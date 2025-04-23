@@ -17,6 +17,10 @@ const Header = () => {
             src="/logo.png" 
             alt="Projeto Anny Logo" 
             className="h-10 w-10 object-contain"
+            onError={(e) => {
+              console.error('Logo image failed to load', e);
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
           />
           <h1 className="text-anny-green text-xl md:text-2xl font-bold">Projeto Anny</h1>
         </div>
