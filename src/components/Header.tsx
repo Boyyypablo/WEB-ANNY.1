@@ -4,19 +4,18 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   
   return (
     <header className="bg-white py-3 px-4 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
         <div 
           onClick={() => navigate("/")} 
-          className="cursor-pointer flex items-center space-x-3"
+          className="cursor-pointer flex items-center space-x-4"
         >
           <img 
             src="/logo.png" 
             alt="Projeto Anny Logo" 
-            className="h-10 w-10 object-contain"
+            className="h-12 w-12 object-contain"
             onError={(e) => {
               console.error('Logo image failed to load', e);
               (e.target as HTMLImageElement).style.display = 'none';
