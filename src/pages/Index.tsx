@@ -50,8 +50,8 @@ const Index = () => {
           </div>
           <div className="flex-1 flex justify-center">
             <img 
-              src="https://images.unsplash.com/photo-1651008376811-b90baee60c1f?q=80&w=1974&auto=format&fit=crop" 
-              alt="Médico atendendo paciente"
+              src="/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png" 
+              alt="Profissional médico com jaleco branco e estetoscópio"
               className="rounded-lg max-h-64 object-cover" 
             />
           </div>
