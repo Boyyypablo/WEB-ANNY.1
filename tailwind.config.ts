@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +20,11 @@ export default {
 		},
 		extend: {
 			colors: {
+				'anny-bg': '#F4F4F4',
+				'anny-green': '#006400',
+				'anny-orange': '#FF7F00',
+				'anny-orange-hover': '#E06E00',
+				'anny-green-light': '#EFF4EF',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -67,6 +73,9 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			fontFamily: {
+				sans: ['Open Sans', 'sans-serif'],
 			},
 			keyframes: {
 				'accordion-down': {
