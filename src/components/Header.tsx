@@ -9,7 +9,15 @@ const Header = () => {
   return (
     <header className="bg-white py-3 px-4 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
-        <div onClick={() => navigate("/")} className="cursor-pointer">
+        <div 
+          onClick={() => navigate("/")} 
+          className="cursor-pointer flex items-center space-x-3"
+        >
+          <img 
+            src="/logo.png" 
+            alt="Projeto Anny Logo" 
+            className="h-10 w-10 object-contain"
+          />
           <h1 className="text-anny-green text-xl md:text-2xl font-bold">Projeto Anny</h1>
         </div>
         
@@ -27,3 +35,4 @@ const Header = () => {
 };
 
 export default Header;
+
