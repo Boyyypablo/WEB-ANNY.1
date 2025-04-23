@@ -10,12 +10,12 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div 
           onClick={() => navigate("/")} 
-          className="cursor-pointer flex items-center space-x-4"
+          className="cursor-pointer flex items-center space-x-5"
         >
           <img 
             src="/logo.png" 
             alt="Projeto Anny Logo" 
-            className="h-12 w-12 object-contain"
+            className="h-16 w-16 object-contain"
             onError={(e) => {
               console.error('Logo image failed to load', e);
               (e.target as HTMLImageElement).style.display = 'none';
@@ -38,3 +38,4 @@ const Header = () => {
 };
 
 export default Header;
+
