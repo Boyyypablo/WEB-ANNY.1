@@ -1,7 +1,7 @@
 
 import { useTheme } from "next-themes"
 import { Toaster as Sonner, toast } from "sonner"
-import { Check, X } from "lucide-react"
+import { Check } from "lucide-react"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
@@ -16,14 +16,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg relative pr-10 flex items-center justify-start", 
-          description: "group-[.toast]:text-muted-foreground ml-2 flex-grow",
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg relative pr-10 flex items-center pl-4", 
+          description: "group-[.toast]:text-muted-foreground ml-4 flex-grow",
           actionButton:
             "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground mr-2",
           cancelButton:
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
           closeButton: "absolute top-1/2 right-2 -translate-y-1/2 hover:bg-gray-100 rounded-full p-1",
-          icon: "mr-2" // Add some margin to the right of the icon
+          icon: "mr-4" // Increased margin to move icon further right
         }
       }}
       // Only use the supported icon types from the Sonner library
@@ -36,3 +36,4 @@ const Toaster = ({ ...props }: ToasterProps) => {
 }
 
 export { Toaster, toast }
+
