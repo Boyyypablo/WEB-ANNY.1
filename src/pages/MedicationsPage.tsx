@@ -22,44 +22,44 @@ const MedicationsPage = () => {
   const medications: Medication[] = [
     {
       id: 1,
-      name: "Paracetamol 500mg",
-      description: "Analgésico para dores leves a moderadas",
-      price: 12.50,
+      name: "Extrato de Cannabis Sativa 36,76mg/ml – Ease Labs Pharma (30ml)",
+      description: "Produto fitoterápico com 36,76 mg/ml de CBD, indicado para auxiliar no tratamento de condições como ansiedade e dores crônicas.",
+      price: 375.00,
       image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=2830&auto=format&fit=crop"
     },
     {
       id: 2,
-      name: "Ibuprofeno 400mg",
-      description: "Anti-inflamatório não esteroidal",
-      price: 15.90,
+      name: "Canabidiol Herbarium 200mg/ml (30ml)",
+      description: "Solução oral com alta concentração de CBD, indicada para casos de epilepsia refratária e outras condições neurológicas.",
+      price: 2210.69,
       image: "https://images.unsplash.com/photo-1550572017-4fcdbb59cc32?q=80&w=2787&auto=format&fit=crop"
     },
     {
       id: 3,
-      name: "Omeprazol 20mg",
-      description: "Protetor gástrico para acidez estomacal",
-      price: 22.75,
+      name: "Canabidiol 20mg/ml – Prati-Donaduzzi (30ml)",
+      description: "Solução oral com 20 mg/ml de CBD, indicada para auxiliar no tratamento de epilepsia e outras condições neurológicas.",
+      price: 92.79,
       image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=2669&auto=format&fit=crop"
     },
     {
       id: 4,
-      name: "Dipirona 500mg",
-      description: "Analgésico e antitérmico",
-      price: 9.90,
+      name: "Canabidiol 79,14mg/ml – GreenCare (30ml)",
+      description: "Solução oral com 79,14 mg/ml de CBD, indicada para tratamento de dores crônicas e distúrbios neurológicos.",
+      price: 994.42,
       image: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=2940&auto=format&fit=crop"
     },
     {
       id: 5,
-      name: "Loratadina 10mg",
-      description: "Anti-histamínico para alergias",
-      price: 18.50,
+      name: "Óleo CBD 1000mg – Naturecan (30ml)",
+      description: "Óleo com 1000 mg de CBD, indicado para auxiliar no alívio de sintomas de ansiedade e estresse.",
+      price: 499.00,
       image: "https://images.unsplash.com/photo-1616578492900-ea5a8fc6c341?q=80&w=2386&auto=format&fit=crop"
     },
     {
       id: 6,
-      name: "Amoxicilina 500mg",
-      description: "Antibiótico de amplo espectro",
-      price: 35.75,
+      name: "Óleo de Cannabis – Abrace Esperança (30ml)",
+      description: "Óleo de CBD com preço acessível, voltado para pacientes com dificuldades financeiras, indicado para diversas condições neurológicas.",
+      price: 79.00,
       image: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?q=80&w=2070&auto=format&fit=crop"
     }
   ];
