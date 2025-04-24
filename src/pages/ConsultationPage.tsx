@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { MessageCircle } from "lucide-react";
+import { ChatDialog } from "@/components/ChatDialog";
 
 const ConsultationPage = () => {
-  const [selectedSpecialty, setSelectedSpecialty] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatContext, setChatContext] = useState("");
   
   const doctors = [
     {
@@ -41,12 +42,18 @@ const ConsultationPage = () => {
   };
 
   const openChat = (doctorName: string, specialty: string) => {
-    alert(`Iniciando chat com a central de atendimento sobre consulta com ${doctorName} (${specialty})`);
-    // In a real app, this would open a chat interface
+    setChatContext(`consulta com ${doctorName} (${specialty})`);
+    setChatOpen(true);
   };
 
   return (
     <div className="flex flex-col gap-8">
+      <ChatDialog 
+        open={chatOpen} 
+        onOpenChange={setChatOpen}
+        initialContext={chatContext}
+      />
+      
       <h1 className="text-2xl md:text-3xl font-bold">Agende sua Consulta Médica</h1>
       
       {/* Scheduling Form */}
