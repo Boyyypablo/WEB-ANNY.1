@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import ConsultationPage from "./pages/ConsultationPage";
 import MedicationsPage from "./pages/MedicationsPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 import HistoryPage from "./pages/HistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/consultation" element={<ConsultationPage />} />
             <Route path="/medications" element={<MedicationsPage />} />
+            <Route path="/medications/:id" element={<ProductDetailPage />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>

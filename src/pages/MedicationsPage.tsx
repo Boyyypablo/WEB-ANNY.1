@@ -1,7 +1,7 @@
-
 import { useState } from "react";
 import { ShoppingCart, Plus, Minus } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { Link } from "react-router-dom";
 
 interface Medication {
   id: number;
@@ -186,14 +186,18 @@ const MedicationsPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {medications.map(medication => (
           <div key={medication.id} className="anny-card">
-            <div className="h-40 mb-4 rounded-lg overflow-hidden">
-              <img 
-                src={medication.image} 
-                alt={medication.name} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <h3 className="font-semibold text-lg mb-1">{medication.name}</h3>
+            <Link to={`/medications/${medication.id}`} className="block">
+              <div className="h-40 mb-4 rounded-lg overflow-hidden">
+                <img 
+                  src={medication.image} 
+                  alt={medication.name} 
+                  className="w-full h-full object-cover transition-transform hover:scale-105"
+                />
+              </div>
+              <h3 className="font-semibold text-lg mb-1 hover:text-anny-green transition-colors">
+                {medication.name}
+              </h3>
+            </Link>
             <p className="text-anny-green/70 text-sm mb-3">{medication.description}</p>
             <div className="flex justify-between items-center">
               <span className="font-bold text-lg">R$ {medication.price.toFixed(2)}</span>
