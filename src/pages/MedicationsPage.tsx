@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ShoppingCart, Plus, Minus } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
@@ -25,7 +24,7 @@ const MedicationsPage = () => {
       name: "Extrato de Cannabis Sativa 36,76mg/ml – Ease Labs Pharma (30ml)",
       description: "Produto fitoterápico com 36,76 mg/ml de CBD, indicado para auxiliar no tratamento de condições como ansiedade e dores crônicas.",
       price: 375.00,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=2830&auto=format&fit=crop"
+      image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png"
     },
     {
       id: 2,
