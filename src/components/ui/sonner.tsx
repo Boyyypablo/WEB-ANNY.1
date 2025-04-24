@@ -28,7 +28,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       // Only use the supported icon types from the Sonner library
       icons={{
-        success: <Check size={16} />
+        success: <Check size={16} className="text-green-500" />
       }}
       {...props}
     />
@@ -36,3 +36,4 @@ const Toaster = ({ ...props }: ToasterProps) => {
 }
 
 export { Toaster, toast }
+
