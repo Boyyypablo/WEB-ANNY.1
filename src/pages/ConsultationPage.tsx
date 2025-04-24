@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
 import { ChatDialog } from "@/components/ChatDialog";
 
 const ConsultationPage = () => {
@@ -40,13 +38,7 @@ const ConsultationPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would submit the form data
     alert(`Agendamento para ${selectedSpecialty} em ${selectedDate} confirmado!`);
-  };
-
-  const openChat = (doctorName: string, specialty: string) => {
-    setChatContext(`consulta com ${doctorName} (${specialty})`);
-    setChatOpen(true);
   };
 
   return (
@@ -125,13 +117,6 @@ const ConsultationPage = () => {
                 <div className="flex flex-col items-center md:items-start">
                   <h3 className="font-semibold text-lg">{doctor.name}</h3>
                   <p className="text-anny-green/70 mb-4">{doctor.specialty}</p>
-                  <button 
-                    className="anny-btn-primary flex items-center gap-2"
-                    onClick={() => openChat(doctor.name, doctor.specialty)}
-                  >
-                    <MessageCircle size={16} />
-                    Iniciar Chat
-                  </button>
                 </div>
               </div>
             </div>
