@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { ChatDialog } from "@/components/ChatDialog";
@@ -5,6 +6,8 @@ import { ChatDialog } from "@/components/ChatDialog";
 const ConsultationPage = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [chatContext, setChatContext] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
   
   const doctors = [
     {
