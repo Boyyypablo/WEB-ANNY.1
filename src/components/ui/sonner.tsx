@@ -23,12 +23,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
           cancelButton:
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
           closeButton: "absolute top-1/2 right-2 -translate-y-1/2 hover:bg-gray-100 rounded-full p-1",
-          icon: "mr-8" // Increased margin to move icon further right
+          icon: "mr-8"
         }
       }}
       // Only use the supported icon types from the Sonner library
       icons={{
-        success: <Check size={16} className="text-green-500" />
+        success: <Check size={19} className="text-green-500" />
       }}
       {...props}
     />
@@ -36,4 +36,3 @@ const Toaster = ({ ...props }: ToasterProps) => {
 }
 
 export { Toaster, toast }
-
