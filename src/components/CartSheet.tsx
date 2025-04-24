@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { toast } from "sonner";
+import { debouncedToast } from "@/components/ui/sonner";
 
 interface CartItem {
   id: number;
@@ -23,7 +22,6 @@ export function CartSheet() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Listen for cart changes in localStorage
   useEffect(() => {
     const loadCart = () => {
       const savedCart = localStorage.getItem('cart');
@@ -32,13 +30,9 @@ export function CartSheet() {
       }
     };
 
-    // Load cart initially
     loadCart();
     
-    // Set up event listener for storage changes
     window.addEventListener('storage', loadCart);
-    
-    // Custom event for immediate cart updates
     window.addEventListener('cartUpdated', loadCart);
     
     return () => {
@@ -58,10 +52,8 @@ export function CartSheet() {
         return item;
       }).filter((item): item is CartItem => item !== null);
 
-      // Update localStorage
       localStorage.setItem('cart', JSON.stringify(newCart));
       
-      // Dispatch event to notify other components
       window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('cartUpdated'));
       
@@ -74,13 +66,12 @@ export function CartSheet() {
       const newCart = prevCart.filter(item => item.id !== itemId);
       localStorage.setItem('cart', JSON.stringify(newCart));
       
-      // Dispatch event to notify other components
       window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('cartUpdated'));
       
       return newCart;
     });
-    toast.success("Item removido do carrinho");
+    debouncedToast.success("Item removido do carrinho");
   };
 
   const getTotalPrice = () => {
@@ -92,7 +83,7 @@ export function CartSheet() {
   };
 
   const handleCheckout = () => {
-    toast.success("Compra finalizada com sucesso!");
+    debouncedToast.success("Compra finalizada com sucesso!");
     setCart([]);
     localStorage.setItem('cart', JSON.stringify([]));
     window.dispatchEvent(new Event('storage'));

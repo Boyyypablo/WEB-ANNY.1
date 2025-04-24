@@ -1,7 +1,7 @@
 
 import { useParams, useNavigate } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
+import { debouncedToast } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -97,10 +97,10 @@ const ProductDetailPage = () => {
       window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('cartUpdated'));
       
-      toast.success(`${medication.name} adicionado ao carrinho`);
+      debouncedToast.success(`${medication.name} adicionado ao carrinho`);
     } catch (error) {
       console.error("Error adding to cart:", error);
-      toast.error("Erro ao adicionar ao carrinho");
+      debouncedToast.error("Erro ao adicionar ao carrinho");
     }
   };
 

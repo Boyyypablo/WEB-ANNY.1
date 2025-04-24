@@ -26,6 +26,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
           icon: "mr-8"
         }
       }}
+      // Configure toast behavior to prevent stacking
+      duration={5000}  // 5 seconds display time
+      expand={false}   // Don't expand on hover
+      position="top-center"
+      richColors={true}
+      // Limit the number of toasts that can appear at once
+      visibleToasts={1}
       // Only use the supported icon types from the Sonner library
       icons={{
         success: <Check size={19} className="text-green-500" />
@@ -35,4 +42,50 @@ const Toaster = ({ ...props }: ToasterProps) => {
   )
 }
 
-export { Toaster, toast }
+// Create a debounced version of the toast function to prevent rapid firing
+// Track toast timestamps to implement cooldown
+const toastTimers: Record<string, number> = {};
+const TOAST_COOLDOWN = 5000; // 5 seconds cooldown
+
+// Wrapper for the toast function that implements cooldown
+const debouncedToast = {
+  success: (message: string, options = {}) => {
+    const now = Date.now();
+    const key = `success-${message}`;
+    if (!toastTimers[key] || (now - toastTimers[key] > TOAST_COOLDOWN)) {
+      toastTimers[key] = now;
+      return toast.success(message, options);
+    }
+    return undefined;
+  },
+  error: (message: string, options = {}) => {
+    const now = Date.now();
+    const key = `error-${message}`;
+    if (!toastTimers[key] || (now - toastTimers[key] > TOAST_COOLDOWN)) {
+      toastTimers[key] = now;
+      return toast.error(message, options);
+    }
+    return undefined;
+  },
+  info: (message: string, options = {}) => {
+    const now = Date.now();
+    const key = `info-${message}`;
+    if (!toastTimers[key] || (now - toastTimers[key] > TOAST_COOLDOWN)) {
+      toastTimers[key] = now;
+      return toast.info(message, options);
+    }
+    return undefined;
+  },
+  warning: (message: string, options = {}) => {
+    const now = Date.now();
+    const key = `warning-${message}`;
+    if (!toastTimers[key] || (now - toastTimers[key] > TOAST_COOLDOWN)) {
+      toastTimers[key] = now;
+      return toast.warning(message, options);
+    }
+    return undefined;
+  }
+};
+
+// Export both the original toast and our debounced version
+export { Toaster, toast, debouncedToast }
