@@ -1,13 +1,10 @@
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartSheet } from "./CartSheet";
-import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
   
   return (
     <header className="bg-white py-3 px-4 shadow-sm">

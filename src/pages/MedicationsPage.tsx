@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { ShoppingCart, Plus, Minus } from "lucide-react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
 
 interface Medication {
@@ -17,7 +18,6 @@ interface CartItem extends Medication {
 
 const MedicationsPage = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   
   const medications: Medication[] = [
     {
@@ -65,24 +65,34 @@ const MedicationsPage = () => {
   ];
 
   const addToCart = (medication: Medication) => {
-    const savedCart = localStorage.getItem('cart');
-    const cart = savedCart ? JSON.parse(savedCart) : [];
-    
-    const existingItem = cart.find((item: any) => item.id === medication.id);
-    
-    if (existingItem) {
-      const newCart = cart.map((item: any) => 
-        item.id === medication.id 
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
+    try {
+      const savedCart = localStorage.getItem('cart');
+      const cart = savedCart ? JSON.parse(savedCart) : [];
+      
+      const existingItem = cart.find((item: any) => item.id === medication.id);
+      
+      let newCart;
+      if (existingItem) {
+        newCart = cart.map((item: any) => 
+          item.id === medication.id 
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        newCart = [...cart, { ...medication, quantity: 1 }];
+      }
+      
       localStorage.setItem('cart', JSON.stringify(newCart));
-    } else {
-      const newCart = [...cart, { ...medication, quantity: 1 }];
-      localStorage.setItem('cart', JSON.stringify(newCart));
+      
+      // Dispatch events to notify components of cart updates
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
+      toast.success(`${medication.name} adicionado ao carrinho`);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      toast.error("Erro ao adicionar ao carrinho");
     }
-    
-    toast.success(`${medication.name} adicionado ao carrinho`);
   };
 
   return (

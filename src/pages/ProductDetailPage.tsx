@@ -74,24 +74,34 @@ const ProductDetailPage = () => {
   }
 
   const handleAddToCart = () => {
-    const savedCart = localStorage.getItem('cart');
-    const cart = savedCart ? JSON.parse(savedCart) : [];
-    
-    const existingItem = cart.find((item: any) => item.id === medication.id);
-    
-    if (existingItem) {
-      const newCart = cart.map((item: any) => 
-        item.id === medication.id 
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
+    try {
+      const savedCart = localStorage.getItem('cart');
+      const cart = savedCart ? JSON.parse(savedCart) : [];
+      
+      const existingItem = cart.find((item: any) => item.id === medication.id);
+      
+      let newCart;
+      if (existingItem) {
+        newCart = cart.map((item: any) => 
+          item.id === medication.id 
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        newCart = [...cart, { ...medication, quantity: 1 }];
+      }
+      
       localStorage.setItem('cart', JSON.stringify(newCart));
-    } else {
-      const newCart = [...cart, { ...medication, quantity: 1 }];
-      localStorage.setItem('cart', JSON.stringify(newCart));
+      
+      // Dispatch events to notify components of cart updates
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
+      toast.success(`${medication.name} adicionado ao carrinho`);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      toast.error("Erro ao adicionar ao carrinho");
     }
-    
-    toast.success(`${medication.name} adicionado ao carrinho`);
   };
 
   return (
@@ -122,7 +132,7 @@ const ProductDetailPage = () => {
             </p>
             <Button 
               onClick={handleAddToCart}
-              className="w-full md:w-auto flex items-center gap-2"
+              className="w-full md:w-auto flex items-center gap-2 bg-anny-green hover:bg-anny-green/90"
             >
               <ShoppingCart size={20} />
               Adicionar ao Carrinho

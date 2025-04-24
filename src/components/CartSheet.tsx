@@ -23,18 +23,29 @@ export function CartSheet() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Load cart from localStorage on component mount
+  // Listen for cart changes in localStorage
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-  }, []);
+    const loadCart = () => {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        setCart(JSON.parse(savedCart));
+      }
+    };
 
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    // Load cart initially
+    loadCart();
+    
+    // Set up event listener for storage changes
+    window.addEventListener('storage', loadCart);
+    
+    // Custom event for immediate cart updates
+    window.addEventListener('cartUpdated', loadCart);
+    
+    return () => {
+      window.removeEventListener('storage', loadCart);
+      window.removeEventListener('cartUpdated', loadCart);
+    };
+  }, []);
 
   const updateQuantity = (itemId: number, change: number) => {
     setCart(prevCart => {
@@ -47,12 +58,28 @@ export function CartSheet() {
         return item;
       }).filter((item): item is CartItem => item !== null);
 
+      // Update localStorage
+      localStorage.setItem('cart', JSON.stringify(newCart));
+      
+      // Dispatch event to notify other components
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
       return newCart;
     });
   };
 
   const removeItem = (itemId: number) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== itemId));
+    setCart(prevCart => {
+      const newCart = prevCart.filter(item => item.id !== itemId);
+      localStorage.setItem('cart', JSON.stringify(newCart));
+      
+      // Dispatch event to notify other components
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
+      return newCart;
+    });
     toast.success("Item removido do carrinho");
   };
 
@@ -67,6 +94,9 @@ export function CartSheet() {
   const handleCheckout = () => {
     toast.success("Compra finalizada com sucesso!");
     setCart([]);
+    localStorage.setItem('cart', JSON.stringify([]));
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
     setIsOpen(false);
   };
 
@@ -82,16 +112,16 @@ export function CartSheet() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="w-full max-w-sm sm:max-w-md md:max-w-md">
         <SheetHeader>
           <SheetTitle>Carrinho de Compras</SheetTitle>
         </SheetHeader>
-        <div className="mt-8 flex flex-col h-full">
+        <div className="mt-8 flex flex-col h-[calc(100vh-10rem)]">
           {cart.length === 0 ? (
             <p className="text-center text-muted-foreground">Seu carrinho está vazio</p>
           ) : (
             <>
-              <div className="flex-1 overflow-auto">
+              <div className="flex-1 overflow-auto pr-2">
                 {cart.map((item) => (
                   <div key={item.id} className="flex items-center gap-4 py-4 border-b">
                     <img
@@ -99,8 +129,8 @@ export function CartSheet() {
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-md"
                     />
-                    <div className="flex-1">
-                      <h3 className="font-medium text-sm">{item.name}</h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-sm truncate">{item.name}</h3>
                       <p className="text-sm text-muted-foreground">
                         R$ {item.price.toFixed(2)}
                       </p>
@@ -135,12 +165,12 @@ export function CartSheet() {
                   </div>
                 ))}
               </div>
-              <div className="border-t pt-4 mt-4">
+              <div className="border-t pt-4 mt-4 sticky bottom-0 bg-white">
                 <div className="flex justify-between mb-4">
                   <span className="font-medium">Total:</span>
-                  <span className="font-medium">R$ {getTotalPrice().toFixed(2)}</span>
+                  <span className="font-medium text-anny-green">R$ {getTotalPrice().toFixed(2)}</span>
                 </div>
-                <Button className="w-full" onClick={handleCheckout}>
+                <Button className="w-full bg-anny-green hover:bg-anny-green/90" onClick={handleCheckout}>
                   Finalizar Compra
                 </Button>
               </div>
