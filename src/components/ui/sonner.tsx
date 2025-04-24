@@ -24,11 +24,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
           closeButton: "absolute top-1/2 right-2 -translate-y-1/2 hover:bg-gray-100 rounded-full p-1",
           icon: "mr-2" // Add some margin to the right of the icon
-        },
-        icons: {
-          success: <Check size={16} />, // Specify success icon
-          close: <X size={16} />
         }
+      }}
+      // Move icons outside of toastOptions as they are a prop of Sonner directly
+      icons={{
+        success: <Check size={16} />,
+        close: <X size={16} />
       }}
       {...props}
     />
@@ -36,4 +37,3 @@ const Toaster = ({ ...props }: ToasterProps) => {
 }
 
 export { Toaster, toast }
-
