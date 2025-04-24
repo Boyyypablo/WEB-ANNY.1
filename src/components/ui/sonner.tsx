@@ -16,14 +16,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg relative pr-10 flex items-center pl-4", 
-          description: "group-[.toast]:text-muted-foreground ml-4 flex-grow",
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg relative pr-10 flex items-center pl-8", 
+          description: "group-[.toast]:text-muted-foreground ml-8 flex-grow",
           actionButton:
             "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground mr-2",
           cancelButton:
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
           closeButton: "absolute top-1/2 right-2 -translate-y-1/2 hover:bg-gray-100 rounded-full p-1",
-          icon: "mr-4" // Increased margin to move icon further right
+          icon: "mr-8" // Increased margin to move icon further right
         }
       }}
       // Only use the supported icon types from the Sonner library
@@ -36,4 +36,3 @@ const Toaster = ({ ...props }: ToasterProps) => {
 }
 
 export { Toaster, toast }
-
