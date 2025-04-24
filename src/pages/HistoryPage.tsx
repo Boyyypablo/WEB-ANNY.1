@@ -154,7 +154,7 @@ const HistoryPage = () => {
                         variant="ghost"
                         size="sm"
                         className="text-blue-600 hover:text-blue-700 p-0 h-auto"
-                        onClick={() => alert("Detalhes do exame")}
+                        onClick={() => window.location.href = `/history/exam/${exam.id}`}
                       >
                         <Info className="w-4 h-4 mr-1" />
                         + detalhes
