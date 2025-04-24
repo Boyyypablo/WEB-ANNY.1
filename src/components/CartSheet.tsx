@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { debouncedToast } from "@/components/ui/sonner";
-import { PaymentDialog } from "@/components/PaymentDialog";
+import { useNavigate } from "react-router-dom";
 
 interface CartItem {
   id: number;
@@ -23,7 +22,7 @@ interface CartItem {
 export function CartSheet() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadCart = () => {
@@ -86,21 +85,12 @@ export function CartSheet() {
   };
 
   const handleCheckoutClick = () => {
-    setPaymentDialogOpen(true);
-  };
-
-  const handlePaymentSuccess = () => {
-    debouncedToast.success("Compra finalizada com sucesso!");
-    setCart([]);
-    localStorage.setItem('cart', JSON.stringify([]));
-    window.dispatchEvent(new Event('storage'));
-    window.dispatchEvent(new CustomEvent('cartUpdated'));
     setIsOpen(false);
+    navigate('/checkout');
   };
 
   return (
-    <>
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="relative">
             <ShoppingCart className="h-5 w-5" />
@@ -181,13 +171,5 @@ export function CartSheet() {
           </div>
         </SheetContent>
       </Sheet>
-
-      <PaymentDialog 
-        isOpen={paymentDialogOpen}
-        onOpenChange={setPaymentDialogOpen}
-        totalAmount={getTotalPrice()}
-        onSuccess={handlePaymentSuccess}
-      />
-    </>
   );
 }
