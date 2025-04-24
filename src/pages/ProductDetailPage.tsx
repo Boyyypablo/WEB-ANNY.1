@@ -1,7 +1,7 @@
 
 import { useParams, useNavigate } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -74,6 +74,23 @@ const ProductDetailPage = () => {
   }
 
   const handleAddToCart = () => {
+    const savedCart = localStorage.getItem('cart');
+    const cart = savedCart ? JSON.parse(savedCart) : [];
+    
+    const existingItem = cart.find((item: any) => item.id === medication.id);
+    
+    if (existingItem) {
+      const newCart = cart.map((item: any) => 
+        item.id === medication.id 
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      localStorage.setItem('cart', JSON.stringify(newCart));
+    } else {
+      const newCart = [...cart, { ...medication, quantity: 1 }];
+      localStorage.setItem('cart', JSON.stringify(newCart));
+    }
+    
     toast.success(`${medication.name} adicionado ao carrinho`);
   };
 

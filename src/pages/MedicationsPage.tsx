@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingCart, Plus, Minus } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { Link } from "react-router-dom";
@@ -44,7 +44,7 @@ const MedicationsPage = () => {
     {
       id: 4,
       name: "Canabidiol 79,14mg/ml – GreenCare (30ml)",
-      description: "Solução oral com 79,14 mg/ml de CBD, indicada para tratamento de dores crônicas e distúrbios neurológicos.",
+      description: "Solução oral com 79,14 mg/ml de CBD, indicada para tratamento de dores crônicas e distúrbios neurológicas.",
       price: 994.42,
       image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
     },
@@ -65,124 +65,32 @@ const MedicationsPage = () => {
   ];
 
   const addToCart = (medication: Medication) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.id === medication.id);
-      
-      if (existingItem) {
-        return prevCart.map(item => 
-          item.id === medication.id 
-            ? { ...item, quantity: item.quantity + 1 } 
-            : item
-        );
-      } else {
-        return [...prevCart, { ...medication, quantity: 1 }];
-      }
-    });
+    const savedCart = localStorage.getItem('cart');
+    const cart = savedCart ? JSON.parse(savedCart) : [];
+    
+    const existingItem = cart.find((item: any) => item.id === medication.id);
+    
+    if (existingItem) {
+      const newCart = cart.map((item: any) => 
+        item.id === medication.id 
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      localStorage.setItem('cart', JSON.stringify(newCart));
+    } else {
+      const newCart = [...cart, { ...medication, quantity: 1 }];
+      localStorage.setItem('cart', JSON.stringify(newCart));
+    }
     
     toast.success(`${medication.name} adicionado ao carrinho`);
-  };
-
-  const removeFromCart = (id: number) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.id === id);
-      
-      if (existingItem && existingItem.quantity > 1) {
-        return prevCart.map(item => 
-          item.id === id 
-            ? { ...item, quantity: item.quantity - 1 } 
-            : item
-        );
-      } else {
-        return prevCart.filter(item => item.id !== id);
-      }
-    });
-  };
-
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const getCartQuantity = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl md:text-3xl font-bold">Medicamentos</h1>
-        <button 
-          className="relative p-2 bg-white rounded-full shadow-sm border border-anny-green/10"
-          onClick={() => setIsCartOpen(!isCartOpen)}
-        >
-          <ShoppingCart size={24} className="text-anny-green" />
-          {getCartQuantity() > 0 && (
-            <span className="absolute -top-1 -right-1 bg-anny-orange text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-              {getCartQuantity()}
-            </span>
-          )}
-        </button>
       </div>
 
-      {/* Shopping Cart */}
-      {isCartOpen && (
-        <div className="anny-card">
-          <h2 className="text-xl font-semibold mb-4">Carrinho de Compras</h2>
-          {cart.length === 0 ? (
-            <p className="text-anny-green/70 text-center py-4">Seu carrinho está vazio</p>
-          ) : (
-            <>
-              <div className="space-y-4 mb-4">
-                {cart.map(item => (
-                  <div key={item.id} className="flex items-center justify-between py-2 border-b border-gray-200">
-                    <div className="flex items-center gap-3">
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
-                        className="w-12 h-12 object-cover rounded-md"
-                      />
-                      <div>
-                        <h3 className="font-medium">{item.name}</h3>
-                        <p className="text-sm text-anny-green/70">R$ {item.price.toFixed(2)}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => removeFromCart(item.id)}
-                        className="p-1 bg-gray-100 rounded-full"
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <span className="w-6 text-center">{item.quantity}</span>
-                      <button 
-                        onClick={() => addToCart(item)}
-                        className="p-1 bg-gray-100 rounded-full"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-between items-center font-semibold mb-4">
-                <span>Total:</span>
-                <span>R$ {getTotalPrice().toFixed(2)}</span>
-              </div>
-              <button 
-                className="anny-btn-primary w-full"
-                onClick={() => {
-                  toast.success("Compra finalizada com sucesso!");
-                  setCart([]);
-                  setIsCartOpen(false);
-                }}
-              >
-                Finalizar Compra
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* Medications Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {medications.map(medication => (
           <div key={medication.id} className="anny-card">
