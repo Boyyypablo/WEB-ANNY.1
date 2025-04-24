@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Calendar, Star } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const ConsultationPage = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState("");
@@ -11,28 +10,24 @@ const ConsultationPage = () => {
       id: 1,
       name: "Dra. Ana Souza",
       specialty: "Cardiologia",
-      rating: 4.9,
       image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop"
     },
     {
       id: 2,
       name: "Dr. Carlos Mendes",
       specialty: "Dermatologia",
-      rating: 4.7,
       image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=2064&auto=format&fit=crop"
     },
     {
       id: 3,
       name: "Dra. Mariana Lima",
       specialty: "Pediatria",
-      rating: 4.8,
       image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=2787&auto=format&fit=crop"
     },
     {
       id: 4,
       name: "Dr. Roberto Alves",
       specialty: "Ortopedia",
-      rating: 4.6,
       image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop"
     }
   ];
@@ -45,14 +40,9 @@ const ConsultationPage = () => {
     alert(`Agendamento para ${selectedSpecialty} em ${selectedDate} confirmado!`);
   };
 
-  const renderStars = (rating: number) => {
-    return Array(5).fill(0).map((_, i) => (
-      <Star 
-        key={i} 
-        size={16} 
-        className={`${i < Math.floor(rating) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`} 
-      />
-    ));
+  const openChat = (doctorName: string, specialty: string) => {
+    alert(`Iniciando chat com a central de atendimento sobre consulta com ${doctorName} (${specialty})`);
+    // In a real app, this would open a chat interface
   };
 
   return (
@@ -124,17 +114,13 @@ const ConsultationPage = () => {
                 </div>
                 <div className="flex flex-col items-center md:items-start">
                   <h3 className="font-semibold text-lg">{doctor.name}</h3>
-                  <p className="text-anny-green/70 mb-1">{doctor.specialty}</p>
-                  <div className="flex items-center gap-1 mb-3">
-                    {renderStars(doctor.rating)}
-                    <span className="text-sm ml-1">{doctor.rating}</span>
-                  </div>
+                  <p className="text-anny-green/70 mb-4">{doctor.specialty}</p>
                   <button 
                     className="anny-btn-primary flex items-center gap-2"
-                    onClick={() => alert(`Agendando consulta com ${doctor.name}`)}
+                    onClick={() => openChat(doctor.name, doctor.specialty)}
                   >
-                    <Calendar size={16} />
-                    Agendar Consulta
+                    <MessageCircle size={16} />
+                    Iniciar Chat
                   </button>
                 </div>
               </div>
