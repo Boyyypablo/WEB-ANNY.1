@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { CartSheet } from "./CartSheet";
 import { Button } from "@/components/ui/button";
+import { UserRound } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -22,17 +23,19 @@ const Header = () => {
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
-          <h1 className="text-anny-green text-xl md:text-2xl font-bold">Projeto Anny</h1>
+          <h1 className="text-anny-green text-4xl md:text-5xl font-bold">Projeto Anny</h1>
         </div>
         
         <div className="flex items-center gap-4">
           <CartSheet />
-          <button 
-            onClick={() => navigate("/consultation")}
-            className="anny-btn-primary hidden md:block"
+          <Button
+            onClick={() => navigate("/profile")}
+            className="hidden md:flex items-center gap-2"
+            variant="outline"
           >
-            Agendar Consulta
-          </button>
+            <UserRound size={20} />
+            <span>Perfil</span>
+          </Button>
         </div>
       </div>
     </header>
