@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Qr, Banknote, Ticket } from "lucide-react";
+import { CreditCard, QrCode, Banknote, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -80,7 +80,7 @@ export default function CheckoutPage() {
                   : "border-gray-200 hover:border-anny-green"
               }`}
             >
-              <Qr className="h-6 w-6" />
+              <QrCode className="h-6 w-6" />
               <span>PIX</span>
             </button>
             <button
@@ -138,7 +138,7 @@ export default function CheckoutPage() {
           </div>
         ) : paymentMethod === "pix" ? (
           <div className="p-8 border rounded-lg text-center space-y-4">
-            <Qr className="mx-auto h-32 w-32" />
+            <QrCode className="mx-auto h-32 w-32" />
             <p>Escaneie o QR Code para pagar</p>
           </div>
         ) : (
