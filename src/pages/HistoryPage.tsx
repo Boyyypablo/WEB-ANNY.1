@@ -1,5 +1,5 @@
-
-import { Calendar, Clock, Activity } from "lucide-react";
+import { Calendar, Clock, Activity, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const HistoryPage = () => {
   const appointments = [
@@ -52,14 +52,16 @@ const HistoryPage = () => {
       name: "Hemograma Completo",
       date: "20/03/2025",
       doctor: "Dra. Ana Souza",
-      status: "Normal"
+      status: "Normal",
+      hasDetails: true
     },
     {
       id: 2,
       name: "Raio-X Joelho Direito",
       date: "27/03/2025",
       doctor: "Dr. Roberto Alves",
-      status: "Alterado"
+      status: "Alterado",
+      hasDetails: false
     }
   ];
 
@@ -137,15 +139,28 @@ const HistoryPage = () => {
                   <h3 className="font-semibold">{exam.name}</h3>
                   <p className="text-sm text-anny-green/70">Dr. {exam.doctor}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex flex-col items-end gap-2">
                   <p className="text-sm">{exam.date}</p>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    exam.status === 'Normal' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-amber-100 text-amber-800'
-                  }`}>
-                    {exam.status}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      exam.status === 'Normal' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-amber-100 text-amber-800'
+                    }`}>
+                      {exam.status}
+                    </span>
+                    {exam.hasDetails && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-blue-600 hover:text-blue-700 p-0 h-auto"
+                        onClick={() => alert("Detalhes do exame")}
+                      >
+                        <Info className="w-4 h-4 mr-1" />
+                        + detalhes
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
