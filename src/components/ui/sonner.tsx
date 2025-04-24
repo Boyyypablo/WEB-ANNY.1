@@ -1,7 +1,7 @@
 
 import { useTheme } from "next-themes"
 import { Toaster as Sonner, toast } from "sonner"
-import { X, Check } from "lucide-react"
+import { Check, X } from "lucide-react"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
@@ -26,10 +26,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
           icon: "mr-2" // Add some margin to the right of the icon
         }
       }}
-      // Move icons outside of toastOptions as they are a prop of Sonner directly
+      // Only use the supported icon types from the Sonner library
       icons={{
-        success: <Check size={16} />,
-        close: <X size={16} />
+        success: <Check size={16} />
       }}
       {...props}
     />
