@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { CartSheet } from "./CartSheet";
 import { ChatDialog } from "./ChatDialog";
 import NotificationsDialog from "./NotificationsDialog";
+import AccessibilityControls from "./AccessibilityControls";
+import { MessageCircle } from "lucide-react";
 
 const Header = () => {
   const [cartItemCount, setCartItemCount] = useState(0);
@@ -43,6 +45,7 @@ const Header = () => {
         <span className="text-xl hidden md:block">Anny</span>
       </Link>
       <div className="flex items-center gap-1 md:gap-4">
+        <AccessibilityControls />
         <NotificationsDialog />
         <CartSheet />
         <button 
@@ -60,7 +63,5 @@ const Header = () => {
     </div>
   </header>;
 }
-
-import { MessageCircle } from "lucide-react";
 
 export default Header;
