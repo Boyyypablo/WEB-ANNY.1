@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { AdjustmentsHorizontal, Headphones, ALargeSmall } from "lucide-react";
+import { Settings, Headphones, ALargeSmall } from "lucide-react";
 import {
   HoverCard,
   HoverCardContent,
@@ -30,7 +30,7 @@ const AccessibilityControls = () => {
     <HoverCard>
       <HoverCardTrigger asChild>
         <Button variant="outline" size="icon">
-          <AdjustmentsHorizontal className="h-5 w-5" />
+          <Settings className="h-5 w-5" />
         </Button>
       </HoverCardTrigger>
       <HoverCardContent className="w-80" align="end">
