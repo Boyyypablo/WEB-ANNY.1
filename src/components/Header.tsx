@@ -1,8 +1,8 @@
 
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import CartSheet from "./CartSheet";
-import ChatDialog from "./ChatDialog";
+import { CartSheet } from "./CartSheet";
+import { ChatDialog } from "./ChatDialog";
 import NotificationsDialog from "./NotificationsDialog";
 
 const Header = () => {
