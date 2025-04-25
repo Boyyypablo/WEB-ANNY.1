@@ -1,6 +1,7 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Package, Truck, MapPin } from "lucide-react";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
