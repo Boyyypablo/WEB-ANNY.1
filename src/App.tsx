@@ -12,6 +12,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import HistoryPage from "./pages/HistoryPage";
 import ExamDetailsPage from "./pages/ExamDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
+import OrdersPage from "./pages/OrdersPage";
 import NotFound from "./pages/NotFound";
 import CheckoutPage from "./pages/CheckoutPage";
 
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/orders" element={<OrdersPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />

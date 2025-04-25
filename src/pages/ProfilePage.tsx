@@ -1,10 +1,12 @@
 
 import { useState } from "react";
-import { UserRound, Lock, Settings, LogOut, CreditCard } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { UserRound, Lock, Settings, LogOut, CreditCard, Package } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personal");
+  const navigate = useNavigate();
   
   const personalInfo = {
     name: "Maria Santos",
@@ -66,6 +68,13 @@ const ProfilePage = () => {
             >
               <Settings size={20} />
               <span>Configurações</span>
+            </button>
+            <button
+              className="flex items-center gap-3 px-4 py-3 hover:bg-anny-green-light transition-colors"
+              onClick={() => navigate("/orders")}
+            >
+              <Package size={20} />
+              <span>Meus Pedidos</span>
             </button>
           </nav>
           <div className="border-t">
