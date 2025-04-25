@@ -15,6 +15,11 @@ import ProfilePage from "./pages/ProfilePage";
 import OrdersPage from "./pages/OrdersPage";
 import NotFound from "./pages/NotFound";
 import CheckoutPage from "./pages/CheckoutPage";
+import DoctorsPage from "./pages/DoctorsPage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
+import FavoritesPage from "./pages/FavoritesPage";
+import PromotionsPage from "./pages/PromotionsPage";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +40,11 @@ const App = () => (
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/doctors" element={<DoctorsPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:id" element={<BlogPostPage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/promotions" element={<PromotionsPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

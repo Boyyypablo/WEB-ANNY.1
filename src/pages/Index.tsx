@@ -1,11 +1,11 @@
 
 import { useNavigate } from "react-router-dom";
-import { Calendar, Pill, History } from "lucide-react";
+import { Calendar, Pill, History, Tag, Heart, User, MessageSquare } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
 
-  const features = [
+  const primaryFeatures = [
     {
       icon: <Calendar size={32} className="text-anny-green" />,
       title: "Consultas Médicas",
@@ -26,6 +26,33 @@ const Index = () => {
       description: "Acesse seu histórico médico e acompanhe sua saúde.",
       action: () => navigate("/history"),
       buttonText: "Ver Histórico"
+    }
+  ];
+
+  const secondaryFeatures = [
+    {
+      icon: <User size={24} className="text-anny-green" />,
+      title: "Médicos Especialistas",
+      description: "Encontre os melhores especialistas em cannabis medicinal.",
+      action: () => navigate("/doctors")
+    },
+    {
+      icon: <Tag size={24} className="text-anny-green" />,
+      title: "Promoções",
+      description: "Descontos especiais em medicamentos selecionados.",
+      action: () => navigate("/promotions")
+    },
+    {
+      icon: <Heart size={24} className="text-anny-green" />,
+      title: "Favoritos",
+      description: "Acesse seus medicamentos favoritos.",
+      action: () => navigate("/favorites")
+    },
+    {
+      icon: <MessageSquare size={24} className="text-anny-green" />,
+      title: "Blog de Saúde",
+      description: "Artigos e conteúdos sobre saúde e bem-estar.",
+      action: () => navigate("/blog")
     }
   ];
 
@@ -58,9 +85,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Primary Features Section */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {features.map((feature, index) => (
+        {primaryFeatures.map((feature, index) => (
           <div key={index} className="anny-card flex flex-col items-center text-center">
             <div className="mb-4 p-3 bg-anny-green-light rounded-full">
               {feature.icon}
@@ -75,6 +102,26 @@ const Index = () => {
             </button>
           </div>
         ))}
+      </section>
+
+      {/* Secondary Features Section */}
+      <section className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Mais serviços para você</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {secondaryFeatures.map((feature, index) => (
+            <div 
+              key={index} 
+              className="anny-card hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center text-center p-4"
+              onClick={feature.action}
+            >
+              <div className="mb-3 p-2 bg-anny-green-light rounded-full">
+                {feature.icon}
+              </div>
+              <h3 className="font-semibold mb-1">{feature.title}</h3>
+              <p className="text-anny-green/80 text-sm">{feature.description}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Testimonials Section */}
