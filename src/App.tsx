@@ -1,3 +1,5 @@
+
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,41 +26,44 @@ import SymptomsPage from "./pages/SymptomsPage";
 import HealthDevicesPage from "./pages/HealthDevicesPage";
 import PrescriptionScannerPage from "./pages/PrescriptionScannerPage";
 
+// Create the query client instance
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/auth" element={<AuthPage />} />
-          <Route element={<Layout />}>
-            <Route path="/home" element={<Index />} />
-            <Route path="/consultation" element={<ConsultationPage />} />
-            <Route path="/medications" element={<MedicationsPage />} />
-            <Route path="/medications/:id" element={<ProductDetailPage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/doctors" element={<DoctorsPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:id" element={<BlogPostPage />} />
-            <Route path="/favorites" element={<FavoritesPage />} />
-            <Route path="/promotions" element={<PromotionsPage />} />
-            <Route path="/symptoms" element={<SymptomsPage />} />
-            <Route path="/health-devices" element={<HealthDevicesPage />} />
-            <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
-          </Route>
-          <Route path="/" element={<Navigate to="/auth" replace />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route element={<Layout />}>
+              <Route path="/home" element={<Index />} />
+              <Route path="/consultation" element={<ConsultationPage />} />
+              <Route path="/medications" element={<MedicationsPage />} />
+              <Route path="/medications/:id" element={<ProductDetailPage />} />
+              <Route path="/history" element={<HistoryPage />} />
+              <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/doctors" element={<DoctorsPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:id" element={<BlogPostPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/promotions" element={<PromotionsPage />} />
+              <Route path="/symptoms" element={<SymptomsPage />} />
+              <Route path="/health-devices" element={<HealthDevicesPage />} />
+              <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
+            </Route>
+            <Route path="/" element={<Navigate to="/auth" replace />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );
 
 export default App;
