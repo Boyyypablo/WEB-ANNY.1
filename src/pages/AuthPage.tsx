@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ export default function AuthPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Se o usuário já estiver autenticado, redirecionar para a página inicial
+    // Se o usuário já estiver autenticado, redirecionar para a página home
     if (session && !loading) {
       navigate("/home");
     }

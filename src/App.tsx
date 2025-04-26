@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -41,6 +40,7 @@ const App = () => (
           <AuthProvider>
             <Routes>
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/" element={<Index />} />
               <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
                 <Route path="/home" element={<Index />} />
                 <Route path="/consultation" element={<ConsultationPage />} />
@@ -60,7 +60,6 @@ const App = () => (
                 <Route path="/health-devices" element={<HealthDevicesPage />} />
                 <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
               </Route>
-              <Route path="/" element={<Navigate to="/auth" replace />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>
