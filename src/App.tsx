@@ -2,8 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
+import AuthPage from "./pages/AuthPage";
 import Index from "./pages/Index";
 import ConsultationPage from "./pages/ConsultationPage";
 import MedicationsPage from "./pages/MedicationsPage";
@@ -32,8 +33,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/auth" element={<AuthPage />} />
           <Route element={<Layout />}>
-            <Route path="/" element={<Index />} />
+            <Route path="/home" element={<Index />} />
             <Route path="/consultation" element={<ConsultationPage />} />
             <Route path="/medications" element={<MedicationsPage />} />
             <Route path="/medications/:id" element={<ProductDetailPage />} />
@@ -51,6 +53,7 @@ const App = () => (
             <Route path="/health-devices" element={<HealthDevicesPage />} />
             <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
           </Route>
+          <Route path="/" element={<Navigate to="/auth" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
