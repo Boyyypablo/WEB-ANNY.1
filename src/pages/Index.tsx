@@ -83,7 +83,14 @@ const Index = () => {
 
   return (
     <div className="flex flex-col gap-6 pb-10">
-      <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4">
+      <section 
+        className="bg-cover bg-center text-white rounded-xl shadow-md p-8 mb-4" 
+        style={{ 
+          backgroundImage: `url('/lovable-uploads/23fd6522-d265-47d0-b4bb-3ec3923b111c.png')`,
+          backgroundColor: 'rgba(0,0,0,0.6)', 
+          backgroundBlendMode: 'multiply'
+        }}
+      >
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex justify-center mb-4">
             <img src="/logo.png" alt="Projeto Anny" className="h-24 md:h-32 w-auto" />
