@@ -25,6 +25,8 @@ import PromotionsPage from "./pages/PromotionsPage";
 import SymptomsPage from "./pages/SymptomsPage";
 import HealthDevicesPage from "./pages/HealthDevicesPage";
 import PrescriptionScannerPage from "./pages/PrescriptionScannerPage";
+import { AuthProvider } from "./contexts/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 
 // Create the query client instance
 const queryClient = new QueryClient();
@@ -36,30 +38,32 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<AuthPage />} />
-            <Route element={<Layout />}>
-              <Route path="/home" element={<Index />} />
-              <Route path="/consultation" element={<ConsultationPage />} />
-              <Route path="/medications" element={<MedicationsPage />} />
-              <Route path="/medications/:id" element={<ProductDetailPage />} />
-              <Route path="/history" element={<HistoryPage />} />
-              <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/doctors" element={<DoctorsPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:id" element={<BlogPostPage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/promotions" element={<PromotionsPage />} />
-              <Route path="/symptoms" element={<SymptomsPage />} />
-              <Route path="/health-devices" element={<HealthDevicesPage />} />
-              <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
-            </Route>
-            <Route path="/" element={<Navigate to="/auth" replace />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AuthProvider>
+            <Routes>
+              <Route path="/auth" element={<AuthPage />} />
+              <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+                <Route path="/home" element={<Index />} />
+                <Route path="/consultation" element={<ConsultationPage />} />
+                <Route path="/medications" element={<MedicationsPage />} />
+                <Route path="/medications/:id" element={<ProductDetailPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/doctors" element={<DoctorsPage />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/:id" element={<BlogPostPage />} />
+                <Route path="/favorites" element={<FavoritesPage />} />
+                <Route path="/promotions" element={<PromotionsPage />} />
+                <Route path="/symptoms" element={<SymptomsPage />} />
+                <Route path="/health-devices" element={<HealthDevicesPage />} />
+                <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
+              </Route>
+              <Route path="/" element={<Navigate to="/auth" replace />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

@@ -1,18 +1,27 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function AuthPage() {
   const navigate = useNavigate();
+  const { signIn, signUp, session, loading } = useAuth();
   const [userType, setUserType] = useState<"patient" | "association">("patient");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Se o usuário já estiver autenticado, redirecionar para a página inicial
+    if (session && !loading) {
+      navigate("/home");
+    }
+  }, [session, loading, navigate]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,13 +33,10 @@ export default function AuthPage() {
     const password = formData.get("password") as string;
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-      navigate("/profile");
+      const { error } = await signIn(email, password);
+      if (error) {
+        setError(error.message);
+      }
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -48,25 +54,25 @@ export default function AuthPage() {
     const password = formData.get("password") as string;
 
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            type: userType,
-          },
-        },
-      });
-
-      if (error) throw error;
-      // Show success message and switch to login tab
-      alert("Cadastro realizado com sucesso! Por favor, faça login.");
+      const { error } = await signUp(email, password, userType);
+      if (error) {
+        setError(error.message);
+      }
     } catch (error: any) {
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Se estiver carregando a autenticação, exibir um indicador de carregamento
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-anny-bg">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-anny-green"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-anny-bg px-4">
@@ -99,7 +105,11 @@ export default function AuthPage() {
                     <Label htmlFor="login-password">Senha</Label>
                     <Input id="login-password" name="password" type="password" required />
                   </div>
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? "Entrando..." : "Entrar"}
                   </Button>
@@ -133,9 +143,13 @@ export default function AuthPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="register-password">Senha</Label>
-                    <Input id="register-password" name="password" type="password" required />
+                    <Input id="register-password" name="password" type="password" required minLength={6} />
                   </div>
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? "Cadastrando..." : "Cadastrar"}
                   </Button>
