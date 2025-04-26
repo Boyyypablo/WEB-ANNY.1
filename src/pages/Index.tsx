@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,18 +11,21 @@ const Index = () => {
       description: "Aqui você encontra associações seguras e produtos rastreados para seu tratamento.",
       action: () => navigate("/consultation"),
       buttonText: "Comece seu tratamento",
+      backgroundClass: "bg-soft-green-50",
     },
     {
       title: "Para Associações",
       description: "Gerencie seus pacientes, produtos e documentação em uma única plataforma.",
       action: () => navigate("/association-signup"),
       buttonText: "Cadastre sua associação",
+      backgroundClass: "bg-soft-blue-50",
     },
     {
       title: "Para Governos",
       description: "Acesse ferramentas de controle e rastreamento para garantir a segurança dos pacientes.",
       action: () => navigate("/government"),
       buttonText: "Conheça nossas soluções",
+      backgroundClass: "bg-soft-orange-50",
     },
   ];
 
@@ -80,7 +82,6 @@ const Index = () => {
 
   return (
     <div className="flex flex-col gap-6 pb-10">
-      {/* Welcome Section */}
       <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
@@ -99,12 +100,14 @@ const Index = () => {
         </div>
       </section>
 
-      {/* User Type Selection */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold text-center mb-8">Comece Aqui</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {userTypes.map((type, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <div 
+              key={index} 
+              className={`${type.backgroundClass} rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow`}
+            >
               <h3 className="text-xl font-semibold mb-3 text-anny-green">{type.title}</h3>
               <p className="text-gray-600 mb-6">{type.description}</p>
               <Button
@@ -118,7 +121,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Primary Features Section */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {primaryFeatures.map((feature, index) => (
           <div key={index} className="anny-card flex flex-col items-center text-center">
@@ -137,7 +139,6 @@ const Index = () => {
         ))}
       </section>
 
-      {/* Secondary Features Section */}
       <section className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Mais serviços para você</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -157,7 +158,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <section className="mt-8">
         <h2 className="text-2xl font-bold text-center mb-6">O que nossos pacientes dizem</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
