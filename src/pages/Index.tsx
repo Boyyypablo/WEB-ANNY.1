@@ -1,8 +1,6 @@
-
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -84,17 +82,12 @@ const Index = () => {
 
   return (
     <div className="flex flex-col gap-6 pb-10">
-      <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 flex flex-col md:flex-row items-center justify-between">
-        <div className="flex flex-col items-center md:items-start md:w-2/3 space-y-4">
-          <img 
-            src="/logo.png" 
-            alt="Projeto Anny Logo" 
-            className="h-24 w-auto mb-4 md:mb-6 animate-fade-in"
-          />
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center md:text-left mb-4">
+      <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Bem-vindo ao Projeto Anny
           </h1>
-          <p className="text-lg md:text-xl mb-6 text-center md:text-left">
+          <p className="text-lg md:text-xl mb-6">
             Somos a primeira plataforma integrada de gestão e rastreamento de cannabis medicinal no Brasil,
             conectando pacientes, associações e governo para garantir acesso seguro ao tratamento.
           </p>
@@ -104,13 +97,6 @@ const Index = () => {
           >
             Conheça Nossa História
           </Button>
-        </div>
-        <div className="hidden md:block md:w-1/3 flex justify-center">
-          <img 
-            src="/logo.png" 
-            alt="Projeto Anny Logo" 
-            className="h-64 w-auto object-contain animate-fade-in-slow"
-          />
         </div>
       </section>
 
