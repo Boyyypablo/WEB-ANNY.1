@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,81 @@ import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, S
 
 const Index = () => {
   const navigate = useNavigate();
+
+  const userTypes = [
+    {
+      title: "Para Pacientes",
+      description: "Aqui você encontra associações seguras e produtos rastreados para seu tratamento.",
+      action: () => navigate("/consultation"),
+      buttonText: "Comece seu tratamento",
+      backgroundClass: "bg-soft-green-50",
+    },
+    {
+      title: "Para Associações",
+      description: "Gerencie seus pacientes, produtos e documentação em uma única plataforma.",
+      action: () => navigate("/association-signup"),
+      buttonText: "Cadastre sua associação",
+      backgroundClass: "bg-soft-blue-50",
+    },
+    {
+      title: "Para Governos",
+      description: "Acesse ferramentas de controle e rastreamento para garantir a segurança dos pacientes.",
+      action: () => navigate("/government"),
+      buttonText: "Conheça nossas soluções",
+      backgroundClass: "bg-soft-orange-50",
+    },
+  ];
+
+  const primaryFeatures = [
+    {
+      icon: <Calendar className="h-6 w-6 text-anny-green" />,
+      title: "Consultas Online",
+      description: "Agende consultas com médicos especialistas em cannabis medicinal.",
+      action: () => navigate("/consultation"),
+      buttonText: "Agendar Consulta",
+    },
+    {
+      icon: <Pill className="h-6 w-6 text-anny-green" />,
+      title: "Medicamentos",
+      description: "Encontre produtos certificados e rastreados para seu tratamento.",
+      action: () => navigate("/medications"),
+      buttonText: "Ver Medicamentos",
+    },
+    {
+      icon: <History className="h-6 w-6 text-anny-green" />,
+      title: "Histórico Médico",
+      description: "Acompanhe seu histórico de consultas, exames e tratamentos.",
+      action: () => navigate("/history"),
+      buttonText: "Meu Histórico",
+    },
+  ];
+
+  const secondaryFeatures = [
+    {
+      icon: <Tag className="h-5 w-5 text-anny-green" />,
+      title: "Promoções",
+      description: "Ofertas especiais em produtos e consultas.",
+      action: () => navigate("/promotions"),
+    },
+    {
+      icon: <Heart className="h-5 w-5 text-anny-green" />,
+      title: "Favoritos",
+      description: "Seus produtos e médicos favoritos.",
+      action: () => navigate("/favorites"),
+    },
+    {
+      icon: <Settings className="h-5 w-5 text-anny-green" />,
+      title: "Diário de Sintomas",
+      description: "Registre e acompanhe seus sintomas.",
+      action: () => navigate("/symptoms"),
+    },
+    {
+      icon: <User className="h-5 w-5 text-anny-green" />,
+      title: "Médicos",
+      description: "Conheça nossa rede de especialistas.",
+      action: () => navigate("/doctors"),
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6 pb-10">
