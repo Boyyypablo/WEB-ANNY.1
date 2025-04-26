@@ -1,5 +1,6 @@
+
 import { useNavigate } from "react-router-dom";
-import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight } from "lucide-react";
+import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -23,6 +24,57 @@ const Index = () => {
       description: "Acesse ferramentas de controle e rastreamento para garantir a segurança dos pacientes.",
       action: () => navigate("/government"),
       buttonText: "Conheça nossas soluções",
+    },
+  ];
+
+  const primaryFeatures = [
+    {
+      icon: <Calendar className="h-6 w-6 text-anny-green" />,
+      title: "Consultas Online",
+      description: "Agende consultas com médicos especialistas em cannabis medicinal.",
+      action: () => navigate("/consultation"),
+      buttonText: "Agendar Consulta",
+    },
+    {
+      icon: <Pill className="h-6 w-6 text-anny-green" />,
+      title: "Medicamentos",
+      description: "Encontre produtos certificados e rastreados para seu tratamento.",
+      action: () => navigate("/medications"),
+      buttonText: "Ver Medicamentos",
+    },
+    {
+      icon: <History className="h-6 w-6 text-anny-green" />,
+      title: "Histórico Médico",
+      description: "Acompanhe seu histórico de consultas, exames e tratamentos.",
+      action: () => navigate("/history"),
+      buttonText: "Meu Histórico",
+    },
+  ];
+
+  const secondaryFeatures = [
+    {
+      icon: <Tag className="h-5 w-5 text-anny-green" />,
+      title: "Promoções",
+      description: "Ofertas especiais em produtos e consultas.",
+      action: () => navigate("/promotions"),
+    },
+    {
+      icon: <Heart className="h-5 w-5 text-anny-green" />,
+      title: "Favoritos",
+      description: "Seus produtos e médicos favoritos.",
+      action: () => navigate("/favorites"),
+    },
+    {
+      icon: <Settings className="h-5 w-5 text-anny-green" />,
+      title: "Diário de Sintomas",
+      description: "Registre e acompanhe seus sintomas.",
+      action: () => navigate("/symptoms"),
+    },
+    {
+      icon: <User className="h-5 w-5 text-anny-green" />,
+      title: "Médicos",
+      description: "Conheça nossa rede de especialistas.",
+      action: () => navigate("/doctors"),
     },
   ];
 
