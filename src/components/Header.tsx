@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CartSheet } from "./CartSheet";
 import { ChatDialog } from "./ChatDialog";
+import { MessageCircle } from "lucide-react";
 import NotificationsDialog from "./NotificationsDialog";
 import AccessibilityControls from "./AccessibilityControls";
-import { MessageCircle } from "lucide-react";
+
 const Header = () => {
   const [cartItemCount, setCartItemCount] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
+
   const updateCartCount = () => {
     try {
       const cartJson = localStorage.getItem("cart");
@@ -20,23 +22,27 @@ const Header = () => {
       console.error("Error updating cart count:", error);
     }
   };
+
   useEffect(() => {
-    // Initial cart count
     updateCartCount();
 
-    // Listen for cart updates
     window.addEventListener("storage", updateCartCount);
     window.addEventListener("cartUpdated", updateCartCount);
+
     return () => {
       window.removeEventListener("storage", updateCartCount);
       window.removeEventListener("cartUpdated", updateCartCount);
     };
   }, []);
+
   return <header className="sticky top-0 z-50 w-full bg-white shadow-md">
-    <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-      <Link to="/" className="text-anny-green font-bold flex items-center gap-2">
-        <img src="/logo.png" alt="Anny" className="h-10 w-auto" />
-        <span className="text-xl hidden md:block">Projeto Anny</span>
+    <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+      <Link to="/" className="text-anny-green font-bold flex items-center gap-3">
+        <img src="/logo.png" alt="Anny" className="h-12 w-auto" />
+        <div className="hidden md:flex flex-col">
+          <span className="text-xl">Projeto Anny</span>
+          <span className="text-sm text-anny-green/80">Saúde e bem-estar ao seu alcance</span>
+        </div>
       </Link>
       <div className="flex items-center gap-1 md:gap-4">
         <AccessibilityControls />
@@ -50,4 +56,5 @@ const Header = () => {
     </div>
   </header>;
 };
+
 export default Header;

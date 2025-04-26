@@ -1,87 +1,68 @@
-
 import { useNavigate } from "react-router-dom";
-import { Calendar, Pill, History, Tag, Heart, User, MessageSquare } from "lucide-react";
+import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const navigate = useNavigate();
 
-  const primaryFeatures = [
+  const userTypes = [
     {
-      icon: <Calendar size={32} className="text-anny-green" />,
-      title: "Consultas Médicas",
-      description: "Agende consultas com especialistas de forma rápida e conveniente.",
+      title: "Para Pacientes",
+      description: "Aqui você encontra associações seguras e produtos rastreados para seu tratamento.",
       action: () => navigate("/consultation"),
-      buttonText: "Agendar Consulta"
+      buttonText: "Comece seu tratamento",
     },
     {
-      icon: <Pill size={32} className="text-anny-green" />,
-      title: "Medicamentos",
-      description: "Compre seus medicamentos com segurança e receba em sua casa.",
-      action: () => navigate("/medications"),
-      buttonText: "Ver Medicamentos"
+      title: "Para Associações",
+      description: "Gerencie seus pacientes, produtos e documentação em uma única plataforma.",
+      action: () => navigate("/association-signup"),
+      buttonText: "Cadastre sua associação",
     },
     {
-      icon: <History size={32} className="text-anny-green" />,
-      title: "Histórico Médico",
-      description: "Acesse seu histórico médico e acompanhe sua saúde.",
-      action: () => navigate("/history"),
-      buttonText: "Ver Histórico"
-    }
-  ];
-
-  const secondaryFeatures = [
-    {
-      icon: <User size={24} className="text-anny-green" />,
-      title: "Médicos Especialistas",
-      description: "Encontre os melhores especialistas em cannabis medicinal.",
-      action: () => navigate("/doctors")
+      title: "Para Governos",
+      description: "Acesse ferramentas de controle e rastreamento para garantir a segurança dos pacientes.",
+      action: () => navigate("/government"),
+      buttonText: "Conheça nossas soluções",
     },
-    {
-      icon: <Tag size={24} className="text-anny-green" />,
-      title: "Promoções",
-      description: "Descontos especiais em medicamentos selecionados.",
-      action: () => navigate("/promotions")
-    },
-    {
-      icon: <Heart size={24} className="text-anny-green" />,
-      title: "Favoritos",
-      description: "Acesse seus medicamentos favoritos.",
-      action: () => navigate("/favorites")
-    },
-    {
-      icon: <MessageSquare size={24} className="text-anny-green" />,
-      title: "Blog de Saúde",
-      description: "Artigos e conteúdos sobre saúde e bem-estar.",
-      action: () => navigate("/blog")
-    }
   ];
 
   return (
     <div className="flex flex-col gap-6 pb-10">
-      {/* Hero Section */}
-      <section className="bg-white rounded-xl shadow-md p-6 md:p-8 mb-4">
-        <div className="flex flex-col md:flex-row gap-6 md:items-center">
-          <div className="flex-1">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-anny-green mb-4">
-              Cuidado médico de qualidade ao seu alcance
-            </h1>
-            <p className="text-anny-green/80 mb-6 text-lg">
-              Consultas médicas, compra de medicamentos e acompanhamento de saúde em um só lugar.
-            </p>
-            <button 
-              onClick={() => navigate("/consultation")}
-              className="anny-btn-primary text-lg px-6 py-3"
-            >
-              Agendar Consulta
-            </button>
-          </div>
-          <div className="flex-1 flex justify-center">
-            <img 
-              src="/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png" 
-              alt="Profissional médico com jaleco branco e estetoscópio"
-              className="rounded-lg max-h-64 object-cover" 
-            />
-          </div>
+      {/* Welcome Section */}
+      <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            Bem-vindo ao Projeto Anny
+          </h1>
+          <p className="text-lg md:text-xl mb-6">
+            Somos a primeira plataforma integrada de gestão e rastreamento de cannabis medicinal no Brasil,
+            conectando pacientes, associações e governo para garantir acesso seguro ao tratamento.
+          </p>
+          <Button
+            onClick={() => navigate("/about")}
+            className="bg-white text-anny-green hover:bg-white/90 text-lg px-8 py-6 rounded-full"
+          >
+            Conheça Nossa História
+          </Button>
+        </div>
+      </section>
+
+      {/* User Type Selection */}
+      <section className="mb-8">
+        <h2 className="text-2xl font-bold text-center mb-8">Comece Aqui</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {userTypes.map((type, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-semibold mb-3 text-anny-green">{type.title}</h3>
+              <p className="text-gray-600 mb-6">{type.description}</p>
+              <Button
+                onClick={type.action}
+                className="w-full bg-anny-green hover:bg-anny-green/90 text-white"
+              >
+                {type.buttonText} <ArrowRight className="ml-2" />
+              </Button>
+            </div>
+          ))}
         </div>
       </section>
 
