@@ -21,12 +21,7 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
 
   const handleValidation = async (field: string, value: string) => {
     const passwordInput = document.querySelector('[name="password"]') as HTMLInputElement;
-    const newErrors = await validateField(
-      field,
-      value,
-      passwordInput?.value,
-      validationErrors
-    );
+    const newErrors = await validateField(field, value, passwordInput?.value);
     setValidationErrors(newErrors);
   };
 
@@ -82,7 +77,7 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
             name="passwordConfirmation"
             type="password"
             className="pl-10"
-            onChange={(e) => handleValidation('passwordConfirmation', e.target.value, (document.querySelector('[name="password"]') as HTMLInputElement)?.value)}
+            onChange={(e) => handleValidation('passwordConfirmation', e.target.value)}
             required
           />
         </div>
@@ -136,7 +131,7 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Cadastrando...
+              <span>Cadastrando...</span>
             </>
           ) : (
             'Cadastrar'

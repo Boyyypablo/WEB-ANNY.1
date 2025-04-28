@@ -12,10 +12,9 @@ const cpfSchema = z.string().regex(/^\d{11}$/, "CPF inválido");
 export const validateField = async (
   field: string,
   value: string,
-  passwordValue?: string,
-  validationErrors: ValidationErrors = {}
+  passwordValue?: string
 ): Promise<ValidationErrors> => {
-  const newErrors = { ...validationErrors };
+  const newErrors: ValidationErrors = {};
 
   try {
     switch (field) {
@@ -31,33 +30,27 @@ export const validateField = async (
             break;
           }
         }
-        delete newErrors.email;
         break;
         
       case 'password':
         passwordSchema.parse(value);
-        delete newErrors.password;
         break;
         
       case 'passwordConfirmation':
         if (value !== passwordValue) {
           newErrors.passwordConfirmation = "As senhas não coincidem";
-        } else {
-          delete newErrors.passwordConfirmation;
         }
         break;
         
       case 'cpf':
         if (value) {
           cpfSchema.parse(value.replace(/\D/g, ''));
-          delete newErrors.cpf;
         }
         break;
         
       case 'cnpj':
         if (value) {
           cnpjSchema.parse(value.replace(/\D/g, ''));
-          delete newErrors.cnpj;
         }
         break;
     }
