@@ -2,6 +2,7 @@
 export type UserType = "patient" | "association";
 
 export interface ValidationErrors {
+  [key: string]: string | undefined;
   email?: string;
   password?: string;
   passwordConfirmation?: string;

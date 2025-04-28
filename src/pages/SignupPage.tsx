@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,35 +42,37 @@ export default function SignupPage() {
     const cnpj = userType === "association" ? String(formData.get("cnpj") || "") : "";
 
     try {
+      // Check for existing CPF (if patient)
       if (userType === "patient" && cpf) {
-        const result = await supabase
+        const { data, error: cpfError } = await supabase
           .from('profiles')
           .select('id')
           .eq('cpf', cpf.replace(/\D/g, ''))
-          .single();
-        
-        if (result.error && result.error.code !== 'PGRST116') {
-          console.error("Error checking CPF:", result.error);
+          .limit(1);
+          
+        if (cpfError) {
+          console.error("Error checking CPF:", cpfError);
         }
           
-        if (result.data) {
+        if (data && data.length > 0) {
           setError("Este CPF já está em uso");
           return;
         }
       }
 
+      // Check for existing CNPJ (if association)
       if (userType === "association" && cnpj) {
-        const result = await supabase
+        const { data, error: cnpjError } = await supabase
           .from('profiles')
           .select('id')
           .eq('cnpj', cnpj.replace(/\D/g, ''))
-          .single();
+          .limit(1);
         
-        if (result.error && result.error.code !== 'PGRST116') {
-          console.error("Error checking CNPJ:", result.error);
+        if (cnpjError) {
+          console.error("Error checking CNPJ:", cnpjError);
         }
           
-        if (result.data) {
+        if (data && data.length > 0) {
           setError("Este CNPJ já está em uso");
           return;
         }

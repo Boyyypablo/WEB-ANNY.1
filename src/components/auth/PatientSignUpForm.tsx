@@ -1,9 +1,10 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ValidationErrors } from "@/types/auth";
 
 interface PatientFormProps {
-  validationErrors: Record<string, string>;
+  validationErrors: ValidationErrors;
   onValidation: (field: string, value: string) => void;
 }
 
