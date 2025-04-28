@@ -43,6 +43,7 @@ export default function SignupPage() {
 
     try {
       if (userType === "patient" && cpf) {
+        // Use type assertions and explicit variable to avoid deep type inference
         const { data: cpfData } = await supabase
           .from('profiles')
           .select('id')
@@ -56,6 +57,7 @@ export default function SignupPage() {
       }
 
       if (userType === "association" && cnpj) {
+        // Use type assertions and explicit variable to avoid deep type inference
         const { data: cnpjData } = await supabase
           .from('profiles')
           .select('id')
