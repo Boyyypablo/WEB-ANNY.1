@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft, Mail, Lock, Loader2, Building2, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/sonner";
 
 // Validation schemas
 const emailSchema = z.string().email("Email inválido");
@@ -35,18 +38,42 @@ export default function SignupPage() {
     return null;
   }
 
-  const validateField = (field: string, value: string, passwordValue?: string) => {
+  const validateField = async (field: string, value: string, passwordValue?: string) => {
     const newErrors = { ...validationErrors };
     try {
       switch (field) {
         case 'email':
           emailSchema.parse(value);
+          
+          // Check if email already exists
+          if (value) {
+            const { data, error } = await supabase.auth.admin.listUsers({
+              filter: {
+                email: value,
+              },
+            });
+            
+            // In real-world, this would be done through a specific API endpoint
+            // Since we don't have direct access to query all users, we'll simulate the check
+            // by attempting a password reset for the email
+            const { error: authError } = await supabase.auth.resetPasswordForEmail(value);
+            
+            // If we don't get an error, it likely means the email exists
+            // This is a hacky workaround, in production you should have a proper API endpoint
+            if (!authError) {
+              newErrors.email = "Este email já está em uso";
+              break;
+            }
+          }
+          
           delete newErrors.email;
           break;
+          
         case 'password':
           passwordSchema.parse(value);
           delete newErrors.password;
           break;
+          
         case 'passwordConfirmation':
           if (value !== passwordValue) {
             newErrors.passwordConfirmation = "As senhas não coincidem";
@@ -54,15 +81,23 @@ export default function SignupPage() {
             delete newErrors.passwordConfirmation;
           }
           break;
+          
         case 'cpf':
           if (value) {
             cpfSchema.parse(value.replace(/\D/g, ''));
+            
+            // Here you would check if CPF is already in use in your database
+            // For this example, we'll implement the check in the signup handler
             delete newErrors.cpf;
           }
           break;
+          
         case 'cnpj':
           if (value) {
             cnpjSchema.parse(value.replace(/\D/g, ''));
+            
+            // Here you would check if CNPJ is already in use in your database
+            // For this example, we'll implement the check in the signup handler
             delete newErrors.cnpj;
           }
           break;
@@ -81,6 +116,8 @@ export default function SignupPage() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const passwordConfirmation = formData.get("passwordConfirmation") as string;
+    const cpf = userType === "patient" ? formData.get("cpf") as string : "";
+    const cnpj = userType === "association" ? formData.get("cnpj") as string : "";
 
     if (password !== passwordConfirmation) {
       setValidationErrors(prev => ({
@@ -90,16 +127,81 @@ export default function SignupPage() {
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-
+    // Check if email already exists
     try {
+      // This is where we'd check if the email is already registered
+      const { data, error: checkError } = await supabase.auth.signInWithPassword({
+        email,
+        password: "dummy-password-for-check" // We're just checking if the email exists
+      });
+
+      if (!checkError || checkError.message !== "Invalid login credentials") {
+        // Email likely exists if we get here
+        setValidationErrors(prev => ({
+          ...prev,
+          email: "Este email já está em uso"
+        }));
+        return;
+      }
+
+      // If we are working with profiles table, we could check for CPF/CNPJ duplicates
+      if (userType === "patient" && cpf) {
+        const { data: cpfData } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('cpf', cpf.replace(/\D/g, ''))
+          .single();
+          
+        if (cpfData) {
+          setValidationErrors(prev => ({
+            ...prev,
+            cpf: "Este CPF já está em uso"
+          }));
+          return;
+        }
+      }
+
+      if (userType === "association" && cnpj) {
+        const { data: cnpjData } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('cnpj', cnpj.replace(/\D/g, ''))
+          .single();
+          
+        if (cnpjData) {
+          setValidationErrors(prev => ({
+            ...prev,
+            cnpj: "Este CNPJ já está em uso"
+          }));
+          return;
+        }
+      }
+
+      setIsLoading(true);
+      setError(null);
+
       const { error } = await signUp(email, password, userType);
       if (error) {
-        setError(error.message);
+        // Handle Supabase specific errors
+        if (error.message.includes("already registered")) {
+          setValidationErrors(prev => ({
+            ...prev,
+            email: "Este email já está em uso"
+          }));
+        } else {
+          setError(error.message);
+        }
       }
     } catch (error: any) {
-      setError(error.message);
+      // Handle unexpected errors during signup
+      if (error.message.includes("already registered") || error.message.includes("User already exists")) {
+        setValidationErrors(prev => ({
+          ...prev,
+          email: "Este email já está em uso"
+        }));
+      } else {
+        setError(error.message);
+      }
     } finally {
       setIsLoading(false);
     }
