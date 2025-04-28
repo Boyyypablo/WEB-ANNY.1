@@ -1,70 +1,25 @@
+
 import { useState, useEffect } from "react";
-import { Bell, Calendar, ShoppingCart, FileText, X, Trash2 } from "lucide-react";
+import { Bell } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { debouncedToast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
-
-interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  type: "appointment" | "order" | "exam" | "system";
-  date: string;
-  read: boolean;
-  actionPath?: string;
-}
+import { NotificationsList } from "./notifications/NotificationsList";
+import { NotificationsHeader } from "./notifications/NotificationsHeader";
+import type { Notification } from "./notifications/NotificationItem";
 
 const NotificationsDialog = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
-
-  const exampleNotifications: Notification[] = [
-    {
-      id: 1,
-      title: "Consulta agendada",
-      message: "Lembrete: Sua consulta com Dra. Fernanda Lima está agendada para amanhã às 14:00",
-      type: "appointment",
-      date: "10 minutos atrás",
-      read: false,
-      actionPath: "/consultation"
-    },
-    {
-      id: 2,
-      title: "Pedido enviado",
-      message: "Seu pedido #12345 foi enviado e está a caminho. Acompanhe o status!",
-      type: "order",
-      date: "2 horas atrás",
-      read: false,
-      actionPath: "/orders"
-    },
-    {
-      id: 3,
-      title: "Novo resultado de exame",
-      message: "O resultado do seu exame de sangue já está disponível para visualização.",
-      type: "exam",
-      date: "1 dia atrás",
-      read: true,
-      actionPath: "/history"
-    },
-    {
-      id: 4,
-      title: "Boas-vindas",
-      message: "Bem-vindo ao Projeto Anny! Estamos felizes em te ter conosco.",
-      type: "system",
-      date: "3 dias atrás",
-      read: true
-    }
-  ];
 
   useEffect(() => {
     try {
@@ -121,19 +76,6 @@ const NotificationsDialog = () => {
     debouncedToast.success("Todas as notificações foram removidas");
   };
 
-  const getNotificationIcon = (type: string) => {
-    switch (type) {
-      case 'appointment':
-        return <Calendar className="w-5 h-5 text-blue-500" />;
-      case 'order':
-        return <ShoppingCart className="w-5 h-5 text-green-500" />;
-      case 'exam':
-        return <FileText className="w-5 h-5 text-purple-500" />;
-      default:
-        return <Bell className="w-5 h-5 text-gray-500" />;
-    }
-  };
-
   const handleNotificationClick = (notification: Notification) => {
     markAsRead(notification.id);
     setOpen(false);
@@ -157,83 +99,20 @@ const NotificationsDialog = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="flex justify-between items-center">
-            <span>Notificações</span>
-            <div className="flex gap-2">
-              {unreadCount > 0 && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={markAllAsRead}
-                  className="text-sm text-anny-green hover:text-anny-green/80"
-                >
-                  Marcar todas como lidas
-                </Button>
-              )}
-              {notifications.length > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearAllNotifications}
-                  className="text-sm text-red-500 hover:text-red-600 flex items-center gap-1"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Limpar todas
-                </Button>
-              )}
-            </div>
-          </DialogTitle>
+          <NotificationsHeader
+            unreadCount={unreadCount}
+            hasNotifications={notifications.length > 0}
+            onMarkAllAsRead={markAllAsRead}
+            onClearAll={clearAllNotifications}
+          />
         </DialogHeader>
         
         <div className="max-h-[60vh] overflow-y-auto pr-1">
-          {notifications.length > 0 ? (
-            <div className="space-y-2">
-              {notifications.map(notification => (
-                <div 
-                  key={notification.id} 
-                  className={`p-3 rounded-lg flex items-start gap-3 cursor-pointer transition-colors ${
-                    notification.read ? 'bg-gray-50' : 'bg-anny-green/5 hover:bg-anny-green/10'
-                  }`}
-                  onClick={() => handleNotificationClick(notification)}
-                >
-                  <div className="mt-1">
-                    {getNotificationIcon(notification.type)}
-                  </div>
-                  
-                  <div className="flex-1">
-                    <div className="flex justify-between">
-                      <h4 className={`text-sm font-medium ${!notification.read ? 'text-anny-green' : 'text-gray-700'}`}>
-                        {notification.title}
-                      </h4>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteNotification(notification.id);
-                        }}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">
-                      {notification.message}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {notification.date}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <Bell className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-              <h3 className="text-lg font-medium text-gray-900">Não há notificações</h3>
-              <p className="text-sm text-gray-500 max-w-xs mx-auto mt-1">
-                Suas notificações sobre consultas, pedidos e exames aparecerão aqui.
-              </p>
-            </div>
-          )}
+          <NotificationsList
+            notifications={notifications}
+            onDelete={deleteNotification}
+            onClick={handleNotificationClick}
+          />
         </div>
       </DialogContent>
     </Dialog>
