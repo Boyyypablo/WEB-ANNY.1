@@ -4,14 +4,9 @@ import { Session, User } from '@supabase/supabase-js';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/sonner';
+import { Database } from '@/integrations/supabase/types';
 
-type Profile = {
-  id: string;
-  email: string;
-  user_type: string;
-  created_at?: string;
-  updated_at?: string;
-};
+type Profile = Database['public']['Tables']['profiles']['Row'];
 
 type AuthContextType = {
   session: Session | null;
@@ -22,6 +17,7 @@ type AuthContextType = {
   signUp: (email: string, password: string, type: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
+  refreshProfile: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsAdmin(false);
       }
       
-      // Usar setTimeout para evitar recursão com o fetchProfile
+      // Use setTimeout to avoid recursion with fetchProfile
       if (session?.user) {
         setTimeout(() => {
           fetchProfile(session.user.id);
@@ -91,6 +87,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const refreshProfile = async () => {
+    if (user?.id) {
+      await fetchProfile(user.id);
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -99,6 +101,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error };
       }
       toast.success("Login efetuado com sucesso!");
+      
+      // Update last login timestamp
+      if (user?.id) {
+        await supabase
+          .from('profiles')
+          .update({ last_login: new Date().toISOString() })
+          .eq('id', user.id);
+      }
+      
       navigate('/home');
       return { error: null };
     } catch (error: any) {
@@ -113,7 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Ensure type is one of the valid enum values
       const userType = validUserTypes.includes(type) ? type : 'patient';
       
-      const { error } = await supabase.auth.signUp({
+      const { error, data } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -126,6 +137,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         toast.error(`Falha no cadastro: ${error.message}`);
         return { error };
+      }
+      
+      // If it's an association or government account, create a tenant
+      if (userType === 'association' || userType === 'master') {
+        // Extract the username part from the email for a basic tenant name
+        const tenantName = email.split('@')[0];
+        const tenantType = userType === 'master' ? 'government' : 'association';
+        
+        const { data: tenant, error: tenantError } = await supabase
+          .from('tenants')
+          .insert({ 
+            name: tenantName,
+            type: tenantType as any
+          })
+          .select()
+          .single();
+          
+        if (tenantError) {
+          console.error("Error creating tenant:", tenantError);
+        } else if (tenant && data.user) {
+          // Update the profile with tenant_id
+          await supabase
+            .from('profiles')
+            .update({ tenant_id: tenant.id })
+            .eq('id', data.user.id);
+        }
       }
       
       toast.success("Cadastro realizado com sucesso!");
@@ -151,7 +188,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signIn, 
         signUp, 
         signOut, 
-        isAdmin 
+        isAdmin,
+        refreshProfile
       }}
     >
       {children}

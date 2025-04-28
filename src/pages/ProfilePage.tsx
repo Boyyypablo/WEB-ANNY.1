@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileNavigation from "@/components/profile/ProfileNavigation";
@@ -10,28 +10,21 @@ import SettingsTab from "@/components/profile/SettingsTab";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personal");
-  const { user, profile } = useAuth();
+  const { loading } = useAuth();
   
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-  });
-
-  useEffect(() => {
-    if (user) {
-      setFormData(prev => ({
-        ...prev,
-        name: profile?.email?.split('@')[0] || "Usuário",
-        email: user.email || "",
-      }));
-    }
-  }, [user, profile]);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-anny-green"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl md:text-3xl font-bold">Meu Perfil</h1>
       
-      <ProfileHeader name={formData.name} email={formData.email} />
+      <ProfileHeader />
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <ProfileNavigation activeTab={activeTab} setActiveTab={setActiveTab} />

@@ -9,27 +9,149 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      profiles: {
+      audit_logs: {
         Row: {
-          created_at: string | null
-          email: string
+          action: string
+          created_at: string
+          entity: string
+          entity_id: string | null
           id: string
-          updated_at: string | null
-          user_type: Database["public"]["Enums"]["user_type"]
+          ip_address: string | null
+          new_values: Json | null
+          old_values: Json | null
+          user_agent: string | null
+          user_id: string | null
         }
         Insert: {
-          created_at?: string | null
-          email: string
-          id: string
-          updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type"]
+          action: string
+          created_at?: string
+          entity: string
+          entity_id?: string | null
+          id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Update: {
-          created_at?: string | null
-          email?: string
+          action?: string
+          created_at?: string
+          entity?: string
+          entity_id?: string | null
           id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          birth_date: string | null
+          cpf: string | null
+          created_at: string | null
+          email: string
+          full_name: string | null
+          gender: string | null
+          id: string
+          last_login: string | null
+          medical_conditions: string[] | null
+          medications: string[] | null
+          phone: string | null
+          position: string | null
+          sus_card: string | null
+          tenant_id: string | null
+          two_factor_enabled: boolean | null
+          updated_at: string | null
+          user_type: Database["public"]["Enums"]["user_type"]
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          birth_date?: string | null
+          cpf?: string | null
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          gender?: string | null
+          id: string
+          last_login?: string | null
+          medical_conditions?: string[] | null
+          medications?: string[] | null
+          phone?: string | null
+          position?: string | null
+          sus_card?: string | null
+          tenant_id?: string | null
+          two_factor_enabled?: boolean | null
           updated_at?: string | null
           user_type?: Database["public"]["Enums"]["user_type"]
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          birth_date?: string | null
+          cpf?: string | null
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          gender?: string | null
+          id?: string
+          last_login?: string | null
+          medical_conditions?: string[] | null
+          medications?: string[] | null
+          phone?: string | null
+          position?: string | null
+          sus_card?: string | null
+          tenant_id?: string | null
+          two_factor_enabled?: boolean | null
+          updated_at?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"]
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenants: {
+        Row: {
+          area_of_activity: string | null
+          cnpj: string | null
+          created_at: string
+          id: string
+          institution_name: string | null
+          name: string
+          type: Database["public"]["Enums"]["tenant_type"]
+          updated_at: string
+        }
+        Insert: {
+          area_of_activity?: string | null
+          cnpj?: string | null
+          created_at?: string
+          id?: string
+          institution_name?: string | null
+          name: string
+          type: Database["public"]["Enums"]["tenant_type"]
+          updated_at?: string
+        }
+        Update: {
+          area_of_activity?: string | null
+          cnpj?: string | null
+          created_at?: string
+          id?: string
+          institution_name?: string | null
+          name?: string
+          type?: Database["public"]["Enums"]["tenant_type"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -41,6 +163,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      tenant_type: "patient" | "association" | "government"
       user_type: "master" | "association" | "patient"
     }
     CompositeTypes: {
@@ -157,6 +280,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      tenant_type: ["patient", "association", "government"],
       user_type: ["master", "association", "patient"],
     },
   },
