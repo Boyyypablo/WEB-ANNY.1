@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,6 +24,7 @@ export default function SignupPage() {
   const [validationErrors, setValidationErrors] = useState<{
     email?: string;
     password?: string;
+    passwordConfirmation?: string;
     cpf?: string;
     cnpj?: string;
   }>({});
@@ -35,7 +35,7 @@ export default function SignupPage() {
     return null;
   }
 
-  const validateField = (field: string, value: string) => {
+  const validateField = (field: string, value: string, passwordValue?: string) => {
     const newErrors = { ...validationErrors };
     try {
       switch (field) {
@@ -46,6 +46,13 @@ export default function SignupPage() {
         case 'password':
           passwordSchema.parse(value);
           delete newErrors.password;
+          break;
+        case 'passwordConfirmation':
+          if (value !== passwordValue) {
+            newErrors.passwordConfirmation = "As senhas não coincidem";
+          } else {
+            delete newErrors.passwordConfirmation;
+          }
           break;
         case 'cpf':
           if (value) {
@@ -70,12 +77,21 @@ export default function SignupPage() {
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const passwordConfirmation = formData.get("passwordConfirmation") as string;
+
+    if (password !== passwordConfirmation) {
+      setValidationErrors(prev => ({
+        ...prev,
+        passwordConfirmation: "As senhas não coincidem"
+      }));
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
 
     try {
       const { error } = await signUp(email, password, userType);
@@ -171,12 +187,36 @@ export default function SignupPage() {
                     name="password"
                     type="password"
                     className="pl-10"
-                    onChange={(e) => validateField('password', e.target.value)}
+                    onChange={(e) => {
+                      validateField('password', e.target.value);
+                      const confirmInput = document.querySelector('[name="passwordConfirmation"]') as HTMLInputElement;
+                      if (confirmInput?.value) {
+                        validateField('passwordConfirmation', confirmInput.value, e.target.value);
+                      }
+                    }}
                     required
                   />
                 </div>
                 {validationErrors.password && (
                   <p className="text-sm text-red-500">{validationErrors.password}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="signup-password-confirmation">Confirmar Senha</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="signup-password-confirmation"
+                    name="passwordConfirmation"
+                    type="password"
+                    className="pl-10"
+                    onChange={(e) => validateField('passwordConfirmation', e.target.value, (document.querySelector('[name="password"]') as HTMLInputElement)?.value)}
+                    required
+                  />
+                </div>
+                {validationErrors.passwordConfirmation && (
+                  <p className="text-sm text-red-500">{validationErrors.passwordConfirmation}</p>
                 )}
               </div>
 
