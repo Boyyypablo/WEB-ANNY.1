@@ -47,20 +47,15 @@ export default function SignupPage() {
           
           // Check if email already exists
           if (value) {
-            const { data, error } = await supabase.auth.admin.listUsers({
-              filter: {
-                email: value,
-              },
+            // Modified this part to fix the type error
+            // We can't directly use admin.listUsers, let's use a different approach
+            // to check if email exists
+            const { error: signInError } = await supabase.auth.signInWithOtp({
+              email: value,
             });
             
-            // In real-world, this would be done through a specific API endpoint
-            // Since we don't have direct access to query all users, we'll simulate the check
-            // by attempting a password reset for the email
-            const { error: authError } = await supabase.auth.resetPasswordForEmail(value);
-            
-            // If we don't get an error, it likely means the email exists
-            // This is a hacky workaround, in production you should have a proper API endpoint
-            if (!authError) {
+            // If there's no error or a specific error indicating the user exists
+            if (!signInError || signInError.message.includes("Email rate limit")) {
               newErrors.email = "Este email já está em uso";
               break;
             }
@@ -130,13 +125,12 @@ export default function SignupPage() {
     // Check if email already exists
     try {
       // This is where we'd check if the email is already registered
-      const { data, error: checkError } = await supabase.auth.signInWithPassword({
+      const { data, error: checkError } = await supabase.auth.signInWithOtp({
         email,
-        password: "dummy-password-for-check" // We're just checking if the email exists
       });
 
-      if (!checkError || checkError.message !== "Invalid login credentials") {
-        // Email likely exists if we get here
+      // If we don't get a specific error, it might mean the email exists
+      if (!checkError || checkError.message.includes("Email rate limit")) {
         setValidationErrors(prev => ({
           ...prev,
           email: "Este email já está em uso"
