@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { Bell, Calendar, ShoppingCart, FileText, X } from "lucide-react";
+import { Bell, Calendar, ShoppingCart, FileText, X, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -27,7 +26,6 @@ const NotificationsDialog = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
   
-  // Dados de exemplo para notificações
   const exampleNotifications: Notification[] = [
     {
       id: 1,
@@ -67,13 +65,11 @@ const NotificationsDialog = () => {
   ];
 
   useEffect(() => {
-    // Carregar notificações do localStorage ou usar exemplos
     try {
       const savedNotifications = localStorage.getItem('notifications');
       if (savedNotifications) {
         setNotifications(JSON.parse(savedNotifications));
       } else {
-        // Se não houver notificações salvas, usar os exemplos
         setNotifications(exampleNotifications);
         localStorage.setItem('notifications', JSON.stringify(exampleNotifications));
       }
@@ -104,6 +100,12 @@ const NotificationsDialog = () => {
     const updatedNotifications = notifications.filter(notif => notif.id !== id);
     setNotifications(updatedNotifications);
     localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+    localStorage.setItem('notifications', JSON.stringify([]));
+    debouncedToast.success("Todas as notificações foram removidas");
   };
 
   const getNotificationIcon = (type: string) => {
@@ -144,16 +146,29 @@ const NotificationsDialog = () => {
         <DialogHeader>
           <DialogTitle className="flex justify-between items-center">
             <span>Notificações</span>
-            {unreadCount > 0 && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={markAllAsRead}
-                className="text-sm text-anny-green hover:text-anny-green/80"
-              >
-                Marcar todas como lidas
-              </Button>
-            )}
+            <div className="flex gap-2">
+              {unreadCount > 0 && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={markAllAsRead}
+                  className="text-sm text-anny-green hover:text-anny-green/80"
+                >
+                  Marcar todas como lidas
+                </Button>
+              )}
+              {notifications.length > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearAllNotifications}
+                  className="text-sm text-red-500 hover:text-red-600 flex items-center gap-1"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Limpar todas
+                </Button>
+              )}
+            </div>
           </DialogTitle>
         </DialogHeader>
         
