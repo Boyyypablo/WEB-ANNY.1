@@ -43,36 +43,36 @@ export default function SignupPage() {
 
     try {
       if (userType === "patient" && cpf) {
-        // Use a simpler approach without relying on complex inferred types
-        const { data, error: queryError } = await supabase
+        // Use type assertion to avoid excessive type inference
+        const result = await supabase
           .from('profiles')
           .select('id')
           .eq('cpf', cpf.replace(/\D/g, ''))
-          .maybeSingle();
-          
-        if (queryError) {
-          console.error("Error checking CPF:", queryError);
+          .limit(1);
+        
+        if (result.error) {
+          console.error("Error checking CPF:", result.error);
         }
           
-        if (data) {
+        if (result.data && result.data.length > 0) {
           setError("Este CPF já está em uso");
           return;
         }
       }
 
       if (userType === "association" && cnpj) {
-        // Use the same approach for CNPJ
-        const { data, error: queryError } = await supabase
+        // Use the same approach for CNPJ to avoid type inference issues
+        const result = await supabase
           .from('profiles')
           .select('id')
           .eq('cnpj', cnpj.replace(/\D/g, ''))
-          .maybeSingle();
-          
-        if (queryError) {
-          console.error("Error checking CNPJ:", queryError);
+          .limit(1);
+        
+        if (result.error) {
+          console.error("Error checking CNPJ:", result.error);
         }
           
-        if (data) {
+        if (result.data && result.data.length > 0) {
           setError("Este CNPJ já está em uso");
           return;
         }
