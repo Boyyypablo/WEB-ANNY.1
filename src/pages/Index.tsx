@@ -66,17 +66,15 @@ const Index = () => {
 
   return <div className="flex flex-col gap-6 pb-10">
       <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 bg-green-800">
-        <div className="max-w-3xl mx-auto text-center relative">
-          <div className="absolute -top-4">
-            <Button
-              onClick={() => navigate("/auth")}
-              variant="outline"
-              className="bg-white text-anny-green hover:bg-white/90 gap-2"
-            >
-              <LogIn className="h-4 w-4" />
-              Entre com sua conta
-            </Button>
-          </div>
+        <div className="max-w-3xl mx-auto text-center">
+          <Button
+            onClick={() => navigate("/auth")}
+            variant="outline"
+            className="bg-white text-anny-green hover:bg-white/90 gap-2"
+          >
+            <LogIn className="h-4 w-4" />
+            Entre com sua conta
+          </Button>
           <div className="flex justify-center mb-4">
             <img src="/logo.png" alt="Projeto Anny" className="h-24 md:h-32 w-auto" />
           </div>
