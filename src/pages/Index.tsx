@@ -67,7 +67,7 @@ const Index = () => {
   return <div className="flex flex-col gap-6 pb-10">
       <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 bg-green-800">
         <div className="max-w-3xl mx-auto text-center relative">
-          <div className="absolute -top-4 right-4">
+          <div className="absolute -top-4 right-20">
             <Button
               onClick={() => navigate("/auth")}
               variant="outline"
