@@ -65,8 +65,8 @@ const Index = () => {
   }];
 
   return <div className="flex flex-col gap-6 pb-10">
-      <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 bg-green-800">
-        <div className="max-w-3xl mx-auto text-center">
+      <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 bg-green-800 relative">
+        <div className="absolute top-2 right-2">
           <Button
             onClick={() => navigate("/auth")}
             variant="outline"
@@ -75,9 +75,9 @@ const Index = () => {
             <LogIn className="h-4 w-4" />
             Entre com sua conta
           </Button>
-          <div className="flex justify-center mb-4">
-            <img src="/logo.png" alt="Projeto Anny" className="h-24 md:h-32 w-auto" />
-          </div>
+        </div>
+        <div className="max-w-3xl mx-auto text-center">
+          <img src="/logo.png" alt="Projeto Anny" className="h-24 md:h-32 w-auto" />
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Bem-vindo ao Projeto Anny
           </h1>
