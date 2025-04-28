@@ -77,7 +77,9 @@ const Index = () => {
           </Button>
         </div>
         <div className="max-w-3xl mx-auto text-center">
-          <img src="/logo.png" alt="Projeto Anny" className="h-24 md:h-32 w-auto" />
+          <div className="flex justify-center items-center mb-8">
+            <img src="/logo.png" alt="Projeto Anny" className="h-32 md:h-40 w-auto" />
+          </div>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Bem-vindo ao Projeto Anny
           </h1>
