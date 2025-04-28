@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ArrowLeft } from "lucide-react";
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ export default function AuthPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Se o usuário já estiver autenticado, redirecionar para a página home
     if (session && !loading) {
       navigate("/home");
     }
@@ -64,7 +64,6 @@ export default function AuthPage() {
     }
   };
 
-  // Se estiver carregando a autenticação, exibir um indicador de carregamento
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-anny-bg">
@@ -76,7 +75,14 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-anny-bg px-4">
       <div className="w-full max-w-md space-y-8">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center relative">
+          <Button 
+            variant="ghost" 
+            className="absolute left-0 top-0" 
+            onClick={() => navigate("/")}
+          >
+            <ArrowLeft className="h-6 w-6 text-anny-green" />
+          </Button>
           <img src="/logo.png" alt="Projeto Anny" className="h-24 w-auto mb-6" />
           <h2 className="text-2xl font-bold text-anny-green">Bem-vindo ao Projeto Anny</h2>
           <p className="text-anny-green/80">Sua plataforma de gestão de cannabis medicinal</p>
