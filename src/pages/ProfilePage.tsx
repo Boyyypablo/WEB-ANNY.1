@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileHeader from "@/components/profile/ProfileHeader";
@@ -7,17 +6,14 @@ import PersonalInfoTab from "@/components/profile/PersonalInfoTab";
 import SecurityTab from "@/components/profile/SecurityTab";
 import PaymentTab from "@/components/profile/PaymentTab";
 import SettingsTab from "@/components/profile/SettingsTab";
+import { FullPageSpinner } from "@/components/ui/loading-spinner";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personal");
   const { loading } = useAuth();
   
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-[50vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-anny-green"></div>
-      </div>
-    );
+    return <FullPageSpinner />;
   }
 
   return (

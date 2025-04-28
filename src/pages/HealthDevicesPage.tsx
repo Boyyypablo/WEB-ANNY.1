@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Thermometer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const HealthDevicesPage = () => {
   const [isConnecting, setIsConnecting] = useState(false);
@@ -45,7 +46,11 @@ const HealthDevicesPage = () => {
             disabled={isConnecting}
             className="w-full"
           >
-            {isConnecting ? "Conectando..." : "Conectar Dispositivo"}
+            {isConnecting ? (
+              <LoadingSpinner text="Conectando..." />
+            ) : (
+              "Conectar Dispositivo"
+            )}
           </Button>
         </div>
 

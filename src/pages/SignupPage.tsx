@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { SignUpForm } from "@/components/auth/SignUpForm";
+import { FullPageSpinner } from "@/components/ui/loading-spinner";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -14,10 +14,13 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Redirect if already logged in
   if (session && !loading) {
     navigate("/home");
     return null;
+  }
+
+  if (loading) {
+    return <FullPageSpinner />;
   }
 
   const handleSignUp = async (formData: FormData) => {
@@ -28,7 +31,6 @@ export default function SignupPage() {
     const cnpj = userType === "association" ? formData.get("cnpj") as string : "";
 
     try {
-      // Check if CPF/CNPJ is already in use
       if (userType === "patient" && cpf) {
         const { data: cpfData } = await supabase
           .from('profiles')
@@ -76,14 +78,6 @@ export default function SignupPage() {
       setIsLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-anny-bg">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-anny-green"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-anny-bg px-4">
