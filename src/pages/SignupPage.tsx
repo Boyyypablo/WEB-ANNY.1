@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,53 +25,51 @@ export default function SignupPage() {
   }
 
   const handleSignUp = async (formData: FormData) => {
-    // Extract form data with proper casting to prevent type inference issues
     const email = String(formData.get("email") || "");
     const password = String(formData.get("password") || "");
     const userTypeValue = formData.get("userType");
-    
-    // Explicitly validate userType to prevent type issues
-    const userType: UserType = 
-      userTypeValue === "patient" || userTypeValue === "association" 
-        ? userTypeValue 
-        : "patient"; // Default to patient if invalid
-    
-    // Only get CPF/CNPJ when needed based on validated userType
+    const userType: UserType = userTypeValue === "patient" || userTypeValue === "association" 
+      ? userTypeValue 
+      : "patient";
+
+    const address = String(formData.get("address") || "");
+    const zipCode = String(formData.get("zipCode") || "");
+    const position = String(formData.get("position") || "");
+    const areaOfActivity = String(formData.get("areaOfActivity") || "");
+    const institutionName = String(formData.get("institutionName") || "");
     const cpf = userType === "patient" ? String(formData.get("cpf") || "") : "";
     const cnpj = userType === "association" ? String(formData.get("cnpj") || "") : "";
 
     try {
       if (userType === "patient" && cpf) {
-        // Use type assertion to avoid excessive type inference
         const result = await supabase
           .from('profiles')
           .select('id')
           .eq('cpf', cpf.replace(/\D/g, ''))
-          .limit(1);
+          .single();
         
-        if (result.error) {
+        if (result.error && result.error.code !== 'PGRST116') {
           console.error("Error checking CPF:", result.error);
         }
           
-        if (result.data && result.data.length > 0) {
+        if (result.data) {
           setError("Este CPF já está em uso");
           return;
         }
       }
 
       if (userType === "association" && cnpj) {
-        // Use the same approach for CNPJ to avoid type inference issues
         const result = await supabase
           .from('profiles')
           .select('id')
           .eq('cnpj', cnpj.replace(/\D/g, ''))
-          .limit(1);
+          .single();
         
-        if (result.error) {
+        if (result.error && result.error.code !== 'PGRST116') {
           console.error("Error checking CNPJ:", result.error);
         }
           
-        if (result.data && result.data.length > 0) {
+        if (result.data) {
           setError("Este CNPJ já está em uso");
           return;
         }
@@ -82,15 +79,36 @@ export default function SignupPage() {
       setError(null);
 
       const { error: signUpError } = await signUp(email, password, userType);
+      
       if (signUpError) {
         if (signUpError.message.includes("already registered")) {
           setError("Este email já está em uso");
         } else {
           setError(signUpError.message);
         }
+        return;
       }
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          address,
+          zip_code: zipCode,
+          position,
+          cpf: userType === "patient" ? cpf : null,
+          cnpj: userType === "association" ? cnpj : null,
+          area_of_activity: areaOfActivity || null,
+          institution_name: institutionName || null,
+        })
+        .eq('email', email);
+
+      if (updateError) {
+        console.error("Error updating profile:", updateError);
+        setError("Erro ao atualizar informações do perfil");
+      }
+
     } catch (error: any) {
-      if (error.message.includes("already registered") || error.message.includes("User already exists")) {
+      if (error.message.includes("already registered")) {
         setError("Este email já está em uso");
       } else {
         setError(error.message);

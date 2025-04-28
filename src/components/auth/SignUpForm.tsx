@@ -8,6 +8,8 @@ import { Mail, Lock, Loader2 } from "lucide-react";
 import { AccountTypeSelector } from "./AccountTypeSelector";
 import { validateField } from "@/utils/validation";
 import { ValidationErrors, UserType } from "@/types/auth";
+import { PatientSignUpForm } from "./PatientSignUpForm";
+import { AssociationSignUpForm } from "./AssociationSignUpForm";
 
 interface SignUpFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -22,7 +24,7 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
   const handleValidation = async (field: string, value: string) => {
     const passwordInput = document.querySelector('[name="password"]') as HTMLInputElement;
     const newErrors = await validateField(field, value, passwordInput?.value);
-    setValidationErrors(newErrors);
+    setValidationErrors(prev => ({ ...prev, ...newErrors }));
   };
 
   return (
@@ -30,6 +32,8 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
       e.preventDefault();
       onSubmit(new FormData(e.currentTarget));
     }} className="space-y-6">
+      <input type="hidden" name="userType" value={userType} />
+      
       <AccountTypeSelector userType={userType} onUserTypeChange={setUserType} />
 
       <div className="space-y-2">
@@ -87,33 +91,15 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
       </div>
 
       {userType === "patient" ? (
-        <div className="space-y-2">
-          <Label htmlFor="cpf">CPF</Label>
-          <Input
-            id="cpf"
-            name="cpf"
-            type="text"
-            onChange={(e) => handleValidation('cpf', e.target.value)}
-            required
-          />
-          {validationErrors.cpf && (
-            <p className="text-sm text-red-500">{validationErrors.cpf}</p>
-          )}
-        </div>
+        <PatientSignUpForm 
+          validationErrors={validationErrors} 
+          onValidation={handleValidation}
+        />
       ) : (
-        <div className="space-y-2">
-          <Label htmlFor="cnpj">CNPJ</Label>
-          <Input
-            id="cnpj"
-            name="cnpj"
-            type="text"
-            onChange={(e) => handleValidation('cnpj', e.target.value)}
-            required
-          />
-          {validationErrors.cnpj && (
-            <p className="text-sm text-red-500">{validationErrors.cnpj}</p>
-          )}
-        </div>
+        <AssociationSignUpForm 
+          validationErrors={validationErrors} 
+          onValidation={handleValidation}
+        />
       )}
 
       {error && (
