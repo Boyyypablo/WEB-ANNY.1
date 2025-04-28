@@ -1,36 +1,18 @@
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft, Mail, Lock, Loader2, Building2, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/sonner";
-
-// Validation schemas
-const emailSchema = z.string().email("Email inválido");
-const passwordSchema = z.string().min(6, "A senha deve ter pelo menos 6 caracteres");
-const cnpjSchema = z.string().regex(/^\d{14}$/, "CNPJ inválido");
-const cpfSchema = z.string().regex(/^\d{11}$/, "CPF inválido");
+import { SignUpForm } from "@/components/auth/SignUpForm";
 
 export default function SignupPage() {
   const navigate = useNavigate();
   const { signUp, session, loading } = useAuth();
-  const [userType, setUserType] = useState<"patient" | "association">("patient");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [validationErrors, setValidationErrors] = useState<{
-    email?: string;
-    password?: string;
-    passwordConfirmation?: string;
-    cpf?: string;
-    cnpj?: string;
-  }>({});
 
   // Redirect if already logged in
   if (session && !loading) {
@@ -38,107 +20,15 @@ export default function SignupPage() {
     return null;
   }
 
-  const validateField = async (field: string, value: string, passwordValue?: string) => {
-    const newErrors = { ...validationErrors };
-    try {
-      switch (field) {
-        case 'email':
-          emailSchema.parse(value);
-          
-          // Check if email already exists
-          if (value) {
-            // Modified this part to fix the type error
-            // We can't directly use admin.listUsers, let's use a different approach
-            // to check if email exists
-            const { error: signInError } = await supabase.auth.signInWithOtp({
-              email: value,
-            });
-            
-            // If there's no error or a specific error indicating the user exists
-            if (!signInError || signInError.message.includes("Email rate limit")) {
-              newErrors.email = "Este email já está em uso";
-              break;
-            }
-          }
-          
-          delete newErrors.email;
-          break;
-          
-        case 'password':
-          passwordSchema.parse(value);
-          delete newErrors.password;
-          break;
-          
-        case 'passwordConfirmation':
-          if (value !== passwordValue) {
-            newErrors.passwordConfirmation = "As senhas não coincidem";
-          } else {
-            delete newErrors.passwordConfirmation;
-          }
-          break;
-          
-        case 'cpf':
-          if (value) {
-            cpfSchema.parse(value.replace(/\D/g, ''));
-            
-            // Here you would check if CPF is already in use in your database
-            // For this example, we'll implement the check in the signup handler
-            delete newErrors.cpf;
-          }
-          break;
-          
-        case 'cnpj':
-          if (value) {
-            cnpjSchema.parse(value.replace(/\D/g, ''));
-            
-            // Here you would check if CNPJ is already in use in your database
-            // For this example, we'll implement the check in the signup handler
-            delete newErrors.cnpj;
-          }
-          break;
-      }
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        newErrors[field as keyof typeof validationErrors] = error.errors[0].message;
-      }
-    }
-    setValidationErrors(newErrors);
-  };
-
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  const handleSignUp = async (formData: FormData) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const passwordConfirmation = formData.get("passwordConfirmation") as string;
+    const userType = formData.get("userType") as "patient" | "association";
     const cpf = userType === "patient" ? formData.get("cpf") as string : "";
     const cnpj = userType === "association" ? formData.get("cnpj") as string : "";
 
-    if (password !== passwordConfirmation) {
-      setValidationErrors(prev => ({
-        ...prev,
-        passwordConfirmation: "As senhas não coincidem"
-      }));
-      return;
-    }
-
-    // Check if email already exists
     try {
-      // This is where we'd check if the email is already registered
-      const { data, error: checkError } = await supabase.auth.signInWithOtp({
-        email,
-      });
-
-      // If we don't get a specific error, it might mean the email exists
-      if (!checkError || checkError.message.includes("Email rate limit")) {
-        setValidationErrors(prev => ({
-          ...prev,
-          email: "Este email já está em uso"
-        }));
-        return;
-      }
-
-      // If we are working with profiles table, we could check for CPF/CNPJ duplicates
+      // Check if CPF/CNPJ is already in use
       if (userType === "patient" && cpf) {
         const { data: cpfData } = await supabase
           .from('profiles')
@@ -147,10 +37,7 @@ export default function SignupPage() {
           .single();
           
         if (cpfData) {
-          setValidationErrors(prev => ({
-            ...prev,
-            cpf: "Este CPF já está em uso"
-          }));
+          setError("Este CPF já está em uso");
           return;
         }
       }
@@ -163,10 +50,7 @@ export default function SignupPage() {
           .single();
           
         if (cnpjData) {
-          setValidationErrors(prev => ({
-            ...prev,
-            cnpj: "Este CNPJ já está em uso"
-          }));
+          setError("Este CNPJ já está em uso");
           return;
         }
       }
@@ -176,23 +60,15 @@ export default function SignupPage() {
 
       const { error } = await signUp(email, password, userType);
       if (error) {
-        // Handle Supabase specific errors
         if (error.message.includes("already registered")) {
-          setValidationErrors(prev => ({
-            ...prev,
-            email: "Este email já está em uso"
-          }));
+          setError("Este email já está em uso");
         } else {
           setError(error.message);
         }
       }
     } catch (error: any) {
-      // Handle unexpected errors during signup
       if (error.message.includes("already registered") || error.message.includes("User already exists")) {
-        setValidationErrors(prev => ({
-          ...prev,
-          email: "Este email já está em uso"
-        }));
+        setError("Este email já está em uso");
       } else {
         setError(error.message);
       }
@@ -231,151 +107,18 @@ export default function SignupPage() {
             <CardDescription>Escolha seu tipo de conta e preencha seus dados</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSignUp} className="space-y-6">
-              <div className="space-y-3">
-                <Label>Tipo de Conta</Label>
-                <div className="grid grid-cols-2 gap-4">
-                  <Button
-                    type="button"
-                    variant={userType === "patient" ? "default" : "outline"}
-                    onClick={() => setUserType("patient")}
-                    className="space-x-2"
-                  >
-                    <User className="h-4 w-4" />
-                    <span>Paciente</span>
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={userType === "association" ? "default" : "outline"}
-                    onClick={() => setUserType("association")}
-                    className="space-x-2"
-                  >
-                    <Building2 className="h-4 w-4" />
-                    <span>Associação</span>
-                  </Button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="signup-email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="signup-email"
-                    name="email"
-                    type="email"
-                    className="pl-10"
-                    onChange={(e) => validateField('email', e.target.value)}
-                    required
-                  />
-                </div>
-                {validationErrors.email && (
-                  <p className="text-sm text-red-500">{validationErrors.email}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="signup-password">Senha</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="signup-password"
-                    name="password"
-                    type="password"
-                    className="pl-10"
-                    onChange={(e) => {
-                      validateField('password', e.target.value);
-                      const confirmInput = document.querySelector('[name="passwordConfirmation"]') as HTMLInputElement;
-                      if (confirmInput?.value) {
-                        validateField('passwordConfirmation', confirmInput.value, e.target.value);
-                      }
-                    }}
-                    required
-                  />
-                </div>
-                {validationErrors.password && (
-                  <p className="text-sm text-red-500">{validationErrors.password}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="signup-password-confirmation">Confirmar Senha</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="signup-password-confirmation"
-                    name="passwordConfirmation"
-                    type="password"
-                    className="pl-10"
-                    onChange={(e) => validateField('passwordConfirmation', e.target.value, (document.querySelector('[name="password"]') as HTMLInputElement)?.value)}
-                    required
-                  />
-                </div>
-                {validationErrors.passwordConfirmation && (
-                  <p className="text-sm text-red-500">{validationErrors.passwordConfirmation}</p>
-                )}
-              </div>
-
-              {userType === "patient" ? (
-                <div className="space-y-2">
-                  <Label htmlFor="cpf">CPF</Label>
-                  <Input
-                    id="cpf"
-                    name="cpf"
-                    type="text"
-                    onChange={(e) => validateField('cpf', e.target.value)}
-                    required
-                  />
-                  {validationErrors.cpf && (
-                    <p className="text-sm text-red-500">{validationErrors.cpf}</p>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <Label htmlFor="cnpj">CNPJ</Label>
-                  <Input
-                    id="cnpj"
-                    name="cnpj"
-                    type="text"
-                    onChange={(e) => validateField('cnpj', e.target.value)}
-                    required
-                  />
-                  {validationErrors.cnpj && (
-                    <p className="text-sm text-red-500">{validationErrors.cnpj}</p>
-                  )}
-                </div>
-              )}
-
-              {error && (
-                <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-
-              <div className="space-y-4">
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  disabled={isLoading || Object.keys(validationErrors).length > 0}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Cadastrando...
-                    </>
-                  ) : (
-                    'Cadastrar'
-                  )}
-                </Button>
-
-                <p className="text-center text-sm text-gray-600">
-                  Já tem uma conta?{" "}
-                  <Link to="/auth" className="text-anny-green hover:underline">
-                    Fazer login
-                  </Link>
-                </p>
-              </div>
-            </form>
+            <SignUpForm
+              onSubmit={handleSignUp}
+              error={error}
+              isLoading={isLoading}
+            />
+            
+            <p className="text-center text-sm text-gray-600 mt-6">
+              Já tem uma conta?{" "}
+              <Link to="/auth" className="text-anny-green hover:underline">
+                Fazer login
+              </Link>
+            </p>
           </CardContent>
         </Card>
       </div>
