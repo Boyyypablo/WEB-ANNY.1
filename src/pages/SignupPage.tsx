@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { SignUpForm } from "@/components/auth/SignUpForm";
 import { FullPageSpinner } from "@/components/ui/loading-spinner";
+import { UserType } from "@/types/auth";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ export default function SignupPage() {
   const handleSignUp = async (formData: FormData) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const userType = formData.get("userType") as "patient" | "association";
+    const userType = formData.get("userType") as UserType;
     const cpf = userType === "patient" ? formData.get("cpf") as string : "";
     const cnpj = userType === "association" ? formData.get("cnpj") as string : "";
 
@@ -60,12 +62,12 @@ export default function SignupPage() {
       setIsLoading(true);
       setError(null);
 
-      const { error } = await signUp(email, password, userType);
-      if (error) {
-        if (error.message.includes("already registered")) {
+      const { error: signUpError } = await signUp(email, password, userType);
+      if (signUpError) {
+        if (signUpError.message.includes("already registered")) {
           setError("Este email já está em uso");
         } else {
-          setError(error.message);
+          setError(signUpError.message);
         }
       }
     } catch (error: any) {
