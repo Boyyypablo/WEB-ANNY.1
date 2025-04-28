@@ -26,11 +26,20 @@ export default function SignupPage() {
   }
 
   const handleSignUp = async (formData: FormData) => {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const userType = formData.get("userType") as UserType;
-    const cpf = userType === "patient" ? formData.get("cpf") as string : "";
-    const cnpj = userType === "association" ? formData.get("cnpj") as string : "";
+    // Extract form data with proper casting to prevent type inference issues
+    const email = String(formData.get("email") || "");
+    const password = String(formData.get("password") || "");
+    const userTypeValue = formData.get("userType");
+    
+    // Explicitly validate userType to prevent type issues
+    const userType: UserType = 
+      userTypeValue === "patient" || userTypeValue === "association" 
+        ? userTypeValue 
+        : "patient"; // Default to patient if invalid
+    
+    // Only get CPF/CNPJ when needed based on validated userType
+    const cpf = userType === "patient" ? String(formData.get("cpf") || "") : "";
+    const cnpj = userType === "association" ? String(formData.get("cnpj") || "") : "";
 
     try {
       if (userType === "patient" && cpf) {
