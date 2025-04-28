@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings } from "lucide-react";
+import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 const Index = () => {
   const navigate = useNavigate();
   const userTypes = [{
@@ -62,9 +63,20 @@ const Index = () => {
     description: "Conheça nossa rede de especialistas.",
     action: () => navigate("/doctors")
   }];
+
   return <div className="flex flex-col gap-6 pb-10">
       <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 bg-green-800">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-3xl mx-auto text-center relative">
+          <div className="absolute top-0 right-0">
+            <Button
+              onClick={() => navigate("/auth")}
+              variant="outline"
+              className="bg-white text-anny-green hover:bg-white/90 gap-2"
+            >
+              <LogIn className="h-4 w-4" />
+              Entre com sua conta
+            </Button>
+          </div>
           <div className="flex justify-center mb-4">
             <img src="/logo.png" alt="Projeto Anny" className="h-24 md:h-32 w-auto" />
           </div>
@@ -138,4 +150,5 @@ Tudo em um só lugar, com responsabilidade, informação e cuidado.</p>
       </section>
     </div>;
 };
+
 export default Index;
