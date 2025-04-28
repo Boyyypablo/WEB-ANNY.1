@@ -109,11 +109,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, type: string) => {
     try {
+      // Fix: Send the user_type as a string that matches the enum values defined in the database
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: { type }
+          data: {
+            // Make sure the type is one of the expected enum values: 'master', 'association', 'patient'
+            type: type === 'association' ? 'association' : 'patient'
+          }
         }
       });
       

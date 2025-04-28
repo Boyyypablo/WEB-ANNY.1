@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,7 @@ export default function AuthPage() {
     const password = formData.get("password") as string;
 
     try {
+      // Pass the userType directly, which is already either "patient" or "association"
       const { error } = await signUp(email, password, userType);
       if (error) {
         setError(error.message);
