@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { debouncedToast } from "@/components/ui/sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Notification {
   id: number;
@@ -25,7 +26,8 @@ const NotificationsDialog = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
-  
+  const { user } = useAuth();
+
   const exampleNotifications: Notification[] = [
     {
       id: 1,
@@ -66,17 +68,27 @@ const NotificationsDialog = () => {
 
   useEffect(() => {
     try {
-      const savedNotifications = localStorage.getItem('notifications');
+      const storageKey = user ? `notifications_${user.id}` : 'notifications';
+      const savedNotifications = localStorage.getItem(storageKey);
+      
       if (savedNotifications) {
         setNotifications(JSON.parse(savedNotifications));
       } else {
-        setNotifications(exampleNotifications);
-        localStorage.setItem('notifications', JSON.stringify(exampleNotifications));
+        const welcomeNotif = [{
+          id: 1,
+          title: "Boas-vindas",
+          message: "Bem-vindo ao Projeto Anny! Estamos felizes em te ter conosco.",
+          type: "system" as const,
+          date: "Agora",
+          read: false
+        }];
+        setNotifications(welcomeNotif);
+        localStorage.setItem(storageKey, JSON.stringify(welcomeNotif));
       }
     } catch (error) {
       console.error("Error loading notifications:", error);
     }
-  }, []);
+  }, [user]);
 
   const unreadCount = notifications.filter(notif => !notif.read).length;
 
@@ -103,8 +115,9 @@ const NotificationsDialog = () => {
   };
 
   const clearAllNotifications = () => {
+    const storageKey = user ? `notifications_${user.id}` : 'notifications';
     setNotifications([]);
-    localStorage.setItem('notifications', JSON.stringify([]));
+    localStorage.setItem(storageKey, JSON.stringify([]));
     debouncedToast.success("Todas as notificações foram removidas");
   };
 

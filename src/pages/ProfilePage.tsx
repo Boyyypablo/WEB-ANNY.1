@@ -1,24 +1,47 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserRound, Lock, Settings, LogOut, CreditCard, Package } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("personal");
   const navigate = useNavigate();
+  const { user, profile, signOut } = useAuth();
   
-  const personalInfo = {
-    name: "Maria Santos",
-    email: "maria.santos@email.com",
-    phone: "(11) 98765-4321",
-    birthdate: "15/07/1985",
-    address: "Av. Paulista, 1000, São Paulo - SP"
-  };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "(11) 98765-4321", // Default value to be updated if available
+    birthdate: "15/07/1985", // Default value to be updated if available
+    address: "Av. Paulista, 1000, São Paulo - SP" // Default value to be updated if available
+  });
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: profile?.email?.split('@')[0] || "Usuário", // Get name from email if not available
+        email: user.email || "",
+      }));
+    }
+  }, [user, profile]);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Informações atualizadas com sucesso!");
+  };
+
+  const handlePasswordChange = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Password validation would go here
+    toast.success("Senha atualizada com sucesso!");
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success("Logout realizado com sucesso!");
   };
 
   return (
@@ -31,8 +54,8 @@ const ProfilePage = () => {
           <UserRound size={48} className="text-anny-green" />
         </div>
         <div className="text-center md:text-left">
-          <h2 className="text-xl font-semibold">{personalInfo.name}</h2>
-          <p className="text-anny-green/70">{personalInfo.email}</p>
+          <h2 className="text-xl font-semibold">{formData.name}</h2>
+          <p className="text-anny-green/70">{formData.email}</p>
         </div>
       </div>
       
@@ -80,7 +103,7 @@ const ProfilePage = () => {
           <div className="border-t">
             <button
               className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors w-full"
-              onClick={() => toast.info("Funcionalidade de logout em implementação")}
+              onClick={handleLogout}
             >
               <LogOut size={20} />
               <span>Sair</span>
@@ -101,7 +124,8 @@ const ProfilePage = () => {
                       id="name"
                       type="text" 
                       className="anny-input"
-                      defaultValue={personalInfo.name}
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -110,7 +134,9 @@ const ProfilePage = () => {
                       id="email"
                       type="email" 
                       className="anny-input"
-                      defaultValue={personalInfo.email}
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      readOnly
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -119,7 +145,8 @@ const ProfilePage = () => {
                       id="phone"
                       type="tel" 
                       className="anny-input"
-                      defaultValue={personalInfo.phone}
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -128,7 +155,8 @@ const ProfilePage = () => {
                       id="birthdate"
                       type="text" 
                       className="anny-input"
-                      defaultValue={personalInfo.birthdate}
+                      value={formData.birthdate}
+                      onChange={(e) => setFormData({...formData, birthdate: e.target.value})}
                     />
                   </div>
                   <div className="flex flex-col gap-2 md:col-span-2">
@@ -137,7 +165,8 @@ const ProfilePage = () => {
                       id="address"
                       type="text" 
                       className="anny-input"
-                      defaultValue={personalInfo.address}
+                      value={formData.address}
+                      onChange={(e) => setFormData({...formData, address: e.target.value})}
                     />
                   </div>
                 </div>
@@ -151,7 +180,7 @@ const ProfilePage = () => {
           {activeTab === "security" && (
             <>
               <h2 className="text-xl font-semibold mb-4">Segurança</h2>
-              <form onSubmit={handleSave} className="space-y-4">
+              <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="current-password" className="font-medium">Senha Atual</label>
                   <input 
@@ -159,6 +188,7 @@ const ProfilePage = () => {
                     type="password" 
                     className="anny-input"
                     placeholder="Digite sua senha atual"
+                    required
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -168,6 +198,7 @@ const ProfilePage = () => {
                     type="password" 
                     className="anny-input"
                     placeholder="Digite sua nova senha"
+                    required
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -177,6 +208,7 @@ const ProfilePage = () => {
                     type="password" 
                     className="anny-input"
                     placeholder="Confirme sua nova senha"
+                    required
                   />
                 </div>
                 <button type="submit" className="anny-btn-primary mt-4">
