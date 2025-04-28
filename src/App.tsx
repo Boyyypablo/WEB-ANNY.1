@@ -24,10 +24,11 @@ import PromotionsPage from "./pages/PromotionsPage";
 import SymptomsPage from "./pages/SymptomsPage";
 import HealthDevicesPage from "./pages/HealthDevicesPage";
 import PrescriptionScannerPage from "./pages/PrescriptionScannerPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 
-// Create the query client instance
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -39,7 +40,8 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <Routes>
-              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/auth" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
               <Route path="/" element={<Index />} />
               <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
                 <Route path="/home" element={<Index />} />
