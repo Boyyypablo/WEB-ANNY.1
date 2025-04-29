@@ -33,32 +33,50 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
       setEmailValue(value);
     } else if (field === 'password') {
       setPasswordValue(value);
+      // If field is password and no value, remove any existing password errors
+      if (!value) {
+        setValidationErrors(prev => {
+          const updated = {...prev};
+          delete updated.password;
+          return updated;
+        });
+        return;
+      }
+      
       // Re-validate password confirmation whenever password changes
       if (confirmPasswordValue) {
-        const confirmErrors = await validateField('passwordConfirmation', confirmPasswordValue, value);
-        setValidationErrors(prev => ({ ...prev, ...confirmErrors }));
+        validatePasswordMatch(value, confirmPasswordValue);
       }
     } else if (field === 'passwordConfirmation') {
       setConfirmPasswordValue(value);
-    }
-
-    // Only validate password-specific fields if we have a value
-    // This prevents showing "minimum 6 characters" error for empty passwords
-    if (field === 'password' && !value) {
+      // If we have both passwords, validate the match
+      if (passwordValue && value) {
+        validatePasswordMatch(passwordValue, value);
+      }
       return;
     }
 
-    const newErrors = await validateField(field, value, passwordValue);
-    setValidationErrors(prev => ({ ...prev, ...newErrors }));
+    // Only proceed with field validation for non-empty fields
+    // For password, we already handled the empty case above
+    if (value) {
+      const newErrors = await validateField(field, value, passwordValue);
+      setValidationErrors(prev => ({ ...prev, ...newErrors }));
+    }
+  };
+
+  // Dedicated function to validate password match
+  const validatePasswordMatch = async (password: string, confirmation: string) => {
+    if (password && confirmation) {
+      const confirmErrors = await validateField('passwordConfirmation', confirmation, password);
+      setValidationErrors(prev => ({ ...prev, ...confirmErrors }));
+    }
   };
 
   // Check if passwords match every 5 seconds
   useEffect(() => {
     const interval = setInterval(async () => {
       if (passwordValue && confirmPasswordValue) {
-        const confirmErrors = await validateField('passwordConfirmation', confirmPasswordValue, passwordValue);
-        
-        const doPasswordsMatch = !confirmErrors.passwordConfirmation;
+        const doPasswordsMatch = passwordValue === confirmPasswordValue;
         
         // Only update state and show toast if match state has changed
         if (passwordsMatch !== doPasswordsMatch) {
@@ -71,7 +89,20 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
           }
         }
         
-        setValidationErrors(prev => ({ ...prev, ...confirmErrors }));
+        // Update validation errors
+        if (!doPasswordsMatch) {
+          setValidationErrors(prev => ({ 
+            ...prev, 
+            passwordConfirmation: "As senhas não coincidem" 
+          }));
+        } else {
+          setValidationErrors(prev => {
+            const updated = {...prev};
+            delete updated.passwordConfirmation;
+            return updated;
+          });
+        }
+        
         setLastPasswordCheck(new Date());
       }
     }, 5000);
