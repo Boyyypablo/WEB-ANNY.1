@@ -44,7 +44,7 @@ export default function SignupPage() {
     try {
       // Check for existing CPF (if patient)
       if (userType === "patient" && cpf) {
-        const { data, error: cpfError } = await supabase
+        const { data: cpfData, error: cpfError } = await supabase
           .from('profiles')
           .select('id')
           .eq('cpf', cpf.replace(/\D/g, ''))
@@ -54,7 +54,7 @@ export default function SignupPage() {
           console.error("Error checking CPF:", cpfError);
         }
           
-        if (data && data.length > 0) {
+        if (cpfData && cpfData.length > 0) {
           setError("Este CPF já está em uso");
           return;
         }
@@ -62,7 +62,7 @@ export default function SignupPage() {
 
       // Check for existing CNPJ (if association)
       if (userType === "association" && cnpj) {
-        const { data, error: cnpjError } = await supabase
+        const { data: cnpjData, error: cnpjError } = await supabase
           .from('profiles')
           .select('id')
           .eq('cnpj', cnpj.replace(/\D/g, ''))
@@ -72,7 +72,7 @@ export default function SignupPage() {
           console.error("Error checking CNPJ:", cnpjError);
         }
           
-        if (data && data.length > 0) {
+        if (cnpjData && cnpjData.length > 0) {
           setError("Este CNPJ já está em uso");
           return;
         }

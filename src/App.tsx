@@ -1,33 +1,38 @@
-import React from "react";
+
+import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Layout from "./components/Layout";
-import AuthPage from "./pages/AuthPage";
-import Index from "./pages/Index";
-import ConsultationPage from "./pages/ConsultationPage";
-import MedicationsPage from "./pages/MedicationsPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
-import HistoryPage from "./pages/HistoryPage";
-import ExamDetailsPage from "./pages/ExamDetailsPage";
-import ProfilePage from "./pages/ProfilePage";
-import OrdersPage from "./pages/OrdersPage";
-import NotFound from "./pages/NotFound";
-import CheckoutPage from "./pages/CheckoutPage";
-import DoctorsPage from "./pages/DoctorsPage";
-import BlogPage from "./pages/BlogPage";
-import BlogPostPage from "./pages/BlogPostPage";
-import FavoritesPage from "./pages/FavoritesPage";
-import PromotionsPage from "./pages/PromotionsPage";
-import SymptomsPage from "./pages/SymptomsPage";
-import HealthDevicesPage from "./pages/HealthDevicesPage";
-import PrescriptionScannerPage from "./pages/PrescriptionScannerPage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
 import { AuthProvider } from "./contexts/AuthContext";
-import PrivateRoute from "./components/PrivateRoute";
+import { FullPageSpinner } from "./components/ui/loading-spinner";
+
+// Lazily load components
+const Layout = lazy(() => import("./components/Layout"));
+const Index = lazy(() => import("./pages/Index"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const ConsultationPage = lazy(() => import("./pages/ConsultationPage"));
+const MedicationsPage = lazy(() => import("./pages/MedicationsPage"));
+const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage"));
+const HistoryPage = lazy(() => import("./pages/HistoryPage"));
+const ExamDetailsPage = lazy(() => import("./pages/ExamDetailsPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const OrdersPage = lazy(() => import("./pages/OrdersPage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const DoctorsPage = lazy(() => import("./pages/DoctorsPage"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
+const FavoritesPage = lazy(() => import("./pages/FavoritesPage"));
+const PromotionsPage = lazy(() => import("./pages/PromotionsPage"));
+const SymptomsPage = lazy(() => import("./pages/SymptomsPage"));
+const HealthDevicesPage = lazy(() => import("./pages/HealthDevicesPage"));
+const PrescriptionScannerPage = lazy(() => import("./pages/PrescriptionScannerPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const SignupPage = lazy(() => import("./pages/SignupPage"));
+const SymptomDiaryPage = lazy(() => import("./pages/SymptomDiaryPage"));
+const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
 
 const queryClient = new QueryClient();
 
@@ -39,31 +44,40 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
-            <Routes>
-              <Route path="/auth" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/" element={<Index />} />
-              <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
-                <Route path="/home" element={<Index />} />
-                <Route path="/consultation" element={<ConsultationPage />} />
-                <Route path="/medications" element={<MedicationsPage />} />
-                <Route path="/medications/:id" element={<ProductDetailPage />} />
-                <Route path="/history" element={<HistoryPage />} />
-                <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/orders" element={<OrdersPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/doctors" element={<DoctorsPage />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog/:id" element={<BlogPostPage />} />
-                <Route path="/favorites" element={<FavoritesPage />} />
-                <Route path="/promotions" element={<PromotionsPage />} />
-                <Route path="/symptoms" element={<SymptomsPage />} />
-                <Route path="/health-devices" element={<HealthDevicesPage />} />
-                <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense fallback={<FullPageSpinner />}>
+              <Routes>
+                <Route path="/auth" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route path="/" element={<Index />} />
+                <Route element={
+                  <Suspense fallback={<FullPageSpinner />}>
+                    <PrivateRoute>
+                      <Layout />
+                    </PrivateRoute>
+                  </Suspense>
+                }>
+                  <Route path="/home" element={<Index />} />
+                  <Route path="/consultation" element={<ConsultationPage />} />
+                  <Route path="/medications" element={<MedicationsPage />} />
+                  <Route path="/medications/:id" element={<ProductDetailPage />} />
+                  <Route path="/history" element={<HistoryPage />} />
+                  <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/doctors" element={<DoctorsPage />} />
+                  <Route path="/blog" element={<BlogPage />} />
+                  <Route path="/blog/:id" element={<BlogPostPage />} />
+                  <Route path="/favorites" element={<FavoritesPage />} />
+                  <Route path="/promotions" element={<PromotionsPage />} />
+                  <Route path="/symptoms" element={<SymptomsPage />} />
+                  <Route path="/symptom-diary" element={<SymptomDiaryPage />} />
+                  <Route path="/health-devices" element={<HealthDevicesPage />} />
+                  <Route path="/prescription-scanner" element={<PrescriptionScannerPage />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -54,6 +54,10 @@
   body {
     @apply bg-anny-bg text-anny-green font-sans;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-semibold;
+  }
 }
 
 @layer components {
@@ -75,5 +79,9 @@
   
   .nav-link.active {
     @apply text-anny-orange;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg;
   }
 }

@@ -1,9 +1,25 @@
 
 import { useState, useEffect } from "react";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { debouncedToast } from "@/components/ui/sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/store/cartStore";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { 
+  Popover, 
+  PopoverContent, 
+  PopoverTrigger 
+} from "@/components/ui/popover";
+import { Slider } from "@/components/ui/slider";
 
 interface Medication {
   id: number;
@@ -13,15 +29,15 @@ interface Medication {
   image: string;
 }
 
-interface CartItem extends Medication {
-  quantity: number;
-}
+type SortOption = "nameAsc" | "nameDesc" | "priceAsc" | "priceDesc";
 
 const MedicationsPage = () => {
   const navigate = useNavigate();
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3000]);
+  const [sortOption, setSortOption] = useState<SortOption>("nameAsc");
+  const { addItem } = useCartStore();
   
   const medications: Medication[] = [
     {
@@ -29,42 +45,42 @@ const MedicationsPage = () => {
       name: "Extrato de Cannabis Sativa 36,76mg/ml – Ease Labs Pharma (30ml)",
       description: "Produto fitoterápico com 36,76 mg/ml de CBD, indicado para auxiliar no tratamento de condições como ansiedade e dores crônicas.",
       price: 375.00,
-      image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png"
+      image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.webp"
     },
     {
       id: 2,
       name: "Canabidiol Herbarium 200mg/ml (30ml)",
       description: "Solução oral com alta concentração de CBD, indicada para casos de epilepsia refratária e outras condições neurológicas.",
       price: 2210.69,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
     },
     {
       id: 3,
       name: "Canabidiol 20mg/ml – Prati-Donaduzzi (30ml)",
       description: "Solução oral com 20 mg/ml de CBD, indicada para auxiliar no tratamento de epilepsia e outras condições neurológicas.",
       price: 92.79,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
     },
     {
       id: 4,
       name: "Canabidiol 79,14mg/ml – GreenCare (30ml)",
       description: "Solução oral com 79,14 mg/ml de CBD, indicada para tratamento de dores crônicas e distúrbios neurológicas.",
       price: 994.42,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
     },
     {
       id: 5,
       name: "Óleo CBD 1000mg – Naturecan (30ml)",
       description: "Óleo com 1000 mg de CBD, indicado para auxiliar no alívio de sintomas de ansiedade e estresse.",
       price: 499.00,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
     },
     {
       id: 6,
       name: "Óleo de Cannabis – Abrace Esperança (30ml)",
       description: "Óleo de CBD com preço acessível, voltado para pacientes com dificuldades financeiras, indicado para diversas condições neurológicas.",
       price: 79.00,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
     }
   ];
 
@@ -81,37 +97,6 @@ const MedicationsPage = () => {
       console.error("Error loading favorites:", error);
     }
   }, []);
-
-  const addToCart = (medication: Medication) => {
-    try {
-      const savedCart = localStorage.getItem('cart');
-      const cart = savedCart ? JSON.parse(savedCart) : [];
-      
-      const existingItem = cart.find((item: any) => item.id === medication.id);
-      
-      let newCart;
-      if (existingItem) {
-        newCart = cart.map((item: any) => 
-          item.id === medication.id 
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        newCart = [...cart, { ...medication, quantity: 1 }];
-      }
-      
-      localStorage.setItem('cart', JSON.stringify(newCart));
-      
-      // Dispatch events to notify components of cart updates
-      window.dispatchEvent(new Event('storage'));
-      window.dispatchEvent(new CustomEvent('cartUpdated'));
-      
-      debouncedToast.success(`${medication.name} adicionado ao carrinho`);
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      debouncedToast.error("Erro ao adicionar ao carrinho");
-    }
-  };
 
   const toggleFavorite = (medication: Medication) => {
     try {
@@ -143,24 +128,101 @@ const MedicationsPage = () => {
     }
   };
 
-  const filteredMedications = medications.filter(medication =>
-    medication.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    medication.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleAddToCart = (medication: Medication) => {
+    addItem(medication);
+    debouncedToast.success(`${medication.name} adicionado ao carrinho`);
+  };
+
+  const getSortLabel = () => {
+    switch (sortOption) {
+      case "nameAsc": return "Nome (A-Z)";
+      case "nameDesc": return "Nome (Z-A)";
+      case "priceAsc": return "Menor Preço";
+      case "priceDesc": return "Maior Preço";
+      default: return "Ordenar por";
+    }
+  };
+  
+  const sortMedications = (a: Medication, b: Medication) => {
+    switch (sortOption) {
+      case "nameAsc":
+        return a.name.localeCompare(b.name);
+      case "nameDesc":
+        return b.name.localeCompare(a.name);
+      case "priceAsc":
+        return a.price - b.price;
+      case "priceDesc":
+        return b.price - a.price;
+      default:
+        return 0;
+    }
+  };
+
+  const filteredMedications = medications
+    .filter(medication => 
+      (medication.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      medication.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      medication.price >= priceRange[0] &&
+      medication.price <= priceRange[1]
+    )
+    .sort(sortMedications);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl md:text-3xl font-bold">Medicamentos</h1>
+        <h1 className="text-2xl md:text-3xl font-bold font-poppins">Medicamentos</h1>
         
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <input 
+          <Input 
             type="text" 
             placeholder="Buscar medicamentos..." 
             className="anny-input flex-grow"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="icon">
+                <SlidersHorizontal className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div className="space-y-4">
+                <h4 className="font-medium">Filtrar por preço</h4>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>R$ {priceRange[0].toFixed(2)}</span>
+                    <span>R$ {priceRange[1].toFixed(2)}</span>
+                  </div>
+                  <Slider 
+                    defaultValue={[0, 3000]} 
+                    max={3000} 
+                    step={10}
+                    value={priceRange}
+                    onValueChange={(value) => setPriceRange(value as [number, number])}
+                  />
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-2">
+                <ArrowUpDown className="h-4 w-4" />
+                <span className="hidden sm:inline">{getSortLabel()}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setSortOption("nameAsc")}>Nome (A-Z)</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortOption("nameDesc")}>Nome (Z-A)</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortOption("priceAsc")}>Menor Preço</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSortOption("priceDesc")}>Maior Preço</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           
           <Button
             variant="outline"
@@ -182,6 +244,7 @@ const MedicationsPage = () => {
                   src={medication.image} 
                   alt={medication.name} 
                   className="w-full h-full object-cover transition-transform hover:scale-105"
+                  loading="lazy"
                 />
               </div>
               <h3 className="font-semibold text-lg mb-1 hover:text-anny-green transition-colors">
@@ -204,7 +267,7 @@ const MedicationsPage = () => {
                 </Button>
                 <Button 
                   className="anny-btn-primary flex items-center gap-2"
-                  onClick={() => addToCart(medication)}
+                  onClick={() => handleAddToCart(medication)}
                 >
                   <ShoppingCart size={16} />
                   Comprar
@@ -221,7 +284,7 @@ const MedicationsPage = () => {
             </div>
             <h3 className="text-lg font-medium text-gray-900">Nenhum medicamento encontrado</h3>
             <p className="mt-2 text-sm text-gray-500">
-              Tente ajustar sua pesquisa ou verifique se digitou corretamente.
+              Tente ajustar sua pesquisa ou filtros.
             </p>
           </div>
         )}
