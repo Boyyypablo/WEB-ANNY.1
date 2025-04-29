@@ -42,6 +42,12 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
       setConfirmPasswordValue(value);
     }
 
+    // Only validate password-specific fields if we have a value
+    // This prevents showing "minimum 6 characters" error for empty passwords
+    if (field === 'password' && !value) {
+      return;
+    }
+
     const newErrors = await validateField(field, value, passwordValue);
     setValidationErrors(prev => ({ ...prev, ...newErrors }));
   };
