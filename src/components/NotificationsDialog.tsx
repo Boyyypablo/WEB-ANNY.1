@@ -4,7 +4,6 @@ import { Bell } from "lucide-react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -97,17 +96,15 @@ const NotificationsDialog = () => {
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <NotificationsHeader
-            unreadCount={unreadCount}
-            hasNotifications={notifications.length > 0}
-            onMarkAllAsRead={markAllAsRead}
-            onClearAll={clearAllNotifications}
-          />
-        </DialogHeader>
+      <DialogContent className="sm:max-w-md p-4">
+        <NotificationsHeader
+          unreadCount={unreadCount}
+          hasNotifications={notifications.length > 0}
+          onMarkAllAsRead={markAllAsRead}
+          onClearAll={clearAllNotifications}
+        />
         
-        <div className="max-h-[60vh] overflow-y-auto pr-1">
+        <div className="max-h-[60vh] overflow-y-auto pr-1 mt-2">
           <NotificationsList
             notifications={notifications}
             onDelete={deleteNotification}

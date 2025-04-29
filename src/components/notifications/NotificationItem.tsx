@@ -34,18 +34,18 @@ export const NotificationItem = ({ notification, onDelete, onClick }: Notificati
 
   return (
     <div 
-      className={`p-3 rounded-lg flex items-start gap-3 cursor-pointer transition-colors ${
+      className={`p-4 rounded-lg flex items-start gap-4 cursor-pointer transition-colors ${
         notification.read ? 'bg-gray-50' : 'bg-anny-green/5 hover:bg-anny-green/10'
       }`}
       onClick={() => onClick(notification)}
     >
-      <div className="mt-1">
+      <div className="mt-0.5 flex-shrink-0">
         {getNotificationIcon(notification.type)}
       </div>
       
-      <div className="flex-1">
-        <div className="flex justify-between">
-          <h4 className={`text-sm font-medium ${!notification.read ? 'text-anny-green' : 'text-gray-700'}`}>
+      <div className="flex-1 min-w-0">
+        <div className="flex justify-between items-start gap-2">
+          <h4 className={`text-sm font-medium truncate ${!notification.read ? 'text-anny-green' : 'text-gray-700'}`}>
             {notification.title}
           </h4>
           <button 
@@ -53,12 +53,12 @@ export const NotificationItem = ({ notification, onDelete, onClick }: Notificati
               e.stopPropagation();
               onDelete(notification.id);
             }}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-1"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
-        <p className="text-sm text-gray-600 mt-1">
+        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
           {notification.message}
         </p>
         <p className="text-xs text-gray-500 mt-1">
