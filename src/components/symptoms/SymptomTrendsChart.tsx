@@ -19,7 +19,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { SymptomEntry } from "@/types/symptoms";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 
 interface SymptomTrendsChartProps {
   entries: SymptomEntry[];
@@ -147,7 +146,7 @@ export function SymptomTrendsChart({ entries }: SymptomTrendsChartProps) {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
                       <YAxis domain={[0, 10]} />
-                      <Tooltip content={(props) => (
+                      <ChartTooltip content={(props) => (
                         <div className="rounded-md border bg-background p-2 shadow-md">
                           <div className="font-medium">{props.label}</div>
                           {props.payload?.map((entry, index) => (
@@ -176,7 +175,7 @@ export function SymptomTrendsChart({ entries }: SymptomTrendsChartProps) {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
                       <YAxis domain={[0, 10]} />
-                      <Tooltip />
+                      <ChartTooltip />
                       <Legend />
                       {uniqueSymptomTypes.map((symptom, index) => (
                         <Bar
@@ -192,22 +191,22 @@ export function SymptomTrendsChart({ entries }: SymptomTrendsChartProps) {
               
               <div className="flex justify-end">
                 <div className="flex space-x-1">
-                  <Button
-                    size="sm"
-                    variant={chartType === "line" ? "default" : "outline"}
+                  <TabsTrigger
+                    value="line"
+                    variant="outline"
                     onClick={() => setChartType("line")}
                     className={chartType === "line" ? "bg-muted" : ""}
                   >
                     Linha
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant={chartType === "bar" ? "default" : "outline"}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="bar"
+                    variant="outline"
                     onClick={() => setChartType("bar")}
                     className={chartType === "bar" ? "bg-muted" : ""}
                   >
                     Barra
-                  </Button>
+                  </TabsTrigger>
                 </div>
               </div>
             </TabsContent>
@@ -218,7 +217,14 @@ export function SymptomTrendsChart({ entries }: SymptomTrendsChartProps) {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="symptom" />
                   <YAxis domain={[0, 10]} />
-                  <Tooltip />
+                  <ChartTooltip
+                    content={props => (
+                      <ChartTooltipContent
+                        className="bg-background border border-border shadow-lg"
+                        {...props}
+                      />
+                    )}
+                  />
                   <Legend />
                   <Bar
                     dataKey="average"
