@@ -56,16 +56,18 @@ const NotificationsDialog = () => {
   };
 
   const markAllAsRead = () => {
+    const storageKey = user ? `notifications_${user.id}` : 'notifications';
     const updatedNotifications = notifications.map(notif => ({ ...notif, read: true }));
     setNotifications(updatedNotifications);
-    localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+    localStorage.setItem(storageKey, JSON.stringify(updatedNotifications));
     debouncedToast.success("Todas as notificações foram marcadas como lidas");
   };
 
   const deleteNotification = (id: number) => {
+    const storageKey = user ? `notifications_${user.id}` : 'notifications';
     const updatedNotifications = notifications.filter(notif => notif.id !== id);
     setNotifications(updatedNotifications);
-    localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+    localStorage.setItem(storageKey, JSON.stringify(updatedNotifications));
   };
 
   const clearAllNotifications = () => {
@@ -104,7 +106,7 @@ const NotificationsDialog = () => {
           onClearAll={clearAllNotifications}
         />
         
-        <div className="max-h-[60vh] overflow-y-auto pr-1 mt-2">
+        <div className="max-h-[60vh] overflow-y-auto pr-1">
           <NotificationsList
             notifications={notifications}
             onDelete={deleteNotification}

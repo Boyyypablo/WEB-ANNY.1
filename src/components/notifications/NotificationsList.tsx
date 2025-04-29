@@ -11,8 +11,8 @@ interface NotificationsListProps {
 export const NotificationsList = ({ notifications, onDelete, onClick }: NotificationsListProps) => {
   if (notifications.length === 0) {
     return (
-      <div className="text-center py-8">
-        <Bell className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+      <div className="text-center py-6">
+        <Bell className="h-12 w-12 text-gray-300 mx-auto mb-3" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">Não há notificações</h3>
         <p className="text-sm text-gray-500 max-w-xs mx-auto">
           Suas notificações sobre consultas, pedidos e exames aparecerão aqui.
@@ -22,7 +22,7 @@ export const NotificationsList = ({ notifications, onDelete, onClick }: Notifica
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {notifications.map(notification => (
         <NotificationItem
           key={notification.id}
