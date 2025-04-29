@@ -20,6 +20,7 @@ import { Calendar, CircleCheck, Edit, PlusCircle, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+// Define the interface to match our database schema
 interface SymptomEntry {
   id?: string;
   user_id?: string;

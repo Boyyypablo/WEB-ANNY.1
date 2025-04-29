@@ -122,6 +122,33 @@ export type Database = {
           },
         ]
       }
+      symptom_diary: {
+        Row: {
+          created_at: string
+          id: string
+          intensity: number
+          notes: string | null
+          symptom_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          intensity: number
+          notes?: string | null
+          symptom_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          intensity?: number
+          notes?: string | null
+          symptom_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tenants: {
         Row: {
           area_of_activity: string | null
