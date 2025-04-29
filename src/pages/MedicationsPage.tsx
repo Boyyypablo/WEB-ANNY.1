@@ -52,35 +52,35 @@ const MedicationsPage = () => {
       name: "Canabidiol Herbarium 200mg/ml (30ml)",
       description: "Solução oral com alta concentração de CBD, indicada para casos de epilepsia refratária e outras condições neurológicas.",
       price: 2210.69,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
     },
     {
       id: 3,
       name: "Canabidiol 20mg/ml – Prati-Donaduzzi (30ml)",
       description: "Solução oral com 20 mg/ml de CBD, indicada para auxiliar no tratamento de epilepsia e outras condições neurológicas.",
       price: 92.79,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
     },
     {
       id: 4,
       name: "Canabidiol 79,14mg/ml – GreenCare (30ml)",
       description: "Solução oral com 79,14 mg/ml de CBD, indicada para tratamento de dores crônicas e distúrbios neurológicas.",
       price: 994.42,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
     },
     {
       id: 5,
       name: "Óleo CBD 1000mg – Naturecan (30ml)",
       description: "Óleo com 1000 mg de CBD, indicado para auxiliar no alívio de sintomas de ansiedade e estresse.",
       price: 499.00,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
     },
     {
       id: 6,
       name: "Óleo de Cannabis – Abrace Esperança (30ml)",
       description: "Óleo de CBD com preço acessível, voltado para pacientes com dificuldades financeiras, indicado para diversas condições neurológicas.",
       price: 79.00,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.webp"
+      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
     }
   ];
 
