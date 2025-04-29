@@ -1,6 +1,7 @@
 
 import { SymptomForm } from "@/components/symptoms/SymptomForm";
 import { SymptomEntryList } from "@/components/symptoms/SymptomEntryList";
+import { SymptomTrendsChart } from "@/components/symptoms/SymptomTrendsChart";
 import { useSymptomDiary } from "@/hooks/useSymptomDiary";
 
 export default function SymptomDiaryPage() {
@@ -34,13 +35,17 @@ export default function SymptomDiaryPage() {
         </div>
         
         <div className="lg:col-span-2">
-          <SymptomEntryList
-            entries={entries}
-            loading={loading}
-            editingEntry={editingEntry}
-            startEditing={startEditing}
-            deleteEntry={deleteEntry}
-          />
+          <div className="space-y-6">
+            <SymptomTrendsChart entries={entries} />
+            
+            <SymptomEntryList
+              entries={entries}
+              loading={loading}
+              editingEntry={editingEntry}
+              startEditing={startEditing}
+              deleteEntry={deleteEntry}
+            />
+          </div>
         </div>
       </div>
     </div>
