@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import { validateField } from "@/utils/validation";
 import { ValidationErrors, UserType } from "@/types/auth";
 import { PatientSignUpForm } from "./PatientSignUpForm";
 import { AssociationSignUpForm } from "./AssociationSignUpForm";
+import { toast } from "sonner";
 
 interface SignUpFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -21,15 +22,56 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
   const [userType, setUserType] = useState<UserType>("patient");
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [emailValue, setEmailValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
+  const [lastPasswordCheck, setLastPasswordCheck] = useState<Date | null>(null);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
+  // Validate field when input changes
   const handleValidation = async (field: string, value: string) => {
     if (field === 'email') {
       setEmailValue(value);
+    } else if (field === 'password') {
+      setPasswordValue(value);
+      // Re-validate password confirmation whenever password changes
+      if (confirmPasswordValue) {
+        const confirmErrors = await validateField('passwordConfirmation', confirmPasswordValue, value);
+        setValidationErrors(prev => ({ ...prev, ...confirmErrors }));
+      }
+    } else if (field === 'passwordConfirmation') {
+      setConfirmPasswordValue(value);
     }
-    const passwordInput = document.querySelector('[name="password"]') as HTMLInputElement;
-    const newErrors = await validateField(field, value, passwordInput?.value);
+
+    const newErrors = await validateField(field, value, passwordValue);
     setValidationErrors(prev => ({ ...prev, ...newErrors }));
   };
+
+  // Check if passwords match every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (passwordValue && confirmPasswordValue) {
+        const confirmErrors = await validateField('passwordConfirmation', confirmPasswordValue, passwordValue);
+        
+        const doPasswordsMatch = !confirmErrors.passwordConfirmation;
+        
+        // Only update state and show toast if match state has changed
+        if (passwordsMatch !== doPasswordsMatch) {
+          setPasswordsMatch(doPasswordsMatch);
+          
+          if (doPasswordsMatch) {
+            toast.success("Senhas coincidem!");
+          } else {
+            toast.error("Senhas não coincidem!");
+          }
+        }
+        
+        setValidationErrors(prev => ({ ...prev, ...confirmErrors }));
+        setLastPasswordCheck(new Date());
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [passwordValue, confirmPasswordValue, passwordsMatch]);
 
   return (
     <form onSubmit={(e) => {
@@ -69,6 +111,7 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
             name="password"
             type="password"
             className="pl-10"
+            value={passwordValue}
             onChange={(e) => handleValidation('password', e.target.value)}
             required
           />
@@ -87,12 +130,18 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
             name="passwordConfirmation"
             type="password"
             className="pl-10"
+            value={confirmPasswordValue}
             onChange={(e) => handleValidation('passwordConfirmation', e.target.value)}
             required
           />
         </div>
         {validationErrors.passwordConfirmation && (
           <p className="text-sm text-red-500">{validationErrors.passwordConfirmation}</p>
+        )}
+        {lastPasswordCheck && (
+          <p className="text-xs text-gray-500">
+            Última verificação: {lastPasswordCheck.toLocaleTimeString()}
+          </p>
         )}
       </div>
 

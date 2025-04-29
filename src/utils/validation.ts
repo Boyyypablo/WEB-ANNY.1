@@ -1,6 +1,5 @@
 
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
 import { ValidationErrors } from "@/types/auth";
 
 // Validation schemas
@@ -20,15 +19,17 @@ export const validateField = async (
     switch (field) {
       case 'email':
         emailSchema.parse(value);
-        // Remove the problematic email validation that was incorrectly detecting emails as already in use
         break;
         
       case 'password':
-        passwordSchema.parse(value);
+        // Only validate if there's a value to validate
+        if (value) {
+          passwordSchema.parse(value);
+        }
         break;
         
       case 'passwordConfirmation':
-        if (value !== passwordValue) {
+        if (value && passwordValue && value !== passwordValue) {
           newErrors.passwordConfirmation = "As senhas não coincidem";
         }
         break;
