@@ -20,8 +20,12 @@ interface SignUpFormProps {
 export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
   const [userType, setUserType] = useState<UserType>("patient");
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [emailValue, setEmailValue] = useState("");
 
   const handleValidation = async (field: string, value: string) => {
+    if (field === 'email') {
+      setEmailValue(value);
+    }
     const passwordInput = document.querySelector('[name="password"]') as HTMLInputElement;
     const newErrors = await validateField(field, value, passwordInput?.value);
     setValidationErrors(prev => ({ ...prev, ...newErrors }));
@@ -30,7 +34,8 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
-      onSubmit(new FormData(e.currentTarget));
+      const formData = new FormData(e.currentTarget);
+      onSubmit(formData);
     }} className="space-y-6">
       <input type="hidden" name="userType" value={userType} />
       
@@ -45,6 +50,7 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
             name="email"
             type="email"
             className="pl-10"
+            value={emailValue}
             onChange={(e) => handleValidation('email', e.target.value)}
             required
           />

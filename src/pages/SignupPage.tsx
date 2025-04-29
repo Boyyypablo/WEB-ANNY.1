@@ -39,52 +39,69 @@ export default function SignupPage() {
         }
       });
 
-      if (signUpError) throw signUpError;
+      if (signUpError) {
+        console.error("Signup error:", signUpError);
+        throw signUpError;
+      }
 
       if (data?.user) {
-        // Create profile based on user type
-        if (userType === "patient") {
-          const { error: profileError } = await supabase.from("profiles").insert({
-            id: data.user.id,
-            email,
-            user_type: userType,
-            cpf: formData.get("cpf") as string,
-            address: formData.get("address") as string,
-            zip_code: formData.get("zipCode") as string,
-          });
+        try {
+          // Create profile based on user type
+          if (userType === "patient") {
+            const { error: profileError } = await supabase.from("profiles").insert({
+              id: data.user.id,
+              email,
+              user_type: userType,
+              cpf: formData.get("cpf") as string,
+              address: formData.get("address") as string,
+              zip_code: formData.get("zipCode") as string,
+            });
 
-          if (profileError) throw profileError;
-        } else {
-          // Create association profile
-          const { error: profileError } = await supabase.from("profiles").insert({
-            id: data.user.id,
-            email,
-            user_type: userType,
-            address: formData.get("address") as string,
-            zip_code: formData.get("zipCode") as string,
-            position: formData.get("position") as string,
-          });
+            if (profileError) throw profileError;
+          } else {
+            // Create association profile
+            const { error: profileError } = await supabase.from("profiles").insert({
+              id: data.user.id,
+              email,
+              user_type: userType,
+              address: formData.get("address") as string,
+              zip_code: formData.get("zipCode") as string,
+              position: formData.get("position") as string,
+            });
 
-          if (profileError) throw profileError;
+            if (profileError) throw profileError;
 
-          // Create tenant for association
-          const { error: tenantError } = await supabase.from("tenants").insert({
-            cnpj: formData.get("cnpj") as string,
-            institution_name: formData.get("institutionName") as string,
-            area_of_activity: formData.get("areaOfActivity") as string,
-            name: formData.get("institutionName") as string,
-            type: userType,
-          });
+            // Create tenant for association
+            const { error: tenantError } = await supabase.from("tenants").insert({
+              cnpj: formData.get("cnpj") as string,
+              institution_name: formData.get("institutionName") as string,
+              area_of_activity: formData.get("areaOfActivity") as string,
+              name: formData.get("institutionName") as string,
+              type: userType,
+            });
 
-          if (tenantError) throw tenantError;
+            if (tenantError) throw tenantError;
+          }
+
+          toast.success("Cadastro realizado com sucesso! Por favor, faça login.");
+          navigate("/auth");
+        } catch (profileError: any) {
+          console.error("Profile creation error:", profileError);
+          
+          // If profile creation fails, delete the created user to maintain consistency
+          await supabase.auth.admin?.deleteUser(data.user.id);
+          
+          throw new Error("Erro ao criar perfil. " + profileError.message);
         }
-
-        toast.success("Cadastro realizado com sucesso! Por favor, faça login.");
-        navigate("/auth");
       }
     } catch (err: any) {
       console.error("Erro no cadastro:", err);
       setError(err.message || "Erro ao realizar cadastro. Tente novamente.");
+      
+      // Check for specific error types and provide friendly messages
+      if (err.message?.includes("User already registered")) {
+        setError("Este email já está cadastrado. Por favor, utilize outro email ou faça login.");
+      }
     } finally {
       setIsLoading(false);
     }

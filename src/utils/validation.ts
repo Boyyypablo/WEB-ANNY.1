@@ -20,16 +20,7 @@ export const validateField = async (
     switch (field) {
       case 'email':
         emailSchema.parse(value);
-        if (value) {
-          const { error: signInError } = await supabase.auth.signInWithOtp({
-            email: value,
-          });
-          
-          if (!signInError || signInError.message.includes("Email rate limit")) {
-            newErrors.email = "Este email já está em uso";
-            break;
-          }
-        }
+        // Remove the problematic email validation that was incorrectly detecting emails as already in use
         break;
         
       case 'password':
