@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,6 @@ import { validateField } from "@/utils/validation";
 import { ValidationErrors, UserType } from "@/types/auth";
 import { PatientSignUpForm } from "./PatientSignUpForm";
 import { AssociationSignUpForm } from "./AssociationSignUpForm";
-import { toast } from "sonner";
 
 interface SignUpFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -22,57 +21,15 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
   const [userType, setUserType] = useState<UserType>("patient");
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [emailValue, setEmailValue] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const timerRef = useRef<number | null>(null);
 
   const handleValidation = async (field: string, value: string) => {
     if (field === 'email') {
       setEmailValue(value);
-    } else if (field === 'password') {
-      setPassword(value);
-    } else if (field === 'passwordConfirmation') {
-      setPasswordConfirmation(value);
     }
-    
-    const newErrors = await validateField(field, value, field === 'passwordConfirmation' ? password : undefined);
+    const passwordInput = document.querySelector('[name="password"]') as HTMLInputElement;
+    const newErrors = await validateField(field, value, passwordInput?.value);
     setValidationErrors(prev => ({ ...prev, ...newErrors }));
   };
-
-  // Setup interval for password validation
-  useEffect(() => {
-    // Clear any existing timer when component mounts or dependencies change
-    if (timerRef.current) {
-      window.clearInterval(timerRef.current);
-    }
-
-    // Set new timer for password validation every 5 seconds
-    timerRef.current = window.setInterval(async () => {
-      if (password && passwordConfirmation) {
-        const newErrors = await validateField('passwordConfirmation', passwordConfirmation, password);
-        
-        const previousError = validationErrors.passwordConfirmation;
-        const newError = newErrors.passwordConfirmation;
-        
-        // Update validation errors
-        setValidationErrors(prev => ({ ...prev, ...newErrors }));
-        
-        // Show toast notification only when error status changes
-        if (previousError && !newError) {
-          toast.success("As senhas coincidem!");
-        } else if (!previousError && newError) {
-          toast.error("As senhas não coincidem!");
-        }
-      }
-    }, 5000); // 5 seconds interval
-    
-    // Cleanup function
-    return () => {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current);
-      }
-    };
-  }, [password, passwordConfirmation, validationErrors.passwordConfirmation]);
 
   return (
     <form onSubmit={(e) => {
@@ -112,7 +69,6 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
             name="password"
             type="password"
             className="pl-10"
-            value={password}
             onChange={(e) => handleValidation('password', e.target.value)}
             required
           />
@@ -131,7 +87,6 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
             name="passwordConfirmation"
             type="password"
             className="pl-10"
-            value={passwordConfirmation}
             onChange={(e) => handleValidation('passwordConfirmation', e.target.value)}
             required
           />
