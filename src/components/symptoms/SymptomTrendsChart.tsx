@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { 
   LineChart, 
@@ -16,7 +15,7 @@ import { format, subDays, isWithinInterval, startOfDay, parseISO } from "date-fn
 import { ptBR } from "date-fns/locale";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 import { SymptomEntry } from "@/types/symptoms";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -216,14 +215,7 @@ export function SymptomTrendsChart({ entries }: SymptomTrendsChartProps) {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="symptom" />
                   <YAxis domain={[0, 10]} />
-                  <Tooltip
-                    content={(props) => (
-                      <ChartTooltipContent
-                        className="bg-background border border-border shadow-lg"
-                        {...props}
-                      />
-                    )}
-                  />
+                  <Tooltip />
                   <Legend />
                   <Bar
                     dataKey="average"
