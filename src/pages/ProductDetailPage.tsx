@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ShoppingCart, Plus, Minus, Truck, Star, Heart } from "lucide-react";
 import { debouncedToast } from "@/components/ui/sonner";
@@ -15,16 +15,23 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+interface Review {
+  id: number;
+  userName: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
 interface Medication {
   id: number;
   name: string;
   description: string;
   price: number;
   image: string;
-  rating?: number;
-  reviews?: number;
   images?: string[];
   specifications?: Record<string, string>;
+  reviews?: Review[];
 }
 
 const medications: Medication[] = [
@@ -34,8 +41,6 @@ const medications: Medication[] = [
     description: "Produto fitoterápico com 36,76 mg/ml de CBD, indicado para auxiliar no tratamento de condições como ansiedade e dores crônicas.",
     price: 375.00,
     image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
-    rating: 4.8,
-    reviews: 124,
     images: [
       "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
       "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
@@ -48,7 +53,30 @@ const medications: Medication[] = [
       "Forma": "Óleo para uso oral",
       "Indicação principal": "Ansiedade e dores crônicas",
       "Conservação": "Conservar em temperatura ambiente entre 15°C e 30°C"
-    }
+    },
+    reviews: [
+      {
+        id: 1,
+        userName: "Maria S.",
+        rating: 5,
+        comment: "Excelente produto! Ajudou muito no controle da minha ansiedade. Recomendo totalmente.",
+        date: "15/04/2025"
+      },
+      {
+        id: 2,
+        userName: "João P.",
+        rating: 4,
+        comment: "Estou usando há 2 meses para dores crônicas e percebi uma melhora significativa. O gosto não é dos melhores, mas os benefícios compensam.",
+        date: "02/04/2025"
+      },
+      {
+        id: 3,
+        userName: "Ana L.",
+        rating: 5,
+        comment: "Ótimo produto, entrega rápida e embalagem discreta. Tem me ajudado muito com insônia.",
+        date: "27/03/2025"
+      }
+    ]
   },
   {
     id: 2,
@@ -56,8 +84,6 @@ const medications: Medication[] = [
     description: "Solução oral com alta concentração de CBD, indicada para casos de epilepsia refratária e outras condições neurológicas.",
     price: 2210.69,
     image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
-    rating: 4.9,
-    reviews: 87,
     images: [
       "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
       "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png"
@@ -69,14 +95,46 @@ const medications: Medication[] = [
       "Forma": "Solução oral",
       "Indicação principal": "Epilepsia refratária",
       "Conservação": "Conservar em temperatura ambiente entre 15°C e 30°C"
-    }
+    },
+    reviews: [
+      {
+        id: 1,
+        userName: "Roberto C.",
+        rating: 5,
+        comment: "Produto de qualidade excepcional! Superou minhas expectativas.",
+        date: "10/04/2025"
+      },
+      {
+        id: 2,
+        userName: "Fernanda M.",
+        rating: 5,
+        comment: "Estava em dúvida se valeria o investimento, mas depois de um mês de uso posso dizer que sim.",
+        date: "05/04/2025"
+      }
+    ]
   },
   {
     id: 3,
     name: "Canabidiol 20mg/ml – Prati-Donaduzzi (30ml)",
     description: "Solução oral com 20 mg/ml de CBD, indicada para auxiliar no tratamento de epilepsia e outras condições neurológicas.",
     price: 92.79,
-    image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+    image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+    reviews: [
+      {
+        id: 1,
+        userName: "Carlos R.",
+        rating: 4,
+        comment: "Bom produto para iniciantes. Concentração mais baixa, mas eficaz.",
+        date: "12/04/2025"
+      },
+      {
+        id: 2,
+        userName: "Mariana T.",
+        rating: 3,
+        comment: "Efeito moderado. Para meu caso, precisei de uma concentração maior.",
+        date: "30/03/2025"
+      }
+    ]
   },
   {
     id: 4,
@@ -128,6 +186,18 @@ const ProductDetailPage = () => {
   }
 
   const relatedProducts = getRelatedProducts(medication.id);
+
+  // Calcular a classificação média com base nas avaliações
+  const calculateAverageRating = (reviews?: Review[]): number | undefined => {
+    if (!reviews || reviews.length === 0) return undefined;
+    
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return totalRating / reviews.length;
+  };
+
+  // Obter a classificação média para o medicamento atual
+  const averageRating = calculateAverageRating(medication.reviews);
+  const reviewsCount = medication.reviews?.length || 0;
 
   const handleAddToCart = () => {
     try {
@@ -186,7 +256,7 @@ const ProductDetailPage = () => {
     }
   };
 
-  // Renderiza as estrelas de avaliação
+  // Renderiza as estrelas de avaliação baseadas na média das avaliações
   const renderRating = (rating: number | undefined) => {
     if (!rating) return null;
     
@@ -199,11 +269,16 @@ const ProductDetailPage = () => {
           />
         ))}
         <span className="text-sm font-medium ml-2">{rating.toFixed(1)}</span>
-        {medication.reviews && (
-          <span className="text-sm text-muted-foreground">({medication.reviews} avaliações)</span>
+        {reviewsCount > 0 && (
+          <span className="text-sm text-muted-foreground">({reviewsCount} avaliações)</span>
         )}
       </div>
     );
+  };
+
+  // Calcular avaliação média para produtos relacionados
+  const getProductRating = (product: Medication): number | undefined => {
+    return calculateAverageRating(product.reviews);
   };
 
   // Calcula prazo de entrega estimado (simulação)
@@ -319,83 +394,54 @@ const ProductDetailPage = () => {
               </TabsContent>
               <TabsContent value="reviews" className="p-6">
                 <h3 className="font-semibold mb-4">Avaliações de Clientes</h3>
-                {medication.rating && (
+                {averageRating !== undefined && (
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="text-3xl font-bold">{medication.rating.toFixed(1)}</div>
+                      <div className="text-3xl font-bold">{averageRating.toFixed(1)}</div>
                       <div className="flex flex-col">
                         <div className="flex">
                           {[...Array(5)].map((_, i) => (
                             <Star 
                               key={i}
-                              className={`h-5 w-5 ${i < Math.floor(medication.rating!) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                              className={`h-5 w-5 ${i < Math.floor(averageRating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
                             />
                           ))}
                         </div>
                         <span className="text-sm text-muted-foreground">
-                          {medication.reviews} avaliações
+                          {reviewsCount} avaliações
                         </span>
                       </div>
                     </div>
                   </div>
                 )}
                 
-                {/* Comentários de exemplo */}
+                {/* Comentários dos usuários */}
                 <div className="space-y-4">
-                  <div className="border-b pb-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i}
-                            className={`h-4 w-4 ${i < 5 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                          />
-                        ))}
+                  {medication.reviews?.map(review => (
+                    <div key={review.id} className="border-b pb-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i}
+                              className={`h-4 w-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
+                            />
+                          ))}
+                        </div>
+                        <span className="font-medium">{review.userName}</span>
                       </div>
-                      <span className="font-medium">Maria S.</span>
+                      <p className="text-sm">
+                        {review.comment}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">{review.date}</p>
                     </div>
-                    <p className="text-sm">
-                      Excelente produto! Ajudou muito no controle da minha ansiedade. Recomendo totalmente.
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">15/04/2025</p>
-                  </div>
+                  ))}
                   
-                  <div className="border-b pb-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i}
-                            className={`h-4 w-4 ${i < 4 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                          />
-                        ))}
-                      </div>
-                      <span className="font-medium">João P.</span>
-                    </div>
-                    <p className="text-sm">
-                      Estou usando há 2 meses para dores crônicas e percebi uma melhora significativa. 
-                      O gosto não é dos melhores, mas os benefícios compensam.
+                  {(!medication.reviews || medication.reviews.length === 0) && (
+                    <p className="text-sm text-muted-foreground">
+                      Este produto ainda não possui avaliações.
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">02/04/2025</p>
-                  </div>
-                  
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i}
-                            className={`h-4 w-4 ${i < 5 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
-                          />
-                        ))}
-                      </div>
-                      <span className="font-medium">Ana L.</span>
-                    </div>
-                    <p className="text-sm">
-                      Ótimo produto, entrega rápida e embalagem discreta. Tem me ajudado muito com insônia.
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">27/03/2025</p>
-                  </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
@@ -408,7 +454,7 @@ const ProductDetailPage = () => {
             {/* Cabeçalho do Produto */}
             <div className="space-y-3 mb-6">
               <h1 className="text-2xl md:text-3xl font-bold">{medication.name}</h1>
-              {renderRating(medication.rating)}
+              {renderRating(averageRating)}
               <p className="text-anny-green/70">{medication.description}</p>
             </div>
             
@@ -520,7 +566,7 @@ const ProductDetailPage = () => {
                       onClick={() => navigate(`/medications/${product.id}`)}>
                     {product.name}
                   </h3>
-                  {renderRating(product.rating)}
+                  {renderRating(getProductRating(product))}
                   <div className="flex justify-between items-center mt-3">
                     <span className="font-bold">R$ {product.price.toFixed(2)}</span>
                     <Button 
