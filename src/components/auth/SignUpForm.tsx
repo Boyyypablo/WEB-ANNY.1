@@ -1,16 +1,14 @@
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Mail, Lock, Loader2 } from "lucide-react";
-import { AccountTypeSelector } from "./AccountTypeSelector";
-import { validateField } from "@/utils/validation";
+import { useState } from "react";
 import { ValidationErrors, UserType } from "@/types/auth";
+import { validateField } from "@/utils/validation";
 import { PatientSignUpForm } from "./PatientSignUpForm";
 import { AssociationSignUpForm } from "./AssociationSignUpForm";
-import { toast } from "sonner";
+import { AccountTypeSelector } from "./AccountTypeSelector";
+import { EmailField } from "./EmailField";
+import { PasswordFields } from "./PasswordFields";
+import { FormError } from "./FormError";
+import { SubmitButton } from "./SubmitButton";
 
 interface SignUpFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -21,94 +19,23 @@ interface SignUpFormProps {
 export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
   const [userType, setUserType] = useState<UserType>("patient");
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
-  const [emailValue, setEmailValue] = useState("");
-  const [passwordValue, setPasswordValue] = useState("");
-  const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
-  const [lastPasswordCheck, setLastPasswordCheck] = useState<Date | null>(null);
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
   // Validate field when input changes
   const handleValidation = async (field: string, value: string) => {
-    if (field === 'email') {
-      setEmailValue(value);
-    } else if (field === 'password') {
-      setPasswordValue(value);
-      // If field is password and no value, remove any existing password errors
-      if (!value) {
-        setValidationErrors(prev => {
-          const updated = {...prev};
-          delete updated.password;
-          return updated;
-        });
-        return;
-      }
-      
-      // Re-validate password confirmation whenever password changes
-      if (confirmPasswordValue) {
-        validatePasswordMatch(value, confirmPasswordValue);
-      }
-    } else if (field === 'passwordConfirmation') {
-      setConfirmPasswordValue(value);
-      // If we have both passwords, validate the match
-      if (passwordValue && value) {
-        validatePasswordMatch(passwordValue, value);
-      }
+    // If field is empty and it's not a required validation check, remove any existing errors
+    if (!value && field !== 'passwordConfirmation') {
+      setValidationErrors(prev => {
+        const updated = {...prev};
+        delete updated[field];
+        return updated;
+      });
       return;
     }
 
-    // Only proceed with field validation for non-empty fields
-    // For password, we already handled the empty case above
-    if (value) {
-      const newErrors = await validateField(field, value, passwordValue);
-      setValidationErrors(prev => ({ ...prev, ...newErrors }));
-    }
+    // For non-empty fields or password confirmation, validate
+    const newErrors = await validateField(field, value, field === 'passwordConfirmation' ? value : undefined);
+    setValidationErrors(prev => ({ ...prev, ...newErrors }));
   };
-
-  // Dedicated function to validate password match
-  const validatePasswordMatch = async (password: string, confirmation: string) => {
-    if (password && confirmation) {
-      const confirmErrors = await validateField('passwordConfirmation', confirmation, password);
-      setValidationErrors(prev => ({ ...prev, ...confirmErrors }));
-    }
-  };
-
-  // Check if passwords match every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (passwordValue && confirmPasswordValue) {
-        const doPasswordsMatch = passwordValue === confirmPasswordValue;
-        
-        // Only update state and show toast if match state has changed
-        if (passwordsMatch !== doPasswordsMatch) {
-          setPasswordsMatch(doPasswordsMatch);
-          
-          if (doPasswordsMatch) {
-            toast.success("Senhas coincidem!");
-          } else {
-            toast.error("Senhas não coincidem!");
-          }
-        }
-        
-        // Update validation errors
-        if (!doPasswordsMatch) {
-          setValidationErrors(prev => ({ 
-            ...prev, 
-            passwordConfirmation: "As senhas não coincidem" 
-          }));
-        } else {
-          setValidationErrors(prev => {
-            const updated = {...prev};
-            delete updated.passwordConfirmation;
-            return updated;
-          });
-        }
-        
-        setLastPasswordCheck(new Date());
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [passwordValue, confirmPasswordValue, passwordsMatch]);
 
   return (
     <form onSubmit={(e) => {
@@ -119,68 +46,16 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
       <input type="hidden" name="userType" value={userType} />
       
       <AccountTypeSelector userType={userType} onUserTypeChange={setUserType} />
+      
+      <EmailField 
+        validationErrors={validationErrors} 
+        onValidation={handleValidation} 
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="signup-email">Email</Label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <Input
-            id="signup-email"
-            name="email"
-            type="email"
-            className="pl-10"
-            value={emailValue}
-            onChange={(e) => handleValidation('email', e.target.value)}
-            required
-          />
-        </div>
-        {validationErrors.email && (
-          <p className="text-sm text-red-500">{validationErrors.email}</p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="signup-password">Senha</Label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <Input
-            id="signup-password"
-            name="password"
-            type="password"
-            className="pl-10"
-            value={passwordValue}
-            onChange={(e) => handleValidation('password', e.target.value)}
-            required
-          />
-        </div>
-        {validationErrors.password && (
-          <p className="text-sm text-red-500">{validationErrors.password}</p>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="signup-password-confirmation">Confirmar Senha</Label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <Input
-            id="signup-password-confirmation"
-            name="passwordConfirmation"
-            type="password"
-            className="pl-10"
-            value={confirmPasswordValue}
-            onChange={(e) => handleValidation('passwordConfirmation', e.target.value)}
-            required
-          />
-        </div>
-        {validationErrors.passwordConfirmation && (
-          <p className="text-sm text-red-500">{validationErrors.passwordConfirmation}</p>
-        )}
-        {lastPasswordCheck && (
-          <p className="text-xs text-gray-500">
-            Última verificação: {lastPasswordCheck.toLocaleTimeString()}
-          </p>
-        )}
-      </div>
+      <PasswordFields 
+        validationErrors={validationErrors} 
+        onValidation={handleValidation} 
+      />
 
       {userType === "patient" ? (
         <PatientSignUpForm 
@@ -194,27 +69,13 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
         />
       )}
 
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      <FormError error={error} />
 
       <div className="space-y-4">
-        <Button 
-          type="submit" 
-          className="w-full" 
-          disabled={isLoading || Object.keys(validationErrors).length > 0}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              <span>Cadastrando...</span>
-            </>
-          ) : (
-            'Cadastrar'
-          )}
-        </Button>
+        <SubmitButton 
+          isLoading={isLoading} 
+          isDisabled={Object.keys(validationErrors).length > 0} 
+        />
       </div>
     </form>
   );
