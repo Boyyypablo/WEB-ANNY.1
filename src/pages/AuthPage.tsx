@@ -9,11 +9,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft } from "lucide-react";
+import { SignUpForm } from "@/components/auth/SignUpForm";
 
 export default function AuthPage() {
   const navigate = useNavigate();
   const { signIn, signUp, session, loading } = useAuth();
-  const [userType, setUserType] = useState<"patient" | "association">("patient");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,17 +44,15 @@ export default function AuthPage() {
     }
   };
 
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSignUp = async (formData: FormData) => {
     setIsLoading(true);
     setError(null);
 
-    const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const userType = formData.get("userType") as "patient" | "association";
 
     try {
-      // Pass the userType directly, which is already either "patient" or "association"
       const { error } = await signUp(email, password, userType);
       if (error) {
         setError(error.message);
@@ -124,43 +122,11 @@ export default function AuthPage() {
               </TabsContent>
 
               <TabsContent value="register">
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Tipo de Conta</Label>
-                    <div className="grid grid-cols-2 gap-4">
-                      <Button
-                        type="button"
-                        variant={userType === "patient" ? "default" : "outline"}
-                        onClick={() => setUserType("patient")}
-                      >
-                        Paciente
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={userType === "association" ? "default" : "outline"}
-                        onClick={() => setUserType("association")}
-                      >
-                        Associação
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="register-email">Email</Label>
-                    <Input id="register-email" name="email" type="email" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="register-password">Senha</Label>
-                    <Input id="register-password" name="password" type="password" required minLength={6} />
-                  </div>
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Cadastrando..." : "Cadastrar"}
-                  </Button>
-                </form>
+                <SignUpForm 
+                  onSubmit={handleSignUp} 
+                  error={error}
+                  isLoading={isLoading} 
+                />
               </TabsContent>
             </Tabs>
           </CardContent>
@@ -169,3 +135,4 @@ export default function AuthPage() {
     </div>
   );
 }
+
