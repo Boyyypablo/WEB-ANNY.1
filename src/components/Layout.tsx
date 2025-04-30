@@ -2,6 +2,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Navigation from "./Navigation";
+import Footer from "./Footer";
 
 const Layout = () => {
   return (
@@ -14,6 +15,7 @@ const Layout = () => {
         <main className="flex-1 container mx-auto px-4 pt-4">
           <Outlet />
         </main>
+        <Footer />
         <div className="lg:hidden">
           <Navigation />
         </div>

@@ -1,247 +1,230 @@
 
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { 
+  ArrowLeft, 
+  Calendar, 
+  User, 
+  Tag, 
+  Share, 
+  Facebook, 
+  Twitter, 
+  Linkedin, 
+  Mail
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, User, MessageSquare } from "lucide-react";
-import { debouncedToast } from "@/components/ui/sonner";
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  content: string;
-  image: string;
-  author: string;
-  date: string;
-  category: string;
-}
-
-interface Comment {
-  id: number;
-  author: string;
-  content: string;
-  date: string;
-}
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 
 const BlogPostPage = () => {
-  const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [comment, setComment] = useState("");
-  const [comments, setComments] = useState<Comment[]>([]);
+  const { id } = useParams();
   
-  // Dados de exemplo para o blog
-  const blogPosts: BlogPost[] = [
-    {
-      id: 1,
-      title: "Os benefícios do CBD para tratamento de epilepsia",
-      excerpt: "Estudos recentes mostram resultados promissores no uso de canabidiol para controle de convulsões em pacientes com epilepsia refratária.",
-      content: `
-        <p>O canabidiol (CBD) tem demonstrado resultados promissores no tratamento de diversos tipos de epilepsia, especialmente em casos refratários aos tratamentos convencionais.</p>
-        
-        <p>Estudos clínicos indicam que o CBD pode reduzir significativamente a frequência e a intensidade das crises epilépticas em pacientes que não respondem bem às terapias tradicionais.</p>
-        
-        <h2>Mecanismo de Ação</h2>
-        
-        <p>Acredita-se que o CBD atua modulando os receptores canabinoides e não-canabinoides no cérebro, resultando em efeitos anticonvulsivantes. Diferente do THC, o CBD não causa efeitos psicoativos, o que o torna uma opção segura para diversos pacientes.</p>
-        
-        <h2>Evidências Científicas</h2>
-        
-        <p>Um estudo publicado no New England Journal of Medicine demonstrou uma redução de aproximadamente 40% na frequência de crises em pacientes com Síndrome de Dravet tratados com CBD.</p>
-        
-        <p>Outros estudos indicam benefícios similares para pacientes com Síndrome de Lennox-Gastaut e outras formas de epilepsia de difícil controle.</p>
-        
-        <h2>Considerações Importantes</h2>
-        
-        <p>O uso do CBD para epilepsia deve sempre ser supervisionado por um médico especialista. A dosagem, frequência e forma de administração variam de acordo com o paciente e sua condição específica.</p>
-        
-        <p>No Brasil, medicamentos à base de CBD já são aprovados pela ANVISA para uso em casos específicos, mediante prescrição médica.</p>
-      `,
-      image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
-      author: "Dra. Fernanda Lima",
-      date: "23/04/2025",
-      category: "Cannabis Medicinal"
+  // In a real app, we would fetch the post based on the ID
+  // For this example, we'll use static content
+  
+  const post = {
+    id: id || "1",
+    title: "Os avanços da cannabis medicinal no tratamento de doenças neurológicas",
+    subtitle: "Um olhar sobre as pesquisas recentes e resultados promissores",
+    date: "15 de abril de 2025",
+    author: {
+      name: "Dra. Mariana Costa",
+      role: "Neurologista e Pesquisadora",
+      avatar: "/placeholder.svg"
     },
-    {
-      id: 2,
-      title: "Como a telemedicina está transformando o acesso à saúde no Brasil",
-      excerpt: "A adoção da telemedicina tem crescido exponencialmente, facilitando o acesso à saúde em regiões remotas do país.",
-      content: `
-        <p>A telemedicina tem se estabelecido como uma ferramenta essencial para democratizar o acesso à saúde no Brasil, especialmente nas regiões mais remotas.</p>
-        
-        <p>Com a pandemia, houve uma aceleração significativa na adoção de tecnologias de telessaúde, permitindo consultas remotas, monitoramento de pacientes à distância e troca de informações entre profissionais de saúde.</p>
-        
-        <h2>Benefícios da Telemedicina</h2>
-        
-        <ul>
-          <li>Acesso facilitado para pacientes em áreas rurais ou distantes</li>
-          <li>Redução do tempo de espera para consultas</li>
-          <li>Diminuição de custos com deslocamento</li>
-          <li>Continuidade do cuidado para pacientes com doenças crônicas</li>
-          <li>Melhor gerenciamento de recursos de saúde</li>
-        </ul>
-        
-        <h2>Desafios a Superar</h2>
-        
-        <p>Apesar dos avanços, ainda existem desafios importantes, como a inclusão digital da população idosa, a segurança de dados dos pacientes e a adaptação dos profissionais de saúde às novas tecnologias.</p>
-        
-        <h2>O Futuro da Telemedicina</h2>
-        
-        <p>Espera-se que a telemedicina continue a se desenvolver, incorporando novas tecnologias como inteligência artificial para diagnósticos preliminares e dispositivos wearable para monitoramento contínuo da saúde.</p>
-      `,
-      image: "/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
-      author: "Dr. Ricardo Santos",
-      date: "20/04/2025",
-      category: "Telemedicina"
-    },
-    {
-      id: 3,
-      title: "Guia completo sobre prescrição de medicamentos à base de cannabis",
-      excerpt: "Entenda os requisitos legais e melhores práticas para prescrição de medicamentos à base de cannabis no Brasil.",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod metus vel semper commodo.",
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
-      author: "Dra. Carolina Mendes",
-      date: "15/04/2025",
-      category: "Cannabis Medicinal"
-    }
-  ];
-
-  // Comentários de exemplo
-  const initialComments = [
-    {
-      id: 1,
-      author: "João Silva",
-      content: "Excelente artigo! Muito informativo sobre os benefícios do CBD.",
-      date: "24/04/2025"
-    },
-    {
-      id: 2,
-      author: "Marina Costa",
-      content: "Minha filha se beneficiou muito do tratamento com CBD para epilepsia. É transformador!",
-      date: "24/04/2025"
-    }
-  ];
-
-  useEffect(() => {
-    // Simulando uma requisição para buscar o post
-    setLoading(true);
-    setTimeout(() => {
-      const foundPost = blogPosts.find(p => p.id === Number(id));
-      if (foundPost) {
-        setPost(foundPost);
-        setComments(initialComments);
-      } else {
-        navigate("/blog");
-        debouncedToast.error("Post não encontrado");
-      }
-      setLoading(false);
-    }, 500);
-  }, [id, navigate]);
-
-  const handleSubmitComment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!comment.trim()) return;
-
-    const newComment = {
-      id: comments.length + 1,
-      author: "Usuário Logado",
-      content: comment,
-      date: new Date().toLocaleDateString()
-    };
-
-    setComments([...comments, newComment]);
-    setComment("");
-    debouncedToast.success("Comentário publicado com sucesso!");
-  };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[50vh]">
-        <div className="animate-pulse text-anny-green">Carregando...</div>
+    category: "Pesquisa Médica",
+    coverImage: "/placeholder.svg",
+    content: `
+      <p class="mb-4">Os últimos anos têm testemunhado um crescente interesse científico no potencial terapêutico dos canabinoides para o tratamento de diversas condições neurológicas. Estudos recentes demonstram resultados promissores no uso de CBD e outros compostos da cannabis no manejo de epilepsias refratárias, doença de Parkinson, esclerose múltipla e dor neuropática.</p>
+      
+      <h2 class="text-xl font-semibold my-4">Epilepsia e o papel dos canabinoides</h2>
+      
+      <p class="mb-4">Em 2018, a FDA aprovou o primeiro medicamento à base de CBD puro para o tratamento de síndromes epilépticas severas, como Síndrome de Dravet e Lennox-Gastaut. Estudos clínicos demonstraram uma redução de até 40% na frequência de convulsões em pacientes que não respondiam aos tratamentos convencionais.</p>
+      
+      <p class="mb-4">Na pesquisa conduzida pela Universidade de São Paulo em parceria com centros internacionais, observou-se que o CBD atua não apenas como anticonvulsivante, mas também apresenta propriedades neuroprotetoras que podem retardar a progressão da doença em alguns casos.</p>
+      
+      <div class="bg-gray-100 p-4 rounded-md my-6 italic">
+        "Os resultados são animadores e representam uma esperança real para pacientes com epilepsias refratárias que já testaram múltiplas medicações sem sucesso." - Dra. Helena Brentani, neurocientista.
       </div>
-    );
-  }
-
-  if (!post) return null;
-
+      
+      <h2 class="text-xl font-semibold my-4">Doença de Parkinson: novos horizontes</h2>
+      
+      <p class="mb-4">Para a doença de Parkinson, os canabinoides têm mostrado potencial para aliviar tanto os sintomas motores quanto não-motores. Um estudo publicado no Journal of Neurochemistry revelou que o CBD pode proteger neurônios dopaminérgicos, cuja perda é característica da doença, através da redução do estresse oxidativo e neuroinflamação.</p>
+      
+      <p class="mb-4">Pacientes tratados com formulações padronizadas de CBD reportaram melhora significativa em tremores, rigidez muscular e distúrbios do sono. Além disso, a qualidade de vida dos participantes apresentou melhora mensurável nas escalas de avaliação específicas para Parkinson.</p>
+      
+      <h2 class="text-xl font-semibold my-4">Esclerose múltipla e controle da espasticidade</h2>
+      
+      <p class="mb-4">A esclerose múltipla (EM) é outra condição em que o uso de canabinoides tem demonstrado benefícios significativos. Um spray de cannabis medicinal contendo CBD e THC em proporções específicas já é aprovado em mais de 30 países para o tratamento da espasticidade relacionada à EM.</p>
+      
+      <p class="mb-4">Estudos de longo prazo indicam que, além do controle da espasticidade, pacientes relatam melhora na dor neuropática, distúrbios da bexiga e qualidade do sono, contribuindo para uma melhoria global na qualidade de vida.</p>
+      
+      <h2 class="text-xl font-semibold my-4">Desafios e perspectivas futuras</h2>
+      
+      <p class="mb-4">Apesar dos resultados promissores, ainda existem desafios significativos no campo da cannabis medicinal para condições neurológicas. A padronização dos produtos, a determinação de dosagens ideais e a compreensão dos mecanismos de ação específicos ainda requerem mais pesquisas.</p>
+      
+      <p class="mb-4">O estigma associado ao uso da cannabis também representa uma barreira à aceitação desses tratamentos, mesmo com evidências científicas crescentes. A educação de profissionais de saúde e do público geral sobre a diferença entre uso medicinal e recreativo é essencial para permitir que mais pacientes se beneficiem dessas terapias.</p>
+      
+      <h2 class="text-xl font-semibold my-4">Conclusão</h2>
+      
+      <p class="mb-4">Os avanços no campo da cannabis medicinal para doenças neurológicas são promissores e representam uma nova fronteira no tratamento de condições muitas vezes desafiadoras e refratárias às terapias convencionais. Com o aumento da pesquisa e da regulamentação adequada, esses tratamentos poderão se tornar opções terapêuticas cada vez mais relevantes no arsenal médico contra doenças neurológicas complexas.</p>
+      
+      <p class="mb-4">À medida que a ciência avança, é fundamental que pacientes interessados em explorar essas opções consultem profissionais médicos especializados, capazes de avaliar adequadamente os potenciais benefícios e riscos para cada caso individual.</p>
+    `,
+    tags: ["Cannabis Medicinal", "Neurologia", "Epilepsia", "Parkinson", "Pesquisa"],
+    relatedPosts: [
+      {
+        id: "2",
+        title: "O papel do sistema endocanabinoide na regulação da dor crônica",
+        image: "/placeholder.svg",
+        excerpt: "Entenda como o CBD interage com receptores do sistema endocanabinoide para modular a percepção da dor."
+      },
+      {
+        id: "3",
+        title: "Ansiedade e depressão: como os canabinoides podem auxiliar no tratamento",
+        image: "/placeholder.svg",
+        excerpt: "Pesquisas recentes apontam benefícios dos compostos da cannabis no manejo de transtornos de humor e ansiedade."
+      }
+    ]
+  };
+  
   return (
-    <div className="space-y-6">
-      <Button
-        variant="ghost"
-        className="flex items-center gap-2 text-anny-green hover:text-anny-green/90"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Voltar para o Blog
-      </Button>
-
-      <div className="anny-card">
-        <div className="h-64 -mx-5 -mt-5 mb-6 relative rounded-t-xl overflow-hidden">
-          <img 
-            src={post.image} 
-            alt={post.title}
-            className="w-full h-full object-cover" 
-          />
-          <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-transparent to-black/50"></div>
-          <span className="absolute bottom-4 left-4 text-white text-sm font-medium px-3 py-1 bg-anny-green/80 rounded-full">
-            {post.category}
-          </span>
-        </div>
+    <div className="max-w-4xl mx-auto py-6">
+      <div className="mb-8">
+        <Link to="/blog" className="flex items-center text-anny-green hover:underline mb-4">
+          <ArrowLeft className="h-4 w-4 mr-2" /> Voltar para o Blog
+        </Link>
         
-        <h1 className="text-2xl md:text-3xl font-bold mb-4">{post.title}</h1>
+        <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
+        <p className="text-xl text-gray-600 mb-4">{post.subtitle}</p>
         
-        <div className="flex justify-between items-center mb-6 text-sm text-gray-500">
+        <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-6">
           <div className="flex items-center">
-            <User className="w-4 h-4 mr-1" />
-            {post.author}
+            <Calendar className="h-4 w-4 mr-2" />
+            <span>{post.date}</span>
           </div>
+          
           <div className="flex items-center">
-            <Calendar className="w-4 h-4 mr-1" />
-            {post.date}
+            <User className="h-4 w-4 mr-2" />
+            <span>{post.author.name}</span>
+          </div>
+          
+          <div className="flex items-center">
+            <Tag className="h-4 w-4 mr-2" />
+            <span>{post.category}</span>
           </div>
         </div>
         
-        <div 
-          className="prose max-w-none" 
-          dangerouslySetInnerHTML={{ __html: post.content }} 
+        <img 
+          src={post.coverImage}
+          alt={post.title}
+          className="w-full h-80 object-cover rounded-lg mb-8"
         />
       </div>
-
-      <div className="anny-card">
-        <h2 className="text-xl font-semibold mb-4 flex items-center">
-          <MessageSquare className="w-5 h-5 mr-2" />
-          Comentários ({comments.length})
-        </h2>
-        
-        <form onSubmit={handleSubmitComment} className="mb-6">
-          <div className="mb-3">
-            <textarea
-              className="anny-input min-h-24"
-              placeholder="Deixe seu comentário..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            ></textarea>
-          </div>
-          <Button type="submit">Publicar Comentário</Button>
-        </form>
-        
-        <div className="space-y-4">
-          {comments.map((comment) => (
-            <div key={comment.id} className="border-b pb-4 last:border-b-0">
-              <div className="flex justify-between items-center mb-2">
-                <div className="font-medium">{comment.author}</div>
-                <div className="text-xs text-gray-500">{comment.date}</div>
-              </div>
-              <p className="text-gray-700">{comment.content}</p>
-            </div>
-          ))}
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="md:col-span-3">
+          <article className="prose max-w-none">
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          </article>
           
-          {comments.length === 0 && (
-            <p className="text-gray-500 text-center py-4">
-              Nenhum comentário ainda. Seja o primeiro a comentar!
-            </p>
-          )}
+          <div className="mt-8 pt-8 border-t">
+            <h3 className="text-lg font-semibold mb-3">Tags:</h3>
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag, index) => (
+                <Link 
+                  key={index}
+                  to={`/blog/tag/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-8 pt-8 border-t">
+            <h3 className="text-lg font-semibold mb-3">Compartilhe:</h3>
+            <div className="flex gap-3">
+              <Button variant="outline" size="icon">
+                <Facebook className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon">
+                <Twitter className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon">
+                <Linkedin className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon">
+                <Mail className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="mt-8 pt-8 border-t">
+            <h3 className="text-xl font-semibold mb-6">Artigos Relacionados</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {post.relatedPosts.map(relatedPost => (
+                <Card key={relatedPost.id}>
+                  <CardContent className="p-4">
+                    <Link to={`/blog/${relatedPost.id}`}>
+                      <img 
+                        src={relatedPost.image}
+                        alt={relatedPost.title}
+                        className="w-full h-40 object-cover rounded-md mb-4"
+                      />
+                      <h4 className="font-semibold text-lg mb-2 hover:text-anny-green transition-colors">
+                        {relatedPost.title}
+                      </h4>
+                    </Link>
+                    <p className="text-gray-600 text-sm">{relatedPost.excerpt}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        <div className="md:col-span-1">
+          <div className="sticky top-24">
+            <div className="bg-gray-50 p-6 rounded-lg mb-6">
+              <h3 className="text-lg font-semibold mb-4">Sobre o Autor</h3>
+              <div className="flex items-center gap-4 mb-3">
+                <Avatar>
+                  <AvatarImage src={post.author.avatar} />
+                  <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium">{post.author.name}</p>
+                  <p className="text-sm text-gray-600">{post.author.role}</p>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full">
+                Ver todos os artigos
+              </Button>
+            </div>
+            
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-lg font-semibold mb-4">Newsletter</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Receba novidades sobre cannabis medicinal e atualizações do nosso blog.
+              </p>
+              <form className="space-y-4">
+                <input
+                  type="email"
+                  placeholder="Seu email"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+                <Button className="w-full bg-anny-green hover:bg-anny-green/90">
+                  Inscrever-se
+                </Button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>

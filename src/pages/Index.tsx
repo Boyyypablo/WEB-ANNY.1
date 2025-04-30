@@ -1,6 +1,8 @@
+
 import { useNavigate } from "react-router-dom";
-import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings, LogIn } from "lucide-react";
+import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings, LogIn, HelpCircle, FileText, Info, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -63,8 +65,36 @@ const Index = () => {
     description: "Conheça nossa rede de especialistas.",
     action: () => navigate("/doctors")
   }];
+  
+  const institutionalLinks = [
+    {
+      icon: <Info className="h-5 w-5 text-anny-green" />,
+      title: "Sobre Nós",
+      description: "Conheça nossa história e missão",
+      action: () => navigate("/about")
+    },
+    {
+      icon: <Mail className="h-5 w-5 text-anny-green" />,
+      title: "Contato",
+      description: "Fale conosco por e-mail ou telefone",
+      action: () => navigate("/contact")
+    },
+    {
+      icon: <HelpCircle className="h-5 w-5 text-anny-green" />,
+      title: "FAQ",
+      description: "Respostas às dúvidas frequentes",
+      action: () => navigate("/faq")
+    },
+    {
+      icon: <FileText className="h-5 w-5 text-anny-green" />,
+      title: "Políticas",
+      description: "Termos e condições de uso",
+      action: () => navigate("/policies")
+    }
+  ];
 
-  return <div className="flex flex-col gap-6 pb-10">
+  return (
+    <div className="flex flex-col gap-6 pb-10">
       <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 bg-green-800 relative">
         <div className="absolute top-2 right-2">
           <Button
@@ -130,6 +160,19 @@ Tudo em um só lugar, com responsabilidade, informação e cuidado.</p>
             </div>)}
         </div>
       </section>
+      
+      <section className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Informações Institucionais</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {institutionalLinks.map((item, index) => <div key={index} className="anny-card hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center text-center p-4" onClick={item.action}>
+              <div className="mb-3 p-2 bg-anny-green-light rounded-full">
+                {item.icon}
+              </div>
+              <h3 className="font-semibold mb-1">{item.title}</h3>
+              <p className="text-anny-green/80 text-sm">{item.description}</p>
+            </div>)}
+        </div>
+      </section>
 
       <section className="mt-8">
         <h2 className="text-2xl font-bold text-center mb-6">O que nossos pacientes dizem</h2>
@@ -148,7 +191,13 @@ Tudo em um só lugar, com responsabilidade, informação e cuidado.</p>
           </div>
         </div>
       </section>
-    </div>;
+      
+      {/* Add Footer directly in the Index page for when accessing the root route */}
+      <div className="mt-12 -mx-4">
+        <Footer />
+      </div>
+    </div>
+  );
 };
 
 export default Index;

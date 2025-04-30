@@ -34,6 +34,12 @@ const PrescriptionScannerPage = lazy(() => import("./pages/PrescriptionScannerPa
 const SymptomDiaryPage = lazy(() => import("./pages/SymptomDiaryPage"));
 const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
 
+// Institutional and support pages
+const AboutUsPage = lazy(() => import("./pages/AboutUsPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const FAQPage = lazy(() => import("./pages/FAQPage"));
+const PoliciesPage = lazy(() => import("./pages/PoliciesPage"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -49,6 +55,13 @@ const App = () => (
                 <Route path="/auth" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/" element={<Index />} />
+                
+                {/* Institutional and Support Pages */}
+                <Route path="/about" element={<AboutUsPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/faq" element={<FAQPage />} />
+                <Route path="/policies" element={<PoliciesPage />} />
+                
                 <Route element={
                   <Suspense fallback={<FullPageSpinner />}>
                     <PrivateRoute>
