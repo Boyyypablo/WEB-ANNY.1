@@ -8,7 +8,7 @@ import {
   AccordionTrigger 
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search } from "lucide-react";
+import { Search, Mail, Phone, MessageSquare } from "lucide-react";
 
 interface FAQItem {
   id: string;
