@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft, Mail, Lock, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { z } from "zod";
+import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 
 // Email validation schema
 const emailSchema = z.string().email("Email inválido");
@@ -144,6 +144,8 @@ export default function LoginPage() {
                     'Entrar'
                   )}
                 </Button>
+                
+                <SocialLoginButtons isLoading={isLoading} view="login" />
 
                 <p className="text-center text-sm text-gray-600">
                   Não tem uma conta?{" "}

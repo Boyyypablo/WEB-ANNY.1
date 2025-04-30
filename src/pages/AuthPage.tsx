@@ -8,8 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Mail, Lock } from "lucide-react";
 import { SignUpForm } from "@/components/auth/SignUpForm";
+import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -118,6 +119,8 @@ export default function AuthPage() {
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? "Entrando..." : "Entrar"}
                   </Button>
+                  
+                  <SocialLoginButtons isLoading={isLoading} view="login" />
                 </form>
               </TabsContent>
 
@@ -135,4 +138,3 @@ export default function AuthPage() {
     </div>
   );
 }
-

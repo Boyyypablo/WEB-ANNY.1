@@ -9,6 +9,7 @@ import { EmailField } from "./EmailField";
 import { PasswordFields } from "./PasswordFields";
 import { FormError } from "./FormError";
 import { SubmitButton } from "./SubmitButton";
+import { SocialLoginButtons } from "./SocialLoginButtons";
 
 interface SignUpFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -76,6 +77,8 @@ export const SignUpForm = ({ onSubmit, error, isLoading }: SignUpFormProps) => {
           isLoading={isLoading} 
           isDisabled={Object.keys(validationErrors).length > 0} 
         />
+        
+        <SocialLoginButtons isLoading={isLoading} view="signup" />
       </div>
     </form>
   );

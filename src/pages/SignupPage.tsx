@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { SignUpForm } from "@/components/auth/SignUpForm";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
@@ -131,6 +131,8 @@ export default function SignupPage() {
           isLoading={isLoading} 
         />
         
+        <SocialLoginButtons isLoading={isLoading} view="signup" />
+
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">
             Já tem uma conta?{" "}
