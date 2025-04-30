@@ -4,14 +4,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { FullPageSpinner } from "./components/ui/loading-spinner";
 
 // Lazily load components
 const Layout = lazy(() => import("./components/Layout"));
 const Index = lazy(() => import("./pages/Index"));
-const AuthPage = lazy(() => import("./pages/AuthPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const SignupPage = lazy(() => import("./pages/SignupPage"));
 const ConsultationPage = lazy(() => import("./pages/ConsultationPage"));
 const MedicationsPage = lazy(() => import("./pages/MedicationsPage"));
 const ProductDetailPage = lazy(() => import("./pages/ProductDetailPage"));
@@ -30,8 +31,6 @@ const PromotionsPage = lazy(() => import("./pages/PromotionsPage"));
 const SymptomsPage = lazy(() => import("./pages/SymptomsPage"));
 const HealthDevicesPage = lazy(() => import("./pages/HealthDevicesPage"));
 const PrescriptionScannerPage = lazy(() => import("./pages/PrescriptionScannerPage"));
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const SignupPage = lazy(() => import("./pages/SignupPage"));
 const SymptomDiaryPage = lazy(() => import("./pages/SymptomDiaryPage"));
 const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
 
