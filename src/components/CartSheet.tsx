@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,6 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetFooter,
 } from "@/components/ui/sheet";
 import { debouncedToast } from "@/components/ui/sonner";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,11 @@ export function CartSheet() {
   const handleCheckoutClick = () => {
     setIsOpen(false);
     navigate('/checkout');
+  };
+
+  const handleCartClick = () => {
+    setIsOpen(false);
+    navigate('/cart');
   };
 
   const handleRemoveItem = (itemId: number) => {
@@ -104,12 +110,22 @@ export function CartSheet() {
                   <span className="font-medium">Total:</span>
                   <span className="font-medium text-anny-green">R$ {getTotalPrice().toFixed(2)}</span>
                 </div>
-                <Button 
-                  className="w-full bg-anny-green hover:bg-anny-green/90" 
-                  onClick={handleCheckoutClick}
-                >
-                  Finalizar Compra
-                </Button>
+                <div className="grid grid-cols-1 gap-3">
+                  <Button 
+                    className="w-full bg-anny-green hover:bg-anny-green/90" 
+                    onClick={handleCheckoutClick}
+                  >
+                    Finalizar Compra
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={handleCartClick}
+                  >
+                    Ver Carrinho
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </>
           )}

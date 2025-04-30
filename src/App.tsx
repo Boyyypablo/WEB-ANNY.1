@@ -21,6 +21,7 @@ const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const OrdersPage = lazy(() => import("./pages/OrdersPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const CartPage = lazy(() => import("./pages/CartPage"));
 const DoctorsPage = lazy(() => import("./pages/DoctorsPage"));
 const BlogPage = lazy(() => import("./pages/BlogPage"));
 const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
@@ -60,6 +61,7 @@ const App = () => (
                   <Route path="/consultation" element={<ConsultationPage />} />
                   <Route path="/medications" element={<MedicationsPage />} />
                   <Route path="/medications/:id" element={<ProductDetailPage />} />
+                  <Route path="/cart" element={<CartPage />} />
                   <Route path="/history" element={<HistoryPage />} />
                   <Route path="/history/exam/:id" element={<ExamDetailsPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
