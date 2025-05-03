@@ -1,8 +1,6 @@
-
 import { useNavigate } from "react-router-dom";
 import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings, LogIn, HelpCircle, FileText, Info, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -44,27 +42,29 @@ const Index = () => {
     action: () => navigate("/history"),
     buttonText: "Meu Histórico"
   }];
-  const secondaryFeatures = [{
-    icon: <Tag className="h-5 w-5 text-anny-green" />,
-    title: "Promoções",
-    description: "Ofertas especiais em produtos e consultas.",
-    action: () => navigate("/promotions")
-  }, {
-    icon: <Heart className="h-5 w-5 text-anny-green" />,
-    title: "Favoritos",
-    description: "Seus produtos e médicos favoritos.",
-    action: () => navigate("/favorites")
-  }, {
-    icon: <Settings className="h-5 w-5 text-anny-green" />,
-    title: "Diário de Sintomas",
-    description: "Registre e acompanhe seus sintomas.",
-    action: () => navigate("/symptoms")
-  }, {
-    icon: <User className="h-5 w-5 text-anny-green" />,
-    title: "Médicos",
-    description: "Conheça nossa rede de especialistas.",
-    action: () => navigate("/doctors")
-  }];
+  const secondaryFeatures = [
+    {
+      icon: <Tag className="h-5 w-5 text-anny-green" />,
+      title: "Promoções",
+      description: "Ofertas especiais em produtos e consultas.",
+      action: () => navigate("/promotions")
+    }, {
+      icon: <Heart className="h-5 w-5 text-anny-green" />,
+      title: "Favoritos",
+      description: "Seus produtos e médicos favoritos.",
+      action: () => navigate("/favorites")
+    }, {
+      icon: <Settings className="h-5 w-5 text-anny-green" />,
+      title: "Diário de Sintomas",
+      description: "Registre e acompanhe seus sintomas.",
+      action: () => navigate("/symptoms")
+    }, {
+      icon: <User className="h-5 w-5 text-anny-green" />,
+      title: "Médicos",
+      description: "Conheça nossa rede de especialistas.",
+      action: () => navigate("/doctors")
+    }
+  ];
   
   const institutionalLinks = [
     {
@@ -192,10 +192,7 @@ Tudo em um só lugar, com responsabilidade, informação e cuidado.</p>
         </div>
       </section>
       
-      {/* Add Footer directly in the Index page for when accessing the root route */}
-      <div className="mt-12 -mx-4">
-        <Footer />
-      </div>
+      {/* Removido o Footer duplicado que estava aqui */}
     </div>
   );
 };
