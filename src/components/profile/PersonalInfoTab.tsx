@@ -14,7 +14,7 @@ const PersonalInfoTab = () => {
     phone: "",
     address: "",
     zip_code: "",
-    birthdate: "",
+    birth_date: "",
   });
   const [loading, setLoading] = useState(false);
   
@@ -27,7 +27,7 @@ const PersonalInfoTab = () => {
         phone: profile.phone || "",
         address: profile.address || "",
         zip_code: profile.zip_code || "",
-        birthdate: profile.birthdate ? new Date(profile.birthdate).toISOString().split('T')[0] : "",
+        birth_date: profile.birth_date ? new Date(profile.birth_date).toISOString().split('T')[0] : "",
       });
     }
   }, [profile]);
@@ -50,7 +50,7 @@ const PersonalInfoTab = () => {
           phone: formData.phone,
           address: formData.address,
           zip_code: formData.zip_code,
-          birthdate: formData.birthdate || null,
+          birth_date: formData.birth_date || null,
         })
         .eq('id', user.id);
         
@@ -150,13 +150,13 @@ const PersonalInfoTab = () => {
           </div>
           
           <div className="flex flex-col gap-2">
-            <label htmlFor="birthdate" className="font-medium">Data de Nascimento</label>
+            <label htmlFor="birth_date" className="font-medium">Data de Nascimento</label>
             <input 
-              id="birthdate"
-              name="birthdate"
+              id="birth_date"
+              name="birth_date"
               type="date"
               className="anny-input"
-              value={formData.birthdate}
+              value={formData.birth_date}
               onChange={handleChange}
             />
           </div>
