@@ -10,8 +10,20 @@ interface PrivateRouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const { session, loading } = useAuth();
+  
+  // Exibe o spinner de carregamento por no máximo 10 segundos
+  // para evitar que o usuário fique preso em um loading infinito
+  const [timeoutLoading, setTimeoutLoading] = useState(true);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeoutLoading(false);
+    }, 10000); // 10 segundos de timeout
+    
+    return () => clearTimeout(timer);
+  }, []);
 
-  if (loading) {
+  if (loading && timeoutLoading) {
     return <FullPageSpinner />;
   }
 

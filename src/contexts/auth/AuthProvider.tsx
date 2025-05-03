@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { AuthContextType } from './types';
 import { useProfileFetch } from './useProfileFetch';
 import { signIn as authSignIn, signUp as authSignUp, signOut as authSignOut, updateLastLogin } from './authActions';
+import { toast } from '@/components/ui/sonner';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -13,7 +14,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const { profile, isAdmin, fetchProfile, refreshProfile } = useProfileFetch();
+  const { profile, isAdmin, fetchProfile, refreshProfile, error: profileError } = useProfileFetch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,8 +30,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Use setTimeout to avoid recursion with fetchProfile
       if (session?.user) {
         setTimeout(() => {
-          fetchProfile(session.user.id);
+          fetchProfile(session.user.id).then(success => {
+            // Finalizamos o loading mesmo se houver falha ao buscar o perfil
+            setLoading(false);
+            
+            // Se houver erro ao buscar o perfil, exibimos uma mensagem mais amigável
+            if (!success && profileError) {
+              toast.error("Não foi possível carregar seu perfil. Tente novamente mais tarde.");
+            }
+          });
         }, 0);
+      } else {
+        setLoading(false);
       }
     });
 
@@ -40,10 +51,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        fetchProfile(session.user.id);
+        fetchProfile(session.user.id).then(() => {
+          setLoading(false);
+        }).catch(() => {
+          setLoading(false);
+        });
       } else {
         setLoading(false);
       }
+    }).catch(err => {
+      console.error("Erro ao verificar sessão:", err);
+      setLoading(false);
     });
 
     return () => {
