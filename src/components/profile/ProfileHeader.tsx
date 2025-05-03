@@ -1,7 +1,6 @@
-
 import React from "react";
 import { UserRound } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth";
 
 const ProfileHeader = () => {
   const { profile } = useAuth();

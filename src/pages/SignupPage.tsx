@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { SignUpForm } from "@/components/auth/SignUpForm";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth";
 import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
 
 export default function SignupPage() {

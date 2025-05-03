@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileNavigation from "@/components/profile/ProfileNavigation";
 import PersonalInfoTab from "@/components/profile/PersonalInfoTab";

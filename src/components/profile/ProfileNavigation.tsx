@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { UserRound, Lock, Settings, LogOut, CreditCard, Package } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth";
 import { toast } from "@/components/ui/sonner";
 
 interface ProfileNavigationProps {

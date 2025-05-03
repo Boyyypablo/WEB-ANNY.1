@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { debouncedToast } from "@/components/ui/sonner";
 import { SymptomEntry, symptomTypes } from "@/types/symptoms";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth";
 
 export function useSymptomDiary() {
   const { session } = useAuth();

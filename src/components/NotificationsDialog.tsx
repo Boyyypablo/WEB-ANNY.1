@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { debouncedToast } from "@/components/ui/sonner";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth";
 import { NotificationsList } from "./notifications/NotificationsList";
 import { NotificationsHeader } from "./notifications/NotificationsHeader";
 import type { Notification } from "./notifications/NotificationItem";
