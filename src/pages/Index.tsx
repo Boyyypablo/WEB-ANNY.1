@@ -113,9 +113,8 @@ const Index = () => {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Bem-vindo ao Projeto Anny
           </h1>
-          <p className="text-lg md:text-xl mb-6">Bem-vindo ao Projeto Anny!
-Aqui, pacientes, associações e o setor público se encontram para tornar o acesso à cannabis medicinal mais fácil, seguro e acessível.
-Tudo em um só lugar, com responsabilidade, informação e cuidado.</p>
+          <p className="text-lg md:text-xl mb-6">Acesso fácil, seguro e humano.
+Encontre associações credenciadas, escolha seu tratamento e tenha apoio para cuidar da sua saúde com tranquilidade.</p>
           <Button onClick={() => navigate("/about")} className="bg-white text-anny-green hover:bg-white/90 text-lg px-8 py-6 rounded-full">
             Conheça Nossa História
           </Button>
