@@ -6,7 +6,7 @@ const Index = () => {
   const navigate = useNavigate();
   const userTypes = [{
     title: "Para Pacientes",
-    description: "Aqui você encontra associações seguras e produtos rastreados para seu tratamento.",
+    description: "Acesso fácil, seguro e humano.\n\nEncontre associações credenciadas, escolha seu tratamento e tenha apoio para cuidar da sua saúde com tranquilidade.",
     action: () => navigate("/consultation"),
     buttonText: "Comece seu tratamento",
     backgroundClass: "bg-soft-green-50"
@@ -127,7 +127,7 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {userTypes.map((type, index) => <div key={index} className={`${type.backgroundClass} rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow`}>
               <h3 className="text-xl font-semibold mb-3 text-anny-green">{type.title}</h3>
-              <p className="text-gray-600 mb-6">{type.description}</p>
+              <p className="text-gray-600 mb-6 whitespace-pre-line">{type.description}</p>
               <Button onClick={type.action} className="w-full bg-anny-green hover:bg-anny-green/90 text-white">
                 {type.buttonText} <ArrowRight className="ml-2" />
               </Button>
