@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings, LogIn, HelpCircle, FileText, Info, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -115,8 +114,7 @@ const Index = () => {
             Bem-vindo ao Projeto Anny
           </h1>
           <p className="text-lg md:text-xl mb-6">
-            Acesso fácil, seguro e humano.<br />
-            Encontre associações credenciadas, escolha seu tratamento e tenha apoio para cuidar da sua saúde com tranquilidade.
+            Bem-vindo ao Projeto Anny! Aqui, pacientes, associações e o setor público se encontram para tornar o acesso à cannabis medicinal mais fácil, seguro e acessível. Tudo em um só lugar, com responsabilidade, informação e cuidado.
           </p>
           <Button onClick={() => navigate("/about")} className="bg-white text-anny-green hover:bg-white/90 text-lg px-8 py-6 rounded-full">
             Conheça Nossa História
