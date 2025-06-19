@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Tag, Clock, Percent } from "lucide-react";
+import { ShoppingCart, Tag, Clock, Percent } from "lucide-react";
 import { debouncedToast } from "@/components/ui/sonner";
 import { Link } from "react-router-dom";
 
@@ -125,14 +125,6 @@ const PromotionsPage = () => {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        className="flex items-center gap-2 text-anny-green hover:text-anny-green/90"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Voltar
-      </Button>
 
       <div className="flex items-center gap-3">
         <Tag className="w-6 h-6 text-anny-orange" />
