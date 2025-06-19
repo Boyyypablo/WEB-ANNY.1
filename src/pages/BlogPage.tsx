@@ -26,7 +26,7 @@ const BlogPage = () => {
       title: "Os benefícios do CBD para tratamento de epilepsia",
       excerpt: "Estudos recentes mostram resultados promissores no uso de canabidiol para controle de convulsões em pacientes com epilepsia refratária.",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod metus vel semper commodo. Proin tincidunt mauris ut sapien dignissim, eget fringilla nisl facilisis.",
-      image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
+      image: "/uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
       author: "Dra. Fernanda Lima",
       date: "23/04/2025",
       category: "Cannabis Medicinal"
@@ -36,7 +36,7 @@ const BlogPage = () => {
       title: "Como a telemedicina está transformando o acesso à saúde no Brasil",
       excerpt: "A adoção da telemedicina tem crescido exponencialmente, facilitando o acesso à saúde em regiões remotas do país.",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod metus vel semper commodo. Proin tincidunt mauris ut sapien dignissim.",
-      image: "/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
+      image: "/uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
       author: "Dr. Ricardo Santos",
       date: "20/04/2025",
       category: "Telemedicina"
@@ -46,7 +46,7 @@ const BlogPage = () => {
       title: "Guia completo sobre prescrição de medicamentos à base de cannabis",
       excerpt: "Entenda os requisitos legais e melhores práticas para prescrição de medicamentos à base de cannabis no Brasil.",
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod metus vel semper commodo.",
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+      image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
       author: "Dra. Carolina Mendes",
       date: "15/04/2025",
       category: "Cannabis Medicinal"
