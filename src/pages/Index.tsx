@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Calendar, Pill, History, Tag, Heart, User, MessageSquare, ArrowRight, Settings, LogIn, HelpCircle, FileText, Info, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -94,8 +95,8 @@ const Index = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-6 pb-10">
-      <section className="bg-anny-green text-white rounded-xl shadow-md p-8 mb-4 bg-green-800 relative">
+    <div className="flex flex-col gap-6">
+      <section className="bg-anny-green text-white rounded-b-xl shadow-md p-8 mb-4 bg-green-800 relative">
         <div className="absolute top-2 right-2">
           <Button
             onClick={() => navigate("/auth")}
@@ -124,10 +125,10 @@ const Index = () => {
 
       <section className="mb-8">
         <h2 className="text-2xl font-bold text-center mb-8">Comece Aqui</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="mx-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           {userTypes.map((type, index) => <div key={index} className={`${type.backgroundClass} rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow`}>
               <h3 className="text-xl font-semibold mb-3 text-anny-green">{type.title}</h3>
-              <p className="text-gray-600 mb-6 whitespace-pre-line">{type.description}</p>
+              <p className="text-gray-600 mb-12 whitespace-pre-line">{type.description}</p>
               <Button onClick={type.action} className="w-full bg-anny-green hover:bg-anny-green/90 text-white">
                 {type.buttonText} <ArrowRight className="ml-2" />
               </Button>
@@ -135,7 +136,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="mx-8 grid grid-cols-1 md:grid-cols-3 gap-6">
         {primaryFeatures.map((feature, index) => <div key={index} className="anny-card flex flex-col items-center text-center">
             <div className="mb-4 p-3 bg-anny-green-light rounded-full">
               {feature.icon}
@@ -147,8 +148,8 @@ const Index = () => {
             </button>
           </div>)}
       </section>
-
-      <section className="mt-8">
+      
+      <section className="p-8 mt-8 bg-[#EEE]">
         <h2 className="text-xl font-semibold mb-4">Mais serviços para você</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {secondaryFeatures.map((feature, index) => <div key={index} className="anny-card hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center text-center p-4" onClick={feature.action}>
@@ -161,7 +162,9 @@ const Index = () => {
         </div>
       </section>
       
-      <section className="mt-8">
+      {/*retirado temporariamente pro Pablo decidir oq fazer com esse segmento, foi 
+       substituído pelo componente Footer
+       <section className="mx-8 mt-8">
         <h2 className="text-xl font-semibold mb-4">Informações Institucionais</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {institutionalLinks.map((item, index) => <div key={index} className="anny-card hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center text-center p-4" onClick={item.action}>
@@ -172,7 +175,9 @@ const Index = () => {
               <p className="text-anny-green/80 text-sm">{item.description}</p>
             </div>)}
         </div>
-      </section>
+      </section> */}
+
+      <Footer/>
     </div>
   );
 };

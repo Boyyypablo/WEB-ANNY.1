@@ -7,10 +7,22 @@ import {
   AccordionTrigger 
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AboutUsPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="max-w-4xl mx-auto py-6">
+      <Button 
+            variant="ghost" 
+            className="absolute left-2 top-2" 
+            onClick={() => navigate("/")}
+          >
+            <ArrowLeft className="h-6 w-6 text-anny-green" />
+            <p className="text-anny-green font-semibold">Voltar</p>
+          </Button>
       <h1 className="text-3xl font-bold text-center text-anny-green mb-6">Sobre o Projeto Anny</h1>
       
       <div className="flex flex-col md:flex-row gap-8 items-center mb-8">

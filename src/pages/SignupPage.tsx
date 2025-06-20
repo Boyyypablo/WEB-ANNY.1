@@ -5,7 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/auth";
-import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
@@ -118,6 +119,14 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Button 
+            variant="ghost" 
+            className="absolute left-2 top-2" 
+            onClick={() => navigate("/")}
+          >
+            <ArrowLeft className="h-6 w-6 text-anny-green" />
+            <p className="text-anny-green font-semibold">Voltar</p>
+      </Button>
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow">
         <div className="text-center">
           <h1 className="text-3xl font-bold">Criar Conta</h1>
@@ -132,9 +141,9 @@ export default function SignupPage() {
           isLoading={isLoading} 
         />
         
-        <SocialLoginButtons isLoading={isLoading} view="signup" />
+        {/* <SocialLoginButtons isLoading={isLoading} view="signup" /> */}
 
-        <div className="text-center mt-4">
+        <div className="text-center pt-4">
           <p className="text-sm text-gray-600">
             Já tem uma conta?{" "}
             <a href="/auth" className="font-medium text-primary hover:text-primary/80">

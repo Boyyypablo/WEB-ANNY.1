@@ -75,7 +75,7 @@ export default function LoginPage() {
         <div className="flex flex-col items-center relative">
           <Button 
             variant="ghost" 
-            className="absolute left-0 top-0" 
+            className="absolute left-0 top-3" 
             onClick={() => navigate("/")}
           >
             <ArrowLeft className="h-6 w-6 text-anny-green" />
@@ -147,8 +147,8 @@ export default function LoginPage() {
                 </Button>
                 
                 <SocialLoginButtons isLoading={isLoading} view="login" />
-
-                <p className="text-center text-sm text-gray-600">
+                
+                <p className="pt-6 text-center text-sm text-gray-600">
                   Não tem uma conta?{" "}
                   <Link to="/signup" className="text-anny-green hover:underline">
                     Cadastre-se
