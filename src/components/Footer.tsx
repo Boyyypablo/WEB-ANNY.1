@@ -1,11 +1,15 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
-import { Mail, MessageSquare, Pill, Calendar, Heart, User } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Mail, MessageSquare, Pill, Calendar, Heart, User, Info, HelpCircle, FileText, Tag, History, Settings } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const Footer = () => {
-  const mainServices = [
+  const location = useLocation();
+  const isHomePage = location.pathname === "/" || location.pathname === "/home";
+
+  const allServices = [
     {
       icon: <Calendar className="h-6 w-6 text-white" />,
       title: "Consultas Online",
@@ -29,34 +33,83 @@ const Footer = () => {
       title: "Médicos Parceiros",
       description: "Rede de especialistas",
       link: "/doctors"
+    },
+    {
+      icon: <History className="h-6 w-6 text-white" />,
+      title: "Histórico Médico",
+      description: "Acompanhe seu tratamento",
+      link: "/history"
+    },
+    {
+      icon: <Tag className="h-6 w-6 text-white" />,
+      title: "Promoções",
+      description: "Ofertas especiais",
+      link: "/promotions"
+    },
+    {
+      icon: <Settings className="h-6 w-6 text-white" />,
+      title: "Diário de Sintomas",
+      description: "Registre seus sintomas",
+      link: "/symptoms"
+    },
+    {
+      icon: <Info className="h-6 w-6 text-white" />,
+      title: "Sobre Nós",
+      description: "Conheça nossa história",
+      link: "/about"
+    },
+    {
+      icon: <Mail className="h-6 w-6 text-white" />,
+      title: "Contato",
+      description: "Fale conosco",
+      link: "/contact"
+    },
+    {
+      icon: <HelpCircle className="h-6 w-6 text-white" />,
+      title: "FAQ",
+      description: "Dúvidas frequentes",
+      link: "/faq"
+    },
+    {
+      icon: <FileText className="h-6 w-6 text-white" />,
+      title: "Políticas",
+      description: "Termos e condições",
+      link: "/policies"
     }
   ];
 
   return (
     <footer className="bg-white border-t">
-      {/* Cards das principais estruturas do portal */}
-      <div className="bg-anny-green py-8">
-        <div className="container mx-auto px-4">
-          <h3 className="text-white text-xl font-semibold text-center mb-6">Principais Serviços do Portal</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {mainServices.map((service, index) => (
-              <Link 
-                key={index}
-                to={service.link}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/20 transition-all group"
-              >
-                <div className="flex justify-center mb-3">
-                  <div className="p-2 bg-white/20 rounded-full group-hover:bg-white/30 transition-colors">
-                    {service.icon}
-                  </div>
-                </div>
-                <h4 className="text-white font-medium mb-1">{service.title}</h4>
-                <p className="text-white/80 text-sm">{service.description}</p>
-              </Link>
-            ))}
+      {/* Cards dos principais serviços - apenas na página inicial */}
+      {isHomePage && (
+        <div className="bg-anny-green py-8">
+          <div className="container mx-auto px-4">
+            <h3 className="text-white text-xl font-semibold text-center mb-6">Principais Serviços do Portal</h3>
+            <Carousel className="w-full max-w-5xl mx-auto">
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {allServices.map((service, index) => (
+                  <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
+                    <Link 
+                      to={service.link}
+                      className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/20 transition-all group block h-full"
+                    >
+                      <div className="flex justify-center mb-3">
+                        <div className="p-2 bg-white/20 rounded-full group-hover:bg-white/30 transition-colors">
+                          {service.icon}
+                        </div>
+                      </div>
+                      <h4 className="text-white font-medium mb-1">{service.title}</h4>
+                      <p className="text-white/80 text-sm">{service.description}</p>
+                    </Link>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="text-white border-white/20 hover:bg-white/20" />
+              <CarouselNext className="text-white border-white/20 hover:bg-white/20" />
+            </Carousel>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
