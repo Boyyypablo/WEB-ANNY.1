@@ -1,18 +1,62 @@
 
-import React from "react";
-import { 
-  Accordion, 
-  AccordionContent, 
-  AccordionItem, 
-  AccordionTrigger 
+import React, { useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import Navigation from "@/components/Navigation";
+import { Search } from "lucide-react";
 
 const AboutUsPage = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const faqItems = [
+    {
+      id: "item-1",
+      question: "O que faz o Projeto Anny diferente das outras plataformas?",
+      answer:
+        "O Projeto Anny é a única plataforma que integra consultas com médicos especializados, acesso a medicamentos rastreáveis e certificados, e um sistema completo de acompanhamento do paciente. Oferecemos uma solução completa que garante segurança e qualidade em todas as etapas."
+    },
+    {
+      id: "item-2",
+      question: "Como o Projeto Anny garante a qualidade dos produtos?",
+      answer:
+        "Todos os produtos disponibilizados em nossa plataforma são certificados e rastreáveis. Trabalhamos apenas com associações e produtores que seguem rigorosos protocolos de controle de qualidade, com testes laboratoriais independentes para garantir pureza e potência."
+    },
+    {
+      id: "item-3",
+      question: "Como o Projeto Anny contribui para a pesquisa científica?",
+      answer:
+        "Colaboramos com instituições de pesquisa e universidades, compartilhando dados anônimos (sempre com consentimento dos pacientes) sobre eficácia de tratamentos e perfis de pacientes. Também patrocinamos estudos científicos sobre cannabis medicinal no Brasil."
+    }
+  ];
+
+  const filteredFaqs = faqItems.filter(
+    item =>
+      item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.answer.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="max-w-4xl mx-auto py-6">
+    <>
+      <Navigation />
+      <div className="max-w-4xl mx-auto py-6">
       <h1 className="text-3xl font-bold text-center text-anny-green mb-6">Sobre o Projeto Anny</h1>
-      
+
+      <div className="relative mb-8">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Input
+          placeholder="Buscar perguntas..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          className="pl-10"
+        />
+      </div>
+
       <div className="flex flex-col md:flex-row gap-8 items-center mb-8">
         <img 
           src="/logo.png" 
@@ -95,38 +139,17 @@ const AboutUsPage = () => {
       <div>
         <h2 className="text-2xl font-semibold mb-6">Perguntas Frequentes</h2>
         <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="text-left">
-              O que faz o Projeto Anny diferente das outras plataformas?
-            </AccordionTrigger>
-            <AccordionContent>
-              O Projeto Anny é a única plataforma que integra consultas com médicos especializados, 
-              acesso a medicamentos rastreáveis e certificados, e um sistema completo de acompanhamento 
-              do paciente. Oferecemos uma solução completa que garante segurança e qualidade em todas as etapas.
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="item-2">
-            <AccordionTrigger className="text-left">
-              Como o Projeto Anny garante a qualidade dos produtos?
-            </AccordionTrigger>
-            <AccordionContent>
-              Todos os produtos disponibilizados em nossa plataforma são certificados e rastreáveis. 
-              Trabalhamos apenas com associações e produtores que seguem rigorosos protocolos de controle 
-              de qualidade, com testes laboratoriais independentes para garantir pureza e potência.
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="item-3">
-            <AccordionTrigger className="text-left">
-              Como o Projeto Anny contribui para a pesquisa científica?
-            </AccordionTrigger>
-            <AccordionContent>
-              Colaboramos com instituições de pesquisa e universidades, compartilhando dados anônimos 
-              (sempre com consentimento dos pacientes) sobre eficácia de tratamentos e perfis de pacientes. 
-              Também patrocinamos estudos científicos sobre cannabis medicinal no Brasil.
-            </AccordionContent>
-          </AccordionItem>
+          {filteredFaqs.map(item => (
+            <AccordionItem key={item.id} value={item.id}>
+              <AccordionTrigger className="text-left">
+                {item.question}
+              </AccordionTrigger>
+              <AccordionContent>{item.answer}</AccordionContent>
+            </AccordionItem>
+          ))}
+          {filteredFaqs.length === 0 && (
+            <p className="text-center py-4 text-gray-500">Nenhuma pergunta encontrada.</p>
+          )}
         </Accordion>
       </div>
     </div>
