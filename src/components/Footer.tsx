@@ -1,7 +1,6 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
-import { Mail, Phone, MessageSquare, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import { Mail, MessageSquare } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
@@ -17,20 +16,6 @@ const Footer = () => {
               Plataforma integrada de cannabis medicinal que conecta pacientes, associações e o setor público
               para tornar o acesso mais fácil, seguro e acessível.
             </p>
-            <div className="flex space-x-3">
-              <a href="#" className="text-gray-400 hover:text-anny-green">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-anny-green">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-anny-green">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-anny-green">
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </div>
           </div>
           
           <div>
@@ -96,10 +81,6 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <Mail className="h-5 w-5 text-anny-green shrink-0 mt-0.5" />
                 <span className="text-gray-600">contato@projetoanny.com.br</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone className="h-5 w-5 text-anny-green shrink-0 mt-0.5" />
-                <span className="text-gray-600">(11) 3456-7890<br />0800 123 4567</span>
               </li>
               <li className="flex items-start gap-3">
                 <MessageSquare className="h-5 w-5 text-anny-green shrink-0 mt-0.5" />
