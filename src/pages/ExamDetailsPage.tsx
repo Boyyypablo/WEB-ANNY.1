@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 
 const ExamDetailsPage = () => {
   const navigate = useNavigate();
@@ -12,16 +11,7 @@ const ExamDetailsPage = () => {
   if (!examDetails) {
     return (
       <div className="space-y-6">
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2 text-anny-green hover:text-anny-green/90"
-          onClick={() => navigate(-1)}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Voltar
-        </Button>
-
-        <div className="text-center py-12">
+      <div className="text-center py-12">
           <h3 className="text-lg font-medium text-gray-900">Exame não encontrado</h3>
           <p className="mt-2 text-sm text-gray-500">
             Não foi possível encontrar os detalhes deste exame.
@@ -39,15 +29,6 @@ const ExamDetailsPage = () => {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        className="flex items-center gap-2 text-anny-green hover:text-anny-green/90"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Voltar
-      </Button>
-
       <div className="anny-card">
         <h1 className="text-2xl font-bold mb-6">Detalhes do Exame #{id}</h1>
         

@@ -1,7 +1,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Package, Truck, MapPin } from "lucide-react";
+import { ShoppingCart, Package, Truck, MapPin } from "lucide-react";
 
 const OrdersPage = () => {
   const navigate = useNavigate();
@@ -12,14 +12,6 @@ const OrdersPage = () => {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        className="flex items-center gap-2 text-anny-green hover:text-anny-green/90"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Voltar
-      </Button>
 
       <h1 className="text-2xl md:text-3xl font-bold">Meus Pedidos</h1>
 

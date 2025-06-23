@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Star, Calendar, MapPin } from "lucide-react";
+import { Star, Calendar, MapPin } from "lucide-react";
 import { debouncedToast } from "@/components/ui/sonner";
 
 interface Doctor {
@@ -73,15 +73,6 @@ const DoctorsPage = () => {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        className="flex items-center gap-2 text-anny-green hover:text-anny-green/90"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Voltar
-      </Button>
-
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl md:text-3xl font-bold">Médicos e Especialistas</h1>
         

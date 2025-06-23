@@ -1,5 +1,6 @@
 
 import React from "react";
+import BackHomeButtons from "@/components/BackHomeButtons";
 import { 
   Accordion, 
   AccordionContent, 
@@ -10,7 +11,8 @@ import { Separator } from "@/components/ui/separator";
 
 const AboutUsPage = () => {
   return (
-    <div className="max-w-4xl mx-auto py-6">
+    <div className="max-w-4xl mx-auto py-6 space-y-4">
+      <BackHomeButtons />
       <h1 className="text-3xl font-bold text-center text-anny-green mb-6">Sobre o Projeto Anny</h1>
       
       <div className="flex flex-col md:flex-row gap-8 items-center mb-8">

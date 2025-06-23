@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import BackHomeButtons from "@/components/BackHomeButtons";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -50,7 +51,8 @@ const ContactPage = () => {
       setIsSubmitting(false);
     }
   };
-  return <div className="max-w-4xl mx-auto py-6">
+  return <div className="max-w-4xl mx-auto py-6 space-y-4">
+      <BackHomeButtons />
       <h1 className="text-3xl font-bold text-center text-anny-green mb-6">Entre em Contato</h1>
       <p className="text-center text-gray-700 mb-8">
         Estamos aqui para ajudar! Preencha o formulário abaixo ou utilize nosso e-mail de contato.
