@@ -1,11 +1,63 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
-import { Mail, MessageSquare } from "lucide-react";
+import { Mail, MessageSquare, Pill, Calendar, Heart, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
+  const mainServices = [
+    {
+      icon: <Calendar className="h-6 w-6 text-white" />,
+      title: "Consultas Online",
+      description: "Agende com especialistas",
+      link: "/consultation"
+    },
+    {
+      icon: <Pill className="h-6 w-6 text-white" />,
+      title: "Medicamentos",
+      description: "Produtos certificados",
+      link: "/medications"
+    },
+    {
+      icon: <Heart className="h-6 w-6 text-white" />,
+      title: "Nossos Serviços",
+      description: "Conheça nossas soluções",
+      link: "/about"
+    },
+    {
+      icon: <User className="h-6 w-6 text-white" />,
+      title: "Médicos Parceiros",
+      description: "Rede de especialistas",
+      link: "/doctors"
+    }
+  ];
+
   return (
     <footer className="bg-white border-t">
+      {/* Cards das principais estruturas do portal */}
+      <div className="bg-anny-green py-8">
+        <div className="container mx-auto px-4">
+          <h3 className="text-white text-xl font-semibold text-center mb-6">Principais Serviços do Portal</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {mainServices.map((service, index) => (
+              <Link 
+                key={index}
+                to={service.link}
+                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center hover:bg-white/20 transition-all group"
+              >
+                <div className="flex justify-center mb-3">
+                  <div className="p-2 bg-white/20 rounded-full group-hover:bg-white/30 transition-colors">
+                    {service.icon}
+                  </div>
+                </div>
+                <h4 className="text-white font-medium mb-1">{service.title}</h4>
+                <p className="text-white/80 text-sm">{service.description}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
@@ -39,11 +91,6 @@ const Footer = () => {
               <li>
                 <Link to="/contact" className="text-gray-600 hover:text-anny-green hover:underline">
                   Contato
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-gray-600 hover:text-anny-green hover:underline">
-                  Perguntas Frequentes
                 </Link>
               </li>
             </ul>
