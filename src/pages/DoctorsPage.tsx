@@ -28,7 +28,7 @@ const DoctorsPage = () => {
       name: "Dra. Fernanda Lima",
       specialty: "Neurologia",
       rating: 4.8,
-      image: "/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
+      image: "/uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
       availability: "Seg-Sex, 8h-17h",
       address: "Av. Paulista, 1000 - São Paulo",
       bio: "Especialista em tratamentos com cannabis medicinal para doenças neurológicas."
@@ -38,7 +38,7 @@ const DoctorsPage = () => {
       name: "Dr. Ricardo Santos",
       specialty: "Psiquiatria",
       rating: 4.9,
-      image: "/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
+      image: "/uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
       availability: "Ter-Qui, 9h-18h",
       address: "Rua Augusta, 500 - São Paulo",
       bio: "Psiquiatra com foco em tratamentos alternativos para ansiedade e depressão."
@@ -48,7 +48,7 @@ const DoctorsPage = () => {
       name: "Dra. Carolina Mendes",
       specialty: "Clínica Geral",
       rating: 4.7,
-      image: "/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
+      image: "/uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png",
       availability: "Seg-Sáb, 8h-16h",
       address: "Av. Brasil, 1500 - Rio de Janeiro",
       bio: "Atendimento humanizado com especialização em medicina integrativa."

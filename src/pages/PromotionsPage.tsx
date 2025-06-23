@@ -32,7 +32,7 @@ const PromotionsPage = () => {
       discountPercentage: 20,
       originalPrice: 375.00,
       currentPrice: 300.00,
-      image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
+      image: "/uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
       endsAt: "2025-05-10",
       medicationId: 1,
       code: "CBD20"
@@ -44,7 +44,7 @@ const PromotionsPage = () => {
       discountPercentage: 15,
       originalPrice: 92.79,
       currentPrice: 78.87,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+      image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
       endsAt: "2025-05-15",
       medicationId: 3
     },
@@ -55,7 +55,7 @@ const PromotionsPage = () => {
       discountPercentage: 0,
       originalPrice: 499.00,
       currentPrice: 499.00,
-      image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+      image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
       endsAt: "2025-05-20",
       medicationId: 5,
       code: "FRETENATURECAN"

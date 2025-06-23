@@ -25,11 +25,11 @@ export const medications: Medication[] = [
     name: "Extrato de Cannabis Sativa 36,76mg/ml – Ease Labs Pharma (30ml)",
     description: "Produto fitoterápico com 36,76 mg/ml de CBD, indicado para auxiliar no tratamento de condições como ansiedade e dores crônicas.",
     price: 375.00,
-    image: "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
+    image: "/uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
     images: [
-      "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
-      "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
-      "/lovable-uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png"
+      "/uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png",
+      "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+      "/uploads/2bde0bd9-b878-4f46-95f9-abb77613dc6b.png"
     ],
     specifications: {
       "Concentração": "36,76 mg/ml de CBD",
@@ -68,10 +68,10 @@ export const medications: Medication[] = [
     name: "Canabidiol Herbarium 200mg/ml (30ml)",
     description: "Solução oral com alta concentração de CBD, indicada para casos de epilepsia refratária e outras condições neurológicas.",
     price: 2210.69,
-    image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+    image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
     images: [
-      "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
-      "/lovable-uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png"
+      "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+      "/uploads/12699b83-589c-4563-8e2e-0ad1d7f31f83.png"
     ],
     specifications: {
       "Concentração": "200 mg/ml de CBD",
@@ -103,7 +103,7 @@ export const medications: Medication[] = [
     name: "Canabidiol 20mg/ml – Prati-Donaduzzi (30ml)",
     description: "Solução oral com 20 mg/ml de CBD, indicada para auxiliar no tratamento de epilepsia e outras condições neurológicas.",
     price: 92.79,
-    image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
+    image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png",
     reviews: [
       {
         id: 1,
@@ -126,21 +126,21 @@ export const medications: Medication[] = [
     name: "Canabidiol 79,14mg/ml – GreenCare (30ml)",
     description: "Solução oral com 79,14 mg/ml de CBD, indicada para tratamento de dores crônicas e distúrbios neurológicos.",
     price: 994.42,
-    image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+    image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
   },
   {
     id: 5,
     name: "Óleo CBD 1000mg – Naturecan (30ml)",
     description: "Óleo com 1000 mg de CBD, indicado para auxiliar no alívio de sintomas de ansiedade e estresse.",
     price: 499.00,
-    image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+    image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
   },
   {
     id: 6,
     name: "Óleo de Cannabis – Abrace Esperança (30ml)",
     description: "Óleo de CBD com preço acessível, voltado para pacientes com dificuldades financeiras, indicado para diversas condições neurológicas.",
     price: 79.00,
-    image: "/lovable-uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
+    image: "/uploads/113364e2-adf3-454b-ab7b-b9404b508632.png"
   }
 ];
 
