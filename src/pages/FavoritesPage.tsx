@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Heart, ShoppingCart, Trash2 } from "lucide-react";
+import { Heart, ShoppingCart, Trash2 } from "lucide-react";
 import { debouncedToast } from "@/components/ui/sonner";
 import { Link } from "react-router-dom";
 
@@ -78,14 +78,6 @@ const FavoritesPage = () => {
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        className="flex items-center gap-2 text-anny-green hover:text-anny-green/90"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Voltar
-      </Button>
 
       <div className="flex items-center gap-3">
         <Heart className="w-6 h-6 text-red-500 fill-red-500" />

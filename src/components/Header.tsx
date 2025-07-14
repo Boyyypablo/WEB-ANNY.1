@@ -6,6 +6,7 @@ import { ChatDialog } from "./ChatDialog";
 import { MessageCircle } from "lucide-react";
 import NotificationsDialog from "./NotificationsDialog";
 import AccessibilityControls from "./AccessibilityControls";
+import BackHomeButtons from "./BackHomeButtons";
 
 const Header = () => {
   const [cartItemCount, setCartItemCount] = useState(0);
@@ -46,6 +47,7 @@ const Header = () => {
         </div>
       </Link>
       <div className="flex items-center gap-1 md:gap-4">
+        <BackHomeButtons />
         <AccessibilityControls />
         <NotificationsDialog />
         <CartSheet />

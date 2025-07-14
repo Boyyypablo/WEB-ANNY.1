@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Mail, Phone, MessageSquare } from "lucide-react";
+import BackHomeButtons from "@/components/BackHomeButtons";
 
 interface FAQItem {
   id: string;
@@ -109,7 +110,8 @@ const FAQPage = () => {
   const categories = ["todos", "produtos", "pagamento", "envio", "legal", "devolucoes"];
   
   return (
-    <div className="max-w-4xl mx-auto py-6">
+    <div className="max-w-4xl mx-auto py-6 space-y-4">
+      <BackHomeButtons />
       <h1 className="text-3xl font-bold text-center text-anny-green mb-6">Perguntas Frequentes</h1>
       <p className="text-center text-gray-700 mb-8">
         Encontre respostas rápidas para as dúvidas mais comuns sobre nossos produtos e serviços.
