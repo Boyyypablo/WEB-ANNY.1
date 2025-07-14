@@ -14,7 +14,7 @@ const Index = () => {
   }, {
     title: "Para Associações",
     description: "Gerencie seus pacientes, produtos e documentação em uma única plataforma.",
-    action: () => navigate("/association-signup"),
+    action: () => navigate("/signup"),
     buttonText: "Cadastre sua associação",
     backgroundClass: "bg-soft-blue-50"
   }, {
